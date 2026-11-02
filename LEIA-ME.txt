@@ -1,0 +1,39 @@
+DIÁRIO DA CARTEIRA — VERSÃO PARA INSTALAR NO CELULAR
+=====================================================
+
+O que tem nesta pasta
+- index.html ............ o aplicativo
+- chart.umd.min.js ...... gráficos (funciona sem internet)
+- manifest.webmanifest .. nome, ícone e cores do app instalado
+- sw.js ................. faz o app abrir sem internet
+- icon-192.png, icon-512.png, maskable-512.png, apple-180.png ... ícones do app
+
+PASSO 1 — Publicar no GitHub Pages (uma vez só, de preferência no computador)
+1. Entre em github.com e crie uma conta gratuita (ou entre na sua).
+2. Clique em "New repository". Nome: carteira. Marque "Public". Clique em "Create repository".
+3. Na página do repositório, clique em "uploading an existing file".
+4. Selecione TODOS os arquivos desta pasta (são 9) e envie. Clique em "Commit changes".
+5. Vá em Settings > Pages. Em "Source", escolha "Deploy from a branch", branch "main", pasta "/ (root)". Clique em Save.
+6. Espere 1 a 2 minutos. O endereço do app será:  https://SEU-USUARIO.github.io/carteira/
+
+PASSO 2 — Instalar no celular
+1. Abra esse endereço no Chrome do celular.
+2. Toque nos três pontinhos (⋮) e em "Instalar app" (ou no aviso "Instalar" que aparece embaixo).
+3. O Diário da Carteira aparece na gaveta de aplicativos, abre em tela cheia e funciona sem internet.
+
+PASSO 3 — Levar seus dados para o app
+1. No site do Claude (Diário da Carteira), vá em Relatórios > Backup dos dados > Exportar backup.
+2. Mande o arquivo backup-carteira-AAAA-MM-DD.json para o celular (Google Drive, WhatsApp, e-mail).
+3. No app instalado, toque em "Importar um backup" (ou Relatórios > Importar backup) e escolha "Substituir tudo".
+
+Como passar dados entre aparelhos depois
+- Sempre que quiser os dados de um aparelho no outro: Exportar backup em um, Importar backup no outro.
+- "Substituir tudo" deixa o aparelho igual ao arquivo. "Juntar" só acrescenta o que falta.
+
+Atualizações do app
+- Quando houver uma versão nova, suba de novo os arquivos no mesmo repositório (substituindo os antigos).
+- O app instalado se atualiza sozinho na próxima vez que abrir com internet. Seus dados não são apagados.
+
+Privacidade
+- O repositório público mostra apenas o código do app. Seus dados ficam guardados só no celular
+  e nos arquivos de backup que você exportar.
