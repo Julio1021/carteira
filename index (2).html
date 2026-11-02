@@ -5188,7 +5188,7 @@ boot();
 if("serviceWorker" in navigator){ window.addEventListener("load",()=>{ navigator.serviceWorker.register("sw.js").catch(()=>{}); }); }
 try{ navigator.storage&&navigator.storage.persist&&navigator.storage.persist(); }catch(e){}
 (function(){
-  var inst=window.matchMedia("(display-mode: standalone)").matches||window.navigator.standalone;
+  var inst=window.matchMedia("(display-mode: standalone)").matches||window.matchMedia("(display-mode: fullscreen)").matches||window.navigator.standalone||document.referrer.indexOf("android-app://")===0;
   if(inst) return;
   var ev=null, bar=null;
   var css=document.createElement("style");
