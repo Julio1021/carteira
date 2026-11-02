@@ -5187,6 +5187,29 @@ boot();
 <script>
 if("serviceWorker" in navigator){ window.addEventListener("load",()=>{ navigator.serviceWorker.register("sw.js").catch(()=>{}); }); }
 try{ navigator.storage&&navigator.storage.persist&&navigator.storage.persist(); }catch(e){}
+(function(){
+  var inst=window.matchMedia("(display-mode: standalone)").matches||window.navigator.standalone;
+  if(inst) return;
+  var ev=null, bar=null;
+  var css=document.createElement("style");
+  css.textContent=".ins-bar{position:fixed;left:12px;right:12px;bottom:calc(96px + env(safe-area-inset-bottom,0px));z-index:60;display:flex;gap:10px;align-items:center;background:var(--surface,#1b2b2a);color:var(--ink,#fff);border:1px solid var(--line,#2e4442);border-radius:16px;padding:12px;box-shadow:0 14px 34px rgba(0,0,0,.35);font:500 13.5px/1.35 system-ui,sans-serif}.ins-bar img{width:40px;height:40px;border-radius:10px;flex:none}.ins-bar b{display:block;font-size:14.5px}.ins-bar .ins-t{flex:1;min-width:0}.ins-bar button{border:0;border-radius:12px;padding:10px 14px;font:700 14px system-ui,sans-serif;cursor:pointer}.ins-ok{background:var(--cta,#e07a45);color:var(--cta-ink,#fff)}.ins-x{background:transparent;color:inherit;opacity:.7;padding:8px!important}.ins-help{margin-top:6px;font-size:12.5px;opacity:.9}@media(min-width:761px){.ins-bar{left:auto;right:20px;bottom:20px;width:380px}}";
+  document.head.appendChild(css);
+  function mostrar(){
+    if(bar) return; try{ if(Date.now()-(+localStorage.getItem("ins-fechado")||0)<3*864e5) return; }catch(e){}
+    bar=document.createElement("div"); bar.className="ins-bar"; bar.setAttribute("role","region"); bar.setAttribute("aria-label","Instalar o app");
+    bar.innerHTML='<img src="icon-192.png" alt=""><div class="ins-t"><b>Instalar o Carteira</b><span class="ins-s">Abre em tela cheia e funciona sem internet.</span><div class="ins-help" hidden></div></div><button class="ins-ok">Instalar</button><button class="ins-x" aria-label="Fechar">✕</button>';
+    document.body.appendChild(bar);
+    bar.querySelector(".ins-x").onclick=function(){ try{ localStorage.setItem("ins-fechado",Date.now()); }catch(e){} bar.remove(); bar=null; };
+    bar.querySelector(".ins-ok").onclick=async function(){
+      if(ev){ ev.prompt(); try{ var r=await ev.userChoice; if(r&&r.outcome==="accepted"){ bar.remove(); bar=null; } }catch(e){} ev=null; return; }
+      var h=bar.querySelector(".ins-help"); h.hidden=false;
+      h.innerHTML="O Chrome ainda não liberou a instalação neste aparelho. Feche e abra esta página de novo e toque em Instalar. Se continuar assim, abra este endereço no <b>Samsung Internet</b>, <b>Edge</b> ou <b>Firefox</b> e use o menu &rarr; <b>Adicionar à tela inicial</b>.";
+    };
+  }
+  window.addEventListener("beforeinstallprompt",function(e){ e.preventDefault(); ev=e; mostrar(); var s=bar&&bar.querySelector(".ins-s"); if(s) s.textContent="Abre em tela cheia e funciona sem internet."; });
+  window.addEventListener("appinstalled",function(){ if(bar){ bar.remove(); bar=null; } });
+  setTimeout(mostrar,2500);
+})();
 </script>
 </body>
 </html>
