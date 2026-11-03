@@ -1928,6 +1928,131 @@ body[data-tab="gastos"] .fab{display:none !important}
 :root[data-glass] .theme-pop{background:rgba(255,255,255,.9) !important;-webkit-backdrop-filter:blur(28px) saturate(160%);backdrop-filter:blur(28px) saturate(160%)}
 :root[data-glass="dark"] .theme-pop{background:rgba(18,22,30,.9) !important}
 .mark.mark-img{background:transparent !important;padding:0;overflow:hidden;box-shadow:0 4px 10px -4px rgba(0,0,0,.35)}.mark.mark-img img{width:100%;height:100%;display:block;object-fit:cover}
+
+/* ===== Resumo compacto ===== */
+.rz .rz-h{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.rz .rz-h h2{margin:0;font-size:16px;flex:1}
+.rz-tot{font-size:15px;font-variant-numeric:tabular-nums}
+.rz-l{display:flex;flex-direction:column;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--surface)}
+.rz-it{border-bottom:1px solid var(--line)} .rz-it:last-child,.rz-l>.rz-row:last-child{border-bottom:0}
+.rz-l>.rz-row{border-bottom:1px solid var(--line)}
+.rz-row{display:grid;grid-template-columns:38px minmax(0,1fr) auto auto;align-items:center;gap:11px;width:100%;border:0;background:transparent;color:var(--ink);font:inherit;text-align:left;padding:11px 12px;cursor:pointer;min-height:60px}
+.rz-row.as-div{cursor:default}
+button.rz-row:hover{background:var(--surface-2)}
+.rz-row>svg{color:var(--muted);transition:transform .2s ease}
+.rz-it.open .rz-row>svg{transform:rotate(180deg)}
+.rz-av{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;font-weight:800;font-size:15px;background:var(--accent-soft);color:var(--accent)}
+.rz-av.t-rd_salario{background:color-mix(in srgb,#1f9d6b 18%,transparent);color:#1f9d6b}
+.rz-av.t-rd_va{background:color-mix(in srgb,#e8a33a 20%,transparent);color:#c9821a}
+.rz-m{min-width:0;display:flex;flex-direction:column;gap:2px}
+.rz-m b{font-size:14.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rz-m small{font-size:12px;color:var(--muted)} .rz-m small.velho,.rz-m small.atr{color:var(--neg)} .rz-m small.ok{color:var(--pos)} .rz-m small.hoje{color:var(--accent)}
+.rz-v{font-weight:750;font-size:15px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.rz-ed{width:32px;height:32px}
+.rz-add .rz-m b{color:var(--accent)} .rz-add>svg{color:var(--accent)}
+.rz-acts{display:flex;gap:6px;flex-wrap:wrap;padding:0 12px 12px 61px}
+.rz-a{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--surface-2);color:var(--ink);border-radius:99px;padding:7px 12px;font:inherit;font-size:12.5px;font-weight:650;cursor:pointer}
+.rz-a:hover{border-color:var(--accent)} .rz-a.danger{color:var(--neg)}
+.rz-nota{margin:0;padding:0 12px 12px 61px;font-size:12px;color:var(--muted)}
+.rz-f{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:4px 12px 12px;margin:0}
+.rz-f .inp{flex:1 1 140px;min-width:0;padding:8px 10px}
+.rz-f .btns{display:flex;gap:6px}
+.rz-ft{width:100%;font-size:14px}
+.rz>.rz-f{padding:12px 0 0}
+.rz-conf{font-size:13px}
+.rz-sw{display:flex;align-items:center;gap:12px;width:calc(100% - 24px);margin:0 12px 12px;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:var(--surface-2);color:var(--ink);font:inherit;text-align:left;cursor:pointer}
+.rz-sw span{flex:1;min-width:0;display:flex;flex-direction:column;gap:1px} .rz-sw b{font-size:13px} .rz-sw small{font-size:11.5px;color:var(--muted)}
+.rz-sw i{flex:none;position:relative;width:42px;height:25px;border-radius:99px;background:var(--line);transition:background .18s ease}
+.rz-sw i::after{content:"";position:absolute;top:3px;left:3px;width:19px;height:19px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.3);transition:transform .18s ease}
+.rz-sw[aria-checked="true"] i{background:var(--accent)} .rz-sw[aria-checked="true"] i::after{transform:translateX(17px)}
+:root[data-glass] .rz-l{background:color-mix(in srgb,var(--gl-glass2) 85%,transparent);border-color:var(--gl-bd)}
+@media (max-width:640px){ .rz-acts,.rz-nota{padding-left:12px} }
+.gi-hist-card .imp-hist{border-top:0 !important;margin-top:0 !important;padding-top:0 !important}
+
+/* ===== Resumo novo ===== */
+.rz-sd{position:relative;overflow:hidden;border-radius:22px;padding:18px 18px 18px;color:#fff;background:linear-gradient(115deg,color-mix(in srgb,var(--cta) 92%,#000) 0%,color-mix(in srgb,var(--cta) 55%,#8b5cf6) 70%,#a879f5 100%);box-shadow:0 18px 40px -24px color-mix(in srgb,var(--cta) 80%,transparent)}
+.rz-sd::before{content:"";position:absolute;right:-10px;top:-10px;width:240px;height:150px;background-image:radial-gradient(rgba(255,255,255,.28) 1.2px,transparent 1.4px);background-size:9px 9px;-webkit-mask-image:radial-gradient(ellipse at 80% 20%,#000 10%,transparent 70%);mask-image:radial-gradient(ellipse at 80% 20%,#000 10%,transparent 70%);pointer-events:none}
+.rz-sd>*{position:relative}
+.rz-sd-top{display:flex;justify-content:space-between;align-items:center}
+.rz-sd-l{display:inline-flex;align-items:center;gap:8px;font-size:14px;font-weight:600;opacity:.92}
+.rz-eye,.rz-sd-go{border:0;background:transparent;color:#fff;display:grid;place-items:center;cursor:pointer;padding:4px;border-radius:8px}
+.rz-eye:hover,.rz-sd-go:hover{background:rgba(255,255,255,.14)}
+.rz-sd-v{display:block;font-family:var(--f-display);font-size:40px;font-weight:800;letter-spacing:-.02em;line-height:1.1;margin:6px 0 4px;font-variant-numeric:tabular-nums}
+.rz-sd-at{display:inline-flex;align-items:center;gap:7px;font-size:13.5px;opacity:.95}
+.rz-sd-at.velho{color:#ffe08a}
+.rz-sd-at .copy{color:#fff;text-decoration:underline}
+.rz-ok{width:18px;height:18px;border-radius:50%;background:#22c55e;display:grid;place-items:center;color:#fff}
+.rz-sd-b{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,255,255,.22)}
+.rz-sd-p{display:block;font-family:var(--f-display);font-size:28px;font-weight:800;margin-top:4px;font-variant-numeric:tabular-nums}
+.rz-sd-ic{flex:none;width:58px;height:58px;border-radius:16px;border:1px solid rgba(255,255,255,.35);background:rgba(255,255,255,.18);color:#fff;display:grid;place-items:center;cursor:pointer}
+.rz-sd-ic:hover{background:rgba(255,255,255,.26)}
+.rz-card{padding:16px}
+.rz-ch{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:14px}
+.rz-ch h2{margin:0;font-size:17px}
+.rz-lk{display:inline-flex;align-items:center;gap:6px;border:0;background:transparent;color:var(--accent);font:inherit;font-weight:650;font-size:13.5px;cursor:pointer;padding:4px 6px;border-radius:8px}
+.rz-tl{display:grid;grid-template-columns:repeat(var(--n),minmax(0,1fr));position:relative}
+.rz-tl-i{display:flex;flex-direction:column;align-items:center;text-align:center;gap:2px;min-width:0;padding:0 4px}
+.rz-tl-i>b{font-size:15px;font-variant-numeric:tabular-nums}
+.rz-tl-i>small{font-size:12.5px;color:var(--ink-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.rz-tl-d{position:relative;width:100%;height:22px;display:grid;place-items:center;margin:4px 0}
+.rz-tl-d::before{content:"";position:absolute;left:-4px;right:-4px;top:50%;height:3px;margin-top:-1.5px;background:var(--line);border-radius:3px}
+.rz-tl-i:first-child .rz-tl-d::before{left:6%} .rz-tl-i:last-child .rz-tl-d::before{right:6%}
+.rz-tl-d i{position:relative;width:16px;height:16px;border-radius:50%;background:var(--surface);border:2px solid var(--muted)}
+.rz-tl-i.ok .rz-tl-d i{background:#22a05a;border-color:#22a05a} .rz-tl-i.prox .rz-tl-d i{background:var(--accent);border-color:var(--accent)} .rz-tl-i.atr .rz-tl-d i{background:var(--neg);border-color:var(--neg)}
+.rz-tl-v{font-size:14px;font-weight:700;padding:6px 12px;border-radius:99px;background:var(--surface-2);color:var(--ink-2);font-variant-numeric:tabular-nums;white-space:nowrap;max-width:100%;overflow:hidden;text-overflow:ellipsis}
+.rz-tl-i.ok .rz-tl-v{background:color-mix(in srgb,#22a05a 14%,transparent);color:#1b8a4c}
+.rz-tl-i.prox .rz-tl-v{background:var(--accent-soft);color:var(--accent)}
+.rz-tl-i.atr .rz-tl-v{background:var(--neg-soft);color:var(--neg)}
+.rz-ag{margin-top:14px}
+.rz-ag .rz-l{margin-top:0}
+.rz-mes{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.25fr);gap:0}
+.rz-mes h3{margin:0 0 10px;font-size:15px;white-space:nowrap}
+.rz-pg{display:flex;flex-direction:column;align-items:center;padding-right:14px;border-right:1px solid var(--line);text-align:center}
+.rz-pg h3{align-self:flex-start}
+.rz-ring{position:relative;width:128px;height:128px}
+.rz-ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.rz-ring circle{fill:none;stroke-width:10}
+.rz-ring .bg{stroke:color-mix(in srgb,#8b5cf6 18%,var(--surface-2))}
+.rz-ring .fg{stroke:#8b5cf6;stroke-linecap:round;transition:stroke-dashoffset .6s ease}
+.rz-ring>div{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.rz-ring b{font-family:var(--f-display);font-size:28px;font-weight:800;line-height:1}
+.rz-ring small{font-size:10.5px;color:var(--ink-2);max-width:80px;line-height:1.2;margin-top:3px}
+.rz-pg-s{font-size:12px;color:var(--muted);margin-top:8px}
+.rz-rs{padding-left:14px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.rz-ml{display:grid;grid-template-columns:32px minmax(0,1fr) auto;align-items:center;gap:9px;font-size:13.5px}
+.rz-ml>span:nth-child(2){min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rz-ml b{font-size:14px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.rz-mi{width:32px;height:32px;border-radius:50%;display:grid;place-items:center}
+.rz-ml.in .rz-mi{background:color-mix(in srgb,#22a05a 15%,transparent);color:#1b8a4c} .rz-ml.in b{color:#1b8a4c}
+.rz-ml.out .rz-mi{background:var(--neg-soft);color:var(--neg)} .rz-ml.out b{color:var(--neg)}
+.rz-ml.sd .rz-mi{background:var(--accent-soft);color:var(--accent)} .rz-ml.sd b{color:var(--accent)}
+.rz-ext{margin-top:auto;display:flex;justify-content:center;align-items:center;gap:8px;position:relative;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:99px;padding:10px 14px;font:inherit;font-size:13.5px;font-weight:650;cursor:pointer}
+.rz-ext svg{position:absolute;right:12px}
+.rz-ext:hover{border-color:var(--accent)}
+.rz-lim .lg-box{margin:0;padding:0;border:0}
+:root[data-glass] .rz-ext{background:var(--gl-glass2);border-color:var(--gl-bd)}
+@media (max-width:640px){
+  .rz-sd{padding:16px}
+  .rz-sd-v{font-size:36px} .rz-sd-p{font-size:24px}
+  .rz-sd-ic{width:52px;height:52px}
+  .rz-card{padding:14px}
+  .rz-tl-i>small{font-size:11.5px} .rz-tl-v{font-size:12.5px;padding:5px 9px}
+  .rz-mes{grid-template-columns:1fr 1.45fr}
+  .rz-ring{width:104px;height:104px} .rz-ring b{font-size:22px} .rz-ring small{font-size:9.5px}
+  .rz-pg{padding-right:10px} .rz-rs{padding-left:10px;gap:7px}
+  .rz-mes h3{font-size:14px}
+  .rz-ml{grid-template-columns:26px minmax(0,1fr) auto;gap:6px;font-size:12.5px} .rz-mi{width:26px;height:26px} .rz-ml b{font-size:12.5px}
+  .rz-ext{font-size:12.5px;padding:9px 26px 9px 10px}
+}
+@media (max-width:370px){ .rz-mes{grid-template-columns:1fr} .rz-pg{border-right:0;border-bottom:1px solid var(--line);padding:0 0 12px;margin-bottom:12px} .rz-rs{padding-left:0} }
+.gi-tg{display:grid;grid-template-columns:38px minmax(0,1fr) auto;align-items:center;gap:11px;width:100%;border:0;background:transparent;color:var(--ink);font:inherit;text-align:left;cursor:pointer;padding:0}
+.gi-tg.open{margin-bottom:10px}
+.gi-tg-ic{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;background:var(--accent-soft);color:var(--accent)}
+.gi-tg-t{min-width:0;display:flex;flex-direction:column;gap:2px} .gi-tg-t b{font-size:14.5px;display:flex;align-items:center;gap:6px}
+.gi-tg-t b i{font-style:normal;font-size:11px;font-weight:800;background:var(--surface-2);color:var(--ink-2);border-radius:99px;padding:1px 7px}
+.gi-tg-t small{font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.gi-tg>svg{color:var(--muted)}
+.gi-hist-card{padding:14px 16px}
 </style>
 
 <header class="top">
@@ -3719,10 +3844,12 @@ function giPlano(){
   const ccPagsN=ccPags.filter(p=>!extP.has(p.ext)&&![...S.cpags.values()].some(q=>q.cartao===p.cartao&&Math.abs(q.valor-p.valor)<0.01&&Math.abs(diasEntre(q.data,p.data))<=6));
   return {novos,ignorados,ja,dups,novosE,apagarE,ccPags:ccPagsN};
 }
-function giHist(){
+function giHist(retr){
   const m={}; [...S.gastos.values(),...S.entradas.values()].forEach(g=>{ if(!g.imp||g.cartao) return; const x=(m[g.imp] ||= {id:g.imp,quando:+g.imp.split("_")[1]||0,n:0,ini:g.data,fim:g.data,orig:new Set()}); x.n++; if(g.data<x.ini) x.ini=g.data; if(g.data>x.fim) x.fim=g.data; try{ const o=origemDe(g); if(o!=="manual"&&o!=="ct:?") x.orig.add(origemNome(o)); }catch{} });
   const feitas=Object.values(m).sort((a,b)=>b.quando-a.quando); if(!feitas.length) return "";
-  return `<div class="imp-hist" id="gi-hist"><h3 class="sub-h">Extratos importados</h3><p class="hint">Desfazer apaga só os lançamentos que vieram daquele arquivo. O que você lançou à mão continua.</p>${feitas.map(f=>`<div class="imp-row"><span><b>${[...f.orig].join(", ")||"Extrato"} · ${dBR(f.ini)} a ${dBR(f.fim)}</b><span class="hint"> · ${f.n} lançamento(s) · importado em ${f.quando?new Date(f.quando).toLocaleDateString("pt-BR"):"—"}</span></span>
+  if(retr){ const ab=RZ.imp||!!GI.undo, u=feitas[0], ori=[...new Set(feitas.flatMap(f=>[...f.orig]))].join(", ")||"Extrato";
+    if(!ab) return `<button class="gi-tg" data-act="rz-imp" aria-expanded="false"><span class="gi-tg-ic">${svgI('<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/>',17)}</span><span class="gi-tg-t"><b>Extratos importados <i>${feitas.length}</i></b><small>${esc(ori)} · último em ${u.quando?new Date(u.quando).toLocaleDateString("pt-BR"):"—"}, até ${dBR(u.fim)}</small></span>${svgI('<path d="M6 9l6 6 6-6"/>',16)}</button>`; }
+  return `<div class="imp-hist" id="gi-hist">${retr?`<button class="gi-tg open" data-act="rz-imp" aria-expanded="true"><span class="gi-tg-ic">${svgI('<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/>',17)}</span><span class="gi-tg-t"><b>Extratos importados <i>${feitas.length}</i></b><small>Toque para recolher</small></span>${svgI('<path d="M6 15l6-6 6 6"/>',16)}</button>`:`<h3 class="sub-h">Extratos importados</h3>`}<p class="hint">Desfazer apaga só os lançamentos que vieram daquele arquivo. O que você lançou à mão continua.</p>${feitas.map(f=>`<div class="imp-row"><span><b>${[...f.orig].join(", ")||"Extrato"} · ${dBR(f.ini)} a ${dBR(f.fim)}</b><span class="hint"> · ${f.n} lançamento(s) · importado em ${f.quando?new Date(f.quando).toLocaleDateString("pt-BR"):"—"}</span></span>
     ${GI.undo===f.id?`<span class="confirm-inl">Apagar os ${f.n} lançamentos desta importação? <button class="btn sm danger" data-act="gi-undo-ok" data-id="${f.id}">Apagar</button><button class="btn sm" data-act="gi-undo-no">Cancelar</button></span>`:`<button class="btn sm ghost danger" data-act="gi-undo" data-id="${f.id}">Excluir importação</button>`}</div>`).join("")}</div>`;
 }
 function vGImp(){
@@ -4116,7 +4243,7 @@ function vHero(G,usoLim,novoOn){
   const E=G.totalE, O=G.total, sobra=E-O, temE=E>0;
   const quando=mes?(atual?"este mês":"em "+mLong(S.gMes).split(" ")[0].toLowerCase()):"no período";
   const seta=(v,l,d)=>`<button class="hx-arr" data-act="g-mes" data-v="${v}" aria-label="${l}">${svgI(`<path d="${d}"/>`,18)}</button>`;
-  let conta=""; try{ if(S.contas.size) conta=`<button class="hx-conta" data-act="gp-ir" data-v="1"><span>Em conta</span><b>${fmt(saldoTotalContas())}</b>${svgI('<path d="M9 6l6 6-6 6"/>',14)}</button>`; }catch{}
+  let conta=""; try{ if(S.contas.size) conta=`<button class="hx-conta" data-act="gp-ir" data-v="1"><span>Em conta</span><b>${rzV(saldoTotalContas())}</b>${svgI('<path d="M9 6l6 6-6 6"/>',14)}</button>`; }catch{}
   const lim=G.limTotal?`<div class="hx-lim ${usoLim>1?"neg":usoLim>.85?"warn":""}"><div><span>Limite de gastos</span><b>${fmt(G.gastoComLim)} <small>de ${fmt(G.limTotal)}</small></b></div><span class="hx-lb"><i style="width:${Math.min(100,usoLim*100).toFixed(1)}%"></i></span></div>`:"";
   const at=(act,n,ic,extra="")=>`<button class="hx-at" data-act="${act}" ${extra}><span class="hx-ati">${svgI(ic,21)}</span><span>${n}</span></button>`;
   return `<section class="hx" id="sec-lanc" aria-label="Resumo de ${esc(tit)}">
@@ -4129,12 +4256,12 @@ function vHero(G,usoLim,novoOn){
     ${S.gPer==="custom"?`<div class="per-dates hx-datas"><input type="date" class="inp" id="g-de" value="${P.de}" aria-label="De"><span>até</span><input type="date" class="inp" id="g-ate" value="${P.ate}" aria-label="Até"></div>`:""}
     <div class="hx-main">
       <small>${temE?(sobra<0?`Faltou ${quando}`:`Sobrou ${quando}`):`Você gastou ${quando}`}</small>
-      <b>${fmt(temE?Math.abs(sobra):O)}</b>
+      <b>${rzV(temE?Math.abs(sobra):O)}</b>
       ${temE?`<span>${sobra<0?"gastou mais do que entrou":`${Math.round(sobra/E*100)}% do que entrou`}</span>`:`<span><button class="copy" data-act="e-nova">Lance suas entradas</button> para ver quanto sobra</span>`}
     </div>
     <div class="hx-io">
-      <button class="hx-k in ${aba==="entradas"?"on":""}" data-act="g-aba" data-v="entradas" aria-pressed="${aba==="entradas"}"><span class="hx-ki">${svgI('<path d="M17 7 7 17M7 9v8h8"/>',15)}</span><span><small>Entrou</small><b>${fmt(E)}</b></span></button>
-      <button class="hx-k out ${aba==="gastos"?"on":""}" data-act="g-aba" data-v="gastos" aria-pressed="${aba==="gastos"}"><span class="hx-ki">${svgI('<path d="M7 17 17 7M9 7h8v8"/>',15)}</span><span><small>Saiu</small><b>${fmt(O)}</b></span></button>
+      <button class="hx-k in ${aba==="entradas"?"on":""}" data-act="g-aba" data-v="entradas" aria-pressed="${aba==="entradas"}"><span class="hx-ki">${svgI('<path d="M17 7 7 17M7 9v8h8"/>',15)}</span><span><small>Entrou</small><b>${rzV(E)}</b></span></button>
+      <button class="hx-k out ${aba==="gastos"?"on":""}" data-act="g-aba" data-v="gastos" aria-pressed="${aba==="gastos"}"><span class="hx-ki">${svgI('<path d="M7 17 17 7M9 7h8v8"/>',15)}</span><span><small>Saiu</small><b>${rzV(O)}</b></span></button>
     </div>
     ${lim}
     ${conta}
@@ -5188,6 +5315,133 @@ function vBalanco(G){
 
 /* ---------- Dinheiro em conta ---------- */
 function diasDesde(d){ return Math.max(0,diasEntre(d,todayISO())-1); }
+
+/* ---------- Resumo compacto: contas e recebimentos em lista ---------- */
+function vResumoListas(){
+  const cs=[...S.contas.values()].sort((a,b)=>b.saldo-a.saldo), ym=todayISO().slice(0,7);
+  const ico=d=>svgI(d,16);
+  const ICO_ED='<path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/>', ICO_UP='<path d="M21 12a9 9 0 1 1-3-6.7L21 8"/><path d="M21 3v5h-5"/>';
+  const linhaConta=c=>{ const dd=diasDesde(c.data), sc=saldoConta(c), aberto=S.ctOpen===c.id||S.ctEdit===c.id||S.ctDel===c.id||(S.ctAj&&S.ctAj.id===c.id);
+    const ini=(c.nome||"?").trim().charAt(0).toUpperCase();
+    let det="";
+    if(S.ctEdit===c.id) det=`<form class="rz-f" data-ct="${c.id}" autocomplete="off"><input class="inp" id="ctn_${c.id}" value="${esc(c.nome)}" maxlength="30" aria-label="Nome da conta"><input class="inp money" id="ctv_${c.id}" inputmode="decimal" value="${numF.format(sc.valor)}" aria-label="Saldo atual"><span class="btns"><button class="btn sm primary" type="submit">Salvar saldo</button><button class="btn sm" type="button" data-act="ct-cancel">Cancelar</button></span></form>`;
+    else if(S.ctDel===c.id) det=`<div class="rz-f rz-conf">Remover a conta ${esc(c.nome)}? Os gastos e entradas continuam. <span class="btns"><button class="btn sm danger" data-act="ct-del-ok" data-id="${c.id}">Remover</button><button class="btn sm" data-act="ct-del-no">Cancelar</button></span></div>`;
+    else if(S.ctAj&&S.ctAj.id===c.id) det=`<form class="rz-f ct-aj-f" data-ctaj="${c.id}" autocomplete="off">
+        <div class="seg ct-aj-seg" role="radiogroup" aria-label="Tipo"><label class="seg-r"><input type="radio" name="ctajt" value="out" ${S.ctAj.t==="out"?"checked":""}><span>− Saiu</span></label><label class="seg-r"><input type="radio" name="ctajt" value="in" ${S.ctAj.t==="in"?"checked":""}><span>+ Entrou</span></label></div>
+        <input class="inp money" id="ctaj_v" inputmode="decimal" placeholder="Valor, ex.: 22,00" required aria-label="Valor"><input class="inp" id="ctaj_d" maxlength="60" placeholder="Descrição (opcional)" aria-label="Descrição">
+        <span class="btns"><button class="btn sm primary" type="submit">Confirmar</button><button class="btn sm ghost" type="button" data-act="ct-aj-no">Cancelar</button></span></form>`;
+    else if(aberto) det=`<div class="rz-acts">
+        <button class="rz-a" data-act="ct-edit" data-id="${c.id}">${ico(ICO_UP)}Atualizar saldo</button>
+        <button class="rz-a" data-act="ct-aj" data-id="${c.id}" data-t="out">${ico('<path d="M5 12h14"/>')}Saiu</button>
+        <button class="rz-a" data-act="ct-aj" data-id="${c.id}" data-t="in">${ico('<path d="M12 5v14M5 12h14"/>')}Entrou</button>
+        <button class="rz-a danger" data-act="ct-del" data-id="${c.id}">${ico('<path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/>')}Remover</button></div>
+      ${sc.n?`<p class="rz-nota">${fmt(c.saldo)} em ${dShort(c.data)}${sc.menos?` − ${fmt(sc.menos)} gasto${sc.n>1?"s":""}`:""}${sc.mais?` + ${fmt(sc.mais)} recebido`:""} lançados depois.</p>`:""}`;
+    return `<div class="rz-it ${aberto?"open":""}"><button class="rz-row" data-act="ct-abrir" data-id="${c.id}" aria-expanded="${aberto}">
+        <span class="rz-av">${esc(ini)}</span>
+        <span class="rz-m"><b>${esc(c.nome)}</b><small class="${dd>7?"velho":""}">${dd===0?"Atualizado hoje":dd===1?"Atualizado ontem":`Atualizado há ${dd} dias`}${c.origem==="extrato"?" · pelo extrato":""}</small></span>
+        <span class="rz-v ${sc.valor<0?"neg-t":""}">${rzV(sc.valor)}</span>${svgI('<path d="M6 9l6 6 6-6"/>',15)}</button>${det}</div>`; };
+  const nova=S.ctNova?`<form class="rz-f" id="f-ct-nova" autocomplete="off"><input class="inp" id="ctn_nova" placeholder="Nome, ex.: Nubank" maxlength="30" required aria-label="Nome da conta"><input class="inp money" id="ctv_nova" inputmode="decimal" placeholder="Saldo atual" required aria-label="Saldo atual"><span class="btns"><button class="btn sm primary" type="submit">Adicionar</button><button class="btn sm" type="button" data-act="ct-cancel">Cancelar</button></span></form>`:"";
+  const contas=`<section class="card rz" id="sec-conta" aria-label="Suas contas">
+    <div class="rz-h"><h2>Suas contas</h2>${cs.length>1?`<b class="rz-tot">${fmt(saldoTotalContas())}</b>`:""}${S.ctNova?"":`<button class="copy" data-act="ct-nova">+ Adicionar</button>`}</div>
+    ${cs.length?`<div class="rz-l">${cs.map(linhaConta).join("")}</div>`:`<p class="hint">Nenhuma conta ainda. Ao importar um extrato, a conta e o saldo entram sozinhos.</p>`}
+    ${nova}
+  </section>`;
+  const linhaRenda=id=>{ const t=RD_TIPOS[id], r=S.rendas.get(id);
+    if(S.rdEdit===id){ const rr=r||{regra:t.regra,dia:t.dia};
+      return `<form class="rz-f rd-form" data-rd="${id}" autocomplete="off"><b class="rz-ft">${t.nome}</b>
+        <input class="inp money" id="rdv_${id}" inputmode="decimal" placeholder="Valor, ex.: 3.500,00" value="${r&&r.valor?numF.format(r.valor):""}" aria-label="Valor">
+        <select class="inp" id="rdq_${id}" aria-label="Quando cai"><option value="util" ${rr.regra==="util"?"selected":""}>Último dia útil do mês</option>${Array.from({length:31},(_,k)=>`<option value="${k+1}" ${rr.regra==="dia"&&rr.dia===k+1?"selected":""}>Todo dia ${k+1}</option>`).join("")}</select>
+        <span class="btns"><button class="btn sm primary" type="submit">Salvar</button><button class="btn sm" type="button" data-act="rd-no">Cancelar</button>${r?`<button class="btn sm ghost danger" type="button" data-act="rd-del" data-id="${id}">Remover</button>`:""}</span></form>`; }
+    if(!r||!r.valor) return `<button class="rz-row rz-add" data-act="rd-edit" data-id="${id}"><span class="rz-av t-${id}">${t.ico}</span><span class="rz-m"><b>Informar ${t.nome.toLowerCase()}</b><small>Para prever quando o dinheiro entra</small></span>${svgI('<path d="M12 5v14M5 12h14"/>',15)}</button>`;
+    const st=rdStatus(r,ym); let q, cl="";
+    if(st.rec){ q=`Recebido em ${dShort(st.rec.data)}`; cl="ok"; } else if(st.dias>0) q=`Cai em ${dShort(st.data)} · ${st.dias===1?"amanhã":`em ${st.dias} dias`}`; else if(st.dias===0){ q="Cai hoje"; cl="hoje"; } else { q=`Previsto para ${dShort(st.data)} · ainda não chegou`; cl="atr"; }
+    return `<div class="rz-it"><div class="rz-row as-div"><span class="rz-av t-${id}">${t.ico}</span>
+        <span class="rz-m"><b>${t.nome}</b><small class="${cl}">${st.rec?"✓ ":""}${q}</small></span>
+        <span class="rz-v ${st.rec?"pos-t":""}">${rzV(r.valor)}</span><button class="icon-btn rz-ed" data-act="rd-edit" data-id="${id}" aria-label="Editar ${t.nome.toLowerCase()}">${svgI(ICO_ED,15)}</button></div>
+      ${!st.rec&&st.dias<=0?`<div class="rz-acts"><button class="rz-a" data-act="rd-recebi" data-id="${id}">${ico('<path d="M5 12l5 5L20 7"/>')}Marcar como recebido</button></div>`:""}
+      ${id==="rd_salario"?`<button class="rz-sw" data-act="sal-messeg" role="switch" aria-checked="${!!r.mesSeg}"><span><b>Contar no mês seguinte</b><small>${r.mesSeg?`O salário do fim do mês conta como dinheiro de ${mesNome(ymAdd(st.data.slice(0,7),1))}`:"Desligado: conta no mês em que cai"}</small></span><i aria-hidden="true"></i></button>`:""}</div>`; };
+  const rendas=`<section class="card rz" aria-label="A receber">
+    <div class="rz-h"><h2>Recebimentos fixos</h2></div>
+    <div class="rz-l">${linhaRenda("rd_salario")}${linhaRenda("rd_va")}</div></section>`;
+  return {contas,rendas};
+}
+
+/* ---------- Resumo estilo app de banco ---------- */
+const RZ={imp:false,ocultar:(()=>{ try{ return localStorage.getItem("diario-ocultar")==="1"; }catch{ return false; } })(),contas:false,ag:false};
+const rzV=v=>RZ.ocultar?"R$ ••••••":fmt(v);
+function rzPrev(G){
+  const E=G.totalE, O=G.total, atual=!!G.ehMesAtual;
+  const prev=S.gPer==="mes"&&G.ym>=todayISO().slice(0,7)?rdAReceber(G.ym):[];
+  const aRec=prev.reduce((t,x)=>t+x.r.valor,0);
+  let abertas=0; try{ abertas=S.gPer==="mes"&&S.pagar.size?pgMesDados(G.ym).falta:0; }catch{}
+  const gastoFim=atual?Math.max(G.projecao||O,O+abertas):O+(G.ym>todayISO().slice(0,7)?abertas:0);
+  return {E,O,aRec,abertas,gastoFim,entPrev:E+aRec,fecha:E+aRec-gastoFim,atual};
+}
+function rzAgenda(){
+  const hoje=todayISO(), mA=hoje.slice(0,7), it=[];
+  [...S.rendas.values()].filter(r=>r.valor>0).forEach(r=>{ [mA,ymAdd(mA,1)].forEach(ym=>{ const st=rdStatus(r,ym), d=st.rec?st.rec.data:rdData(r,ym);
+    if(st.rec&&d.slice(0,7)!==mA) return; if(!st.rec&&ym!==mA&&it.some(x=>x.id===r.id&&!x.rec)) return;
+    it.push({id:r.id,data:d,nome:(RD_TIPOS[r.id]||{}).nome||"Recebimento",valor:st.rec?st.rec.valor:r.valor,rec:!!st.rec,atr:!st.rec&&d<hoje}); }); });
+  [...S.emps.values()].forEach(e=>{ try{ const D=emDados(e); if(D.quitado||!D.prox) return; it.push({id:e.id,data:D.prox.venc,nome:`Parcela · ${e.pessoa||"empréstimo"}`,valor:Math.max(0,D.prox.val-D.prox.cob),rec:false,atr:D.prox.venc<hoje}); }catch{} });
+  it.sort((a,b)=>a.data.localeCompare(b.data));
+  const rec=it.filter(x=>x.rec).slice(-1), fut=it.filter(x=>!x.rec);
+  return [...rec,...fut].slice(0,3);
+}
+function vRzSaldo(G,P){
+  const cs=[...S.contas.values()], tot=cs.length?saldoTotalContas():null;
+  const rec=cs.length?cs.reduce((m,c)=>c.data>m?c.data:m,cs[0].data):null, dd=rec?diasDesde(rec):null;
+  const at=dd==null?"Nenhuma conta cadastrada":dd===0?"Atualizado hoje":dd===1?"Atualizado ontem":`Atualizado há ${dd} dias`;
+  const ok=dd!=null&&dd<=2;
+  const proj=tot!=null&&P.atual?tot+P.aRec-Math.max(0,P.gastoFim-P.O):null;
+  const olho=RZ.ocultar?'<path d="M3 3l18 18"/><path d="M10.6 5.1A10 10 0 0 1 12 5c6 0 10 7 10 7a17 17 0 0 1-3.2 3.9M6.6 6.6C3.9 8.4 2 12 2 12s4 7 10 7c1.7 0 3.2-.5 4.5-1.2"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/>':'<path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>';
+  return `<section class="rz-sd" aria-label="Saldo disponível">
+    <div class="rz-sd-top"><span class="rz-sd-l">Saldo disponível <button class="rz-eye" data-act="rz-olho" aria-pressed="${RZ.ocultar}" aria-label="${RZ.ocultar?"Mostrar":"Esconder"} valores">${svgI(olho,18)}</button></span>
+      <button class="rz-sd-go" data-act="rz-contas" aria-expanded="${RZ.contas}" aria-label="Ver contas">${svgI(RZ.contas?'<path d="M6 15l6-6 6 6"/>':'<path d="M9 6l6 6-6 6"/>',20)}</button></div>
+    <b class="rz-sd-v">${tot==null?"R$ —":rzV(tot)}</b>
+    <span class="rz-sd-at ${dd!=null&&dd>7?"velho":""}">${at}${ok?`<i class="rz-ok">${svgI('<path d="M5 12l5 5L20 7"/>',11)}</i>`:""}${tot==null?` · <button class="copy" data-act="ct-nova">adicionar</button>`:""}</span>
+    <div class="rz-sd-b"><div><span class="rz-sd-l">${proj!=null?"Saldo projetado (fim do mês)":P.atual?"Previsão de fechamento do mês":"Sobrou no mês"}</span><b class="rz-sd-p">${proj!=null?rzV(proj):rzV(P.atual?P.fecha:P.E-P.O)}</b></div>
+      <button class="rz-sd-ic" data-act="gp-ir" data-v="2" aria-label="Ver análise">${svgI('<path d="M3 17l5-5 4 3 8-8"/><path d="M15 7h5v5"/>',24)}</button></div>
+  </section>`;
+}
+function vRzReceb(){
+  const ag=rzAgenda(), iProx=ag.findIndex(x=>!x.rec);
+  const tl=ag.length?`<div class="rz-tl" style="--n:${ag.length}">${ag.map((x,k)=>{ const c=x.rec?"ok":k===iProx?(x.atr?"atr":"prox"):"fut";
+      return `<div class="rz-tl-i ${c}"><b>${dShort(x.data)}</b><small>${esc(x.nome)}${x.atr?" · atrasado":""}</small><span class="rz-tl-d"><i></i></span><span class="rz-tl-v">${x.rec?"✓ ":""}${rzV(x.valor)}</span></div>`; }).join("")}</div>`
+    :`<p class="hint">Informe seu salário e outros recebimentos fixos para ver quando o dinheiro entra.</p>`;
+  return `<section class="card rz-card" aria-label="Próximos recebimentos">
+    <div class="rz-ch"><h2>Próximos recebimentos</h2><button class="rz-lk" data-act="rz-ag" aria-expanded="${RZ.ag}">${svgI('<rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/>',17)}${RZ.ag?"Fechar":"Ajustar"}</button></div>
+    ${tl}
+    ${RZ.ag||S.rdEdit?`<div class="rz-ag">${vResumoListas().rendas.replace(/<section class="card rz"[^>]*>\s*<div class="rz-h"><h2>Recebimentos fixos<\/h2><\/div>/,"").replace(/<\/section>\s*$/,"")}</div>`:""}
+  </section>`;
+}
+function vRzMes(G,P){
+  const hoje=todayISO(), ym=G.ym, dim=daysIn(ym), mA=hoje.slice(0,7), mes=S.gPer==="mes";
+  const pct=!mes?1:ym<mA?1:ym>mA?0:(+hoje.slice(8,10))/dim, falta=mes&&ym===mA?dim-(+hoje.slice(8,10)):0;
+  const R=46, C=2*Math.PI*R;
+  const linha=(cl,ic,n,v)=>`<div class="rz-ml ${cl}"><span class="rz-mi">${svgI(ic,16)}</span><span>${n}</span><b>${rzV(v)}</b></div>`;
+  const prev=P.atual||ym>mA;
+  return `<section class="card rz-card rz-mes" aria-label="Resumo do mês">
+    <div class="rz-pg"><h3>Progresso do mês</h3>
+      <div class="rz-ring"><svg viewBox="0 0 110 110" aria-hidden="true"><circle cx="55" cy="55" r="${R}" class="bg"/><circle cx="55" cy="55" r="${R}" class="fg" stroke-dasharray="${C.toFixed(1)}" stroke-dashoffset="${(C*(1-pct)).toFixed(1)}"/></svg>
+        <div><b>${Math.round(pct*100)}%</b><small>${mes?"do mês concluído":"do período"}</small></div></div>
+      <small class="rz-pg-s">${!mes?esc(G.P.label):ym<mA?"Mês encerrado":ym>mA?"Mês ainda não começou":falta===0?"Último dia do mês":`Faltam ${falta} dia${falta>1?"s":""} para o fim do mês`}</small></div>
+    <div class="rz-rs"><h3>${prev?"Previsão do mês":"Resumo do mês"}</h3>
+      ${linha("in",'<path d="M12 19V5M5 12l7-7 7 7"/>',"Entradas",prev?P.entPrev:P.E)}
+      ${linha("out",'<path d="M12 5v14M5 12l7 7 7-7"/>',"Saídas",prev?P.gastoFim:P.O)}
+      ${linha("sd",'<path d="M21 12a9 9 0 1 1-9-9v9z"/>',prev?"Sobra":"Sobrou",prev?P.fecha:P.E-P.O)}
+      <button class="rz-ext" data-act="gp-ir" data-v="0">Ver extrato completo${svgI('<path d="M9 6l6 6-6 6"/>',16)}</button></div>
+  </section>`;
+}
+function vResumoPg(G,avs){
+  const P=rzPrev(G), L=vResumoListas();
+  const lim=S.gPer==="mes"?vLimGerais(limGeraisStatus(G.ym)):"";
+  return `${vRzSaldo(G,P)}
+    ${RZ.contas||S.ctNova||S.ctEdit||S.ctDel||S.ctAj?L.contas:""}
+    ${vRzReceb()}
+    ${vRzMes(G,P)}
+    ${lim?`<section class="card rz-card rz-lim">${lim}</section>`:""}
+    ${vAvisosFaixa(avs)}`;
+}
 function vContas(){
   const cs=[...S.contas.values()].sort((a,b)=>b.saldo-a.saldo);
   const tot=saldoTotalContas();
@@ -5515,7 +5769,7 @@ function vFluxo(G,varMes,usoLim,estado,compacto){
   const abertas=prev.length&&S.pagar.size?pgMesDados(G.ym).falta:0;
   const gastoFim=G.ehMesAtual?Math.max(G.projecao,O+abertas):O+abertas;
   const fecha=E+aRec-gastoFim;
-  const prevBox=prev.length?`<div class="fx-prev ${fecha<0?"bad":"ok"}">
+  const prevBox=prev.length&&compacto?`<div class="fx-prev rz-prev ${fecha<0?"bad":"ok"}"><div class="fx-prev-r"><span class="fx-l">Previsão de fechamento</span><b>${fecha<0?"Faltam ":"Sobram "}${fmt(Math.abs(fecha))}</b><small>contando ${fmt(aRec)} que ainda vai entrar${abertas?` e ${fmt(abertas)} de contas a pagar em aberto`:""}</small></div></div>`:prev.length?`<div class="fx-prev ${fecha<0?"bad":"ok"}">
       <div class="fx-prev-l"><span class="fx-l">Ainda vai entrar</span><b>${fmt(aRec)}</b><small>${prev.map(x=>`${esc(x.r.nome)} em ${dShort(x.data)}`).join(" · ")}</small></div>
       <div class="fx-prev-r"><span class="fx-l">Previsão de fechamento</span><b>${fecha<0?"Faltam ":"Sobram "}${fmt(Math.abs(fecha))}</b><small>${fmt(E)} já entrou + ${fmt(aRec)} a receber − ${fmt(gastoFim)} de gastos previstos${abertas?`, já contando ${fmt(abertas)} de contas a pagar em aberto`:""}</small></div>
     </div>`:"";
@@ -5588,10 +5842,8 @@ function vGastos(){
     </div>
     ${aba==="entradas"?vEntradasCorpo(G):vMovGastosCorpo(G,lista,filtrando,origs.sort((a,b)=>origemNome(a).localeCompare(origemNome(b))),varias,aba)}
   </section>`:""}
-  ${pg===1?`${vContas()}
-  ${vFluxo(G,varMes,usoLim,estado,true)}
-  ${vAvisosFaixa(avs)}
-  ${GI.open?"":(()=>{ const h=giHist(); return h?`<section class="card gi-hist-card">${h}<div class="btns"><button class="btn sm" data-act="gi-rapido">Importar outro extrato</button></div></section>`:""; })()}`:""}
+  ${pg===1?`${vResumoPg(G,avs)}
+  ${GI.open?"":(()=>{ const h=giHist(true); return h?`<section class="card gi-hist-card">${h}${RZ.imp||GI.undo?`<div class="btns"><button class="btn sm" data-act="gi-rapido">Importar outro extrato</button></div>`:""}</section>`:""; })()}`:""}
   ${pg===2?`  <h2 class="gx-sec" id="sec-dist"><span>Para onde foi o dinheiro</span><small>${esc(G.P.label)}</small></h2>
   <section class="grid">
     <div class="card span-7 g-dist2"><div class="card-h"><div><h2>Distribuição</h2><p><span class="dist-per">${esc(G.P.label)}</span> · <span id="dist-sub">${DIST[S.gDist][1]}</span></p></div>
@@ -5854,6 +6106,11 @@ app.addEventListener("click",async e=>{
   else if(act==="gi-undo-ok"){ await giDesfazer(b.dataset.id); }
   else if(act==="g-per"){ const v=b.dataset.v; if(v==="custom"&&S.gPer!=="custom"){ const P=gPeriodo(); S.gDe=P.de; S.gAte=P.ate; } S.gPer=v; S.gLim=100; render(); }
   else if(act==="mq-abrir"){ mqAbrir(); }
+  else if(act==="rz-olho"){ RZ.ocultar=!RZ.ocultar; try{ localStorage.setItem("diario-ocultar",RZ.ocultar?"1":"0"); }catch{} render(); }
+  else if(act==="rz-contas"){ RZ.contas=!RZ.contas; if(!RZ.contas){ S.ctEdit=null; S.ctDel=null; S.ctAj=null; S.ctNova=false; } render(); }
+  else if(act==="rz-imp"){ RZ.imp=!RZ.imp; GI.undo=null; render(); }
+  else if(act==="rz-ag"){ RZ.ag=!RZ.ag; if(!RZ.ag) S.rdEdit=null; render(); }
+  else if(act==="ct-abrir"){ const id=b.dataset.id; const ab=S.ctOpen===id||S.ctEdit===id||S.ctDel===id||(S.ctAj&&S.ctAj.id===id); S.ctOpen=ab?null:id; if(ab){ S.ctEdit=null; S.ctDel=null; S.ctAj=null; } render(); }
   else if(act==="atl-cartao"){ S.tab="cartoes"; CC.form=ccLista().length?"compra":"cartao"; CC.imp=null; render(); window.scrollTo({top:0}); setTimeout(()=>{ const f=document.querySelector(".cc-form"); if(f) f.scrollIntoView({behavior:"smooth",block:"start"}); const i=document.getElementById("ccc_d")||document.getElementById("cc_n"); if(i) i.focus({preventScroll:true}); try{ ccPrevCompra(); }catch{} },80); }
   else if(act==="g-hoje"){ S.gPer="mes"; S.gMes=todayISO().slice(0,7); S.gLim=100; S.gEdit=null; S.gDel=null; PG.pay=null; render(); }
   else if(act==="g-ir-mes"){ S.gPer="mes"; S.gMes=b.dataset.v; S.gLim=100; S.gEdit=null; S.gDel=null; PG.pay=null; const sl=document.querySelector(".mx-strip"); const pos=sl?sl.scrollLeft:0; render(); const st=document.querySelector(".mx-strip"); if(st){ st.scrollLeft=pos; const c=st.querySelector(".mx-c.on"); if(c){ const alvo=c.offsetLeft-st.clientWidth/2+c.offsetWidth/2; st.scrollTo({left:alvo,behavior:"smooth"}); st.dataset.ok=alvo; mxCentrado=S.gPer+"|"+S.gMes; c.focus({preventScroll:true}); } } }
