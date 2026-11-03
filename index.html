@@ -1788,6 +1788,58 @@ body[data-tab="lancar"] .fab{display:none!important}
   .gp-t{flex-direction:column;gap:3px;font-size:11.5px;padding:7px 2px}
   .gp-b{right:calc(50% - 22px);top:1px}
 }
+
+/* ===== Mês compacto ===== */
+.mq{display:flex;align-items:center;gap:6px;min-width:0;flex:1 1 260px}
+.mq-arr{flex:none;width:36px;height:36px;border-radius:11px;border:1px solid var(--line);background:var(--surface-2);color:var(--ink);display:grid;place-items:center;cursor:pointer}
+.mq-arr:hover:not(:disabled){background:var(--accent-soft)} .mq-arr:disabled{opacity:.35;cursor:default}
+.mq-t{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;gap:0;border:0;background:transparent;color:var(--ink);font:inherit;cursor:pointer;padding:2px 4px;border-radius:10px}
+.mq-t:hover{background:var(--surface-2)}
+.mq-t small{font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}
+.mq-t small.on{color:var(--accent)}
+.mq-t b{display:inline-flex;align-items:center;gap:4px;font-family:var(--f-display);font-size:17px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.mq-t b svg{color:var(--muted);flex:none}
+.mq-hoje{flex:none;display:inline-flex;align-items:center;gap:5px;border:1px solid var(--accent);color:var(--accent);background:transparent;border-radius:11px;height:36px;padding:0 10px;font:inherit;font-size:12.5px;font-weight:700;cursor:pointer}
+.mq-datas{width:100%}
+.gx-bar{gap:10px}
+.mq-sheet{max-width:520px}
+.mq-seg{display:grid;grid-template-columns:repeat(6,1fr);width:100%;margin-top:10px}
+.mq-seg .seg-b{padding:8px 2px;font-size:12px}
+.mq-ano{display:flex;align-items:center;justify-content:space-between;margin:16px 0 10px}
+.mq-ano div{text-align:center} .mq-ano b{display:block;font-family:var(--f-display);font-size:20px} .mq-ano small{font-size:12px;color:var(--muted)}
+.mq-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.mq-m{position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:2px;padding:10px 10px 9px;border:1px solid var(--line);border-radius:12px;background:var(--surface);color:var(--ink);font:inherit;cursor:pointer;text-align:left}
+.mq-m b{font-size:14px;text-transform:capitalize} .mq-m small{font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}
+.mq-bar{width:100%;height:4px;border-radius:9px;background:var(--surface-2);margin-top:5px;overflow:hidden} .mq-bar i{display:block;height:100%;background:var(--accent);border-radius:9px}
+.mq-m.fut{border-style:dashed} .mq-m.fut b{color:var(--muted)}
+.mq-m.now::after{content:"";position:absolute;top:8px;right:8px;width:6px;height:6px;border-radius:50%;background:var(--accent)}
+.mq-m.on{background:var(--cta);border-color:var(--cta);color:var(--cta-ink)} .mq-m.on small{color:var(--cta-ink);opacity:.85} .mq-m.on .mq-bar{background:color-mix(in srgb,var(--cta-ink) 25%,transparent)} .mq-m.on .mq-bar i{background:var(--cta-ink)}
+.mq-m:focus-visible{outline:2px solid var(--focus);outline-offset:1px}
+.mq-foot{display:flex;gap:8px;margin-top:14px} .mq-foot .btn{flex:1;justify-content:center;min-height:44px;gap:7px}
+@media (max-width:640px){ .mq{flex-basis:100%} .mq-seg{grid-template-columns:repeat(3,1fr)} }
+
+/* ===== Extrato: entrou e saiu de cara ===== */
+.ex-hd{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.ex-k{display:flex;flex-direction:column;align-items:flex-start;gap:3px;min-width:0;padding:12px 12px 11px;border-radius:16px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font:inherit;text-align:left;cursor:pointer;transition:border-color .15s ease,transform .1s ease}
+.ex-k:active{transform:scale(.98)}
+.ex-k small{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.ex-k b{font-family:var(--f-display);font-size:19px;font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.ex-k i{font-style:normal;font-size:11px;color:var(--muted)}
+.ex-k.in b{color:var(--pos)} .ex-k.in small svg{color:var(--pos)} .ex-k.out small svg{color:var(--neg)}
+.ex-k.sob{background:var(--pos-soft);border-color:transparent} .ex-k.sob b{color:var(--pos)}
+.ex-k.sob.neg{background:var(--neg-soft)} .ex-k.sob.neg b{color:var(--neg)}
+.ex-k.on{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent) inset}
+.ex-lim{grid-column:1/-1;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:10px;font-size:12px;color:var(--muted);padding:0 4px}
+.ex-lim b{font-size:12.5px;color:var(--ink);white-space:nowrap} .ex-lim b small{color:var(--muted);font-weight:500}
+.ex-lim .gbar{height:6px}
+.ex-av{grid-column:1/-1;display:flex;align-items:center;gap:6px;justify-content:center;border:1px dashed var(--line);background:transparent;color:var(--ink-2);border-radius:12px;padding:8px;font:inherit;font-size:12.5px;font-weight:600;cursor:pointer}
+.ex-av svg:first-child{color:var(--neg)}
+.mov .tabs3{grid-template-columns:repeat(3,1fr)}
+.mov .tab2{flex-wrap:nowrap;gap:5px;padding:9px 4px}
+:root[data-glass] .ex-k{background:var(--gl-glass2);border-color:var(--gl-bd)}
+:root[data-glass] .ex-k.sob{background:color-mix(in srgb,var(--pos) 16%,var(--gl-glass2))}
+:root[data-glass] .ex-k.sob.neg{background:color-mix(in srgb,var(--neg) 16%,var(--gl-glass2))}
+@media (max-width:640px){ .ex-hd{gap:6px} .ex-k{padding:10px 8px;border-radius:14px} .ex-k b{font-size:14px;letter-spacing:-.02em} .ex-k small{font-size:10px} .ex-k i{font-size:10px} }
 </style>
 
 <header class="top">
@@ -1850,7 +1902,7 @@ const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).
 /* ---------- Estado ---------- */
 const S = { assets:new Map(), entries:new Map(), ready:false, tab:"painel", range:"6M", assetMode:"valor",
   entryDate: todayISO(), drafts:{}, confirmDel:null, histFilter:"", repYear:null,
-  detalhar:{}, regras:new Map(), entradas:new Map(), contas:new Map(), rendas:new Map(), emps:new Map(), recebs:new Map(), rdEdit:null, pagar:new Map(), pagtos:new Map(), ctEdit:null, ctNova:false, ctDel:null, gTipo:"gasto", eEdit:null, eDel:null, eLim:10, avOcultos:new Set(), gastos:new Map(), orc:new Map(), cartoes:new Map(), cpags:new Map(), gPer:"mes", gDist:0, gForm:false, aForm:false, gAba:"gastos", gDe:"", gAte:"", gOrd:"recentes", gBusca:"", gMin:"", gLim:100, gMes: todayISO().slice(0,7), gEdit:null, gCat:"", gDel:null, gOrcOpen:false };
+  detalhar:{}, regras:new Map(), entradas:new Map(), contas:new Map(), rendas:new Map(), emps:new Map(), recebs:new Map(), rdEdit:null, pagar:new Map(), pagtos:new Map(), ctEdit:null, ctNova:false, ctDel:null, gTipo:"gasto", eEdit:null, eDel:null, eLim:10, avOcultos:new Set(), gastos:new Map(), orc:new Map(), cartoes:new Map(), cpags:new Map(), gPer:"mes", gDist:0, gForm:false, aForm:false, gAba:"tudo", gDe:"", gAte:"", gOrd:"recentes", gBusca:"", gMin:"", gLim:100, gMes: todayISO().slice(0,7), gEdit:null, gCat:"", gDel:null, gOrcOpen:false };
 
 /* ---------- Armazenamento (nuvem → navegador) ---------- */
 const store = { mode:null, put:null, del:null };
@@ -3943,6 +3995,60 @@ async function pgExcluir(id){
 /* ---------- Navegação por meses (aba Gastos) ---------- */
 const fmtK=v=>v>=1e6?`R$ ${(v/1e6).toLocaleString("pt-BR",{maximumFractionDigits:1})} mi`:v>=1000?`R$ ${(v/1000).toLocaleString("pt-BR",{maximumFractionDigits:1})} mil`:v>0?`R$ ${Math.round(v)}`:"—";
 let mxCentrado=null;
+
+/* ---------- Escolha do mês compacta + painel de meses ---------- */
+const MQ_PER=[["mes","Mês"],["3m","3 meses"],["6m","6 meses"],["12m","1 ano"],["tudo","Tudo"],["custom","Datas"]];
+function mqTag(P){ const mA=P.mesAtual; if(S.gPer!=="mes") return S.gPer==="custom"?"Período escolhido":"Período"; if(S.gMes===mA) return "Mês atual"; if(S.gMes>mA) return "Mês futuro"; const n=ymDiff(S.gMes,mA); return `Há ${n} ${n>1?"meses":"mês"}`; }
+function vMesCompacto(G){
+  const P=G.P, mes=S.gPer==="mes", atual=mes&&S.gMes===P.mesAtual;
+  const tit=mes?mLong(S.gMes):P.label;
+  const seta=(v,l,d)=>`<button class="mq-arr" data-act="g-mes" data-v="${v}" aria-label="${l}">${svgI(`<path d="${d}"/>`,17)}</button>`;
+  return `<div class="mq" id="sec-mes">
+    ${mes?seta(-1,"Mês anterior","M15 6l-6 6 6 6"):""}
+    <button class="mq-t" data-act="mq-abrir" aria-haspopup="dialog" aria-label="Escolher mês ou período. Agora: ${esc(tit)}"><small class="${atual?"on":""}">${mqTag(P)}</small><b>${esc(tit)}${svgI('<path d="M6 9l6 6 6-6"/>',15)}</b></button>
+    ${mes?seta(1,"Próximo mês","M9 6l6 6-6 6"):""}
+    ${!atual?`<button class="mq-hoje" data-act="g-hoje" title="Voltar para o mês atual">${svgI('<path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/>',14)}<span>Hoje</span></button>`:""}
+  </div>
+  ${S.gPer==="custom"?`<div class="per-dates mx-datas mq-datas"><label for="g-de">De</label><input type="date" class="inp" id="g-de" value="${P.de}"><label for="g-ate">até</label><input type="date" class="inp" id="g-ate" value="${P.ate}"></div>`:""}`;
+}
+function mqAbrir(){
+  let ov=document.getElementById("mq-ov");
+  if(!ov){ ov=document.createElement("div"); ov.id="mq-ov"; ov.className="gn-ov"; ov.setAttribute("role","dialog"); ov.setAttribute("aria-modal","true"); ov.setAttribute("aria-label","Escolher mês ou período"); document.body.appendChild(ov);
+    ov.addEventListener("click",e=>{ if(e.target===ov){ mqFechar(); return; } const b=e.target.closest("[data-mq]"); if(!b) return; const a=b.dataset.mq, v=b.dataset.v;
+      if(a==="x"){ mqFechar(); return; }
+      if(a==="per"){ if(v==="custom"&&S.gPer!=="custom"){ const P=gPeriodo(); S.gDe=P.de; S.gAte=P.ate; } S.gPer=v; S.gLim=100; render(); if(v==="mes") mqRender(); else mqFechar(); return; }
+      if(a==="mes"){ S.gPer="mes"; S.gMes=v; S.gLim=100; S.gEdit=null; S.gDel=null; PG.pay=null; mqFechar(); render(); return; }
+      if(a==="ano"){ MQ.ano=+v; mqRender(); return; }
+      if(a==="hoje"){ S.gPer="mes"; S.gMes=todayISO().slice(0,7); S.gLim=100; mqFechar(); render(); return; }
+      if(a==="resumo"){ mqFechar(); S.tab="relatorios"; S.rsMes=v; render(); window.scrollTo({top:0}); } });
+    document.addEventListener("keydown",e=>{ if(e.key==="Escape"&&!ov.hidden&&ov.classList.contains("show")) mqFechar(); }); }
+  MQ.ano=+(S.gPer==="mes"?S.gMes:todayISO()).slice(0,4);
+  mqRender(); ov.hidden=false; document.body.classList.add("gn-on"); requestAnimationFrame(()=>ov.classList.add("show"));
+  setTimeout(()=>{ const f=ov.querySelector(".mq-m.on")||ov.querySelector(".mq-m"); if(f) f.focus({preventScroll:true}); },60);
+}
+const MQ={ano:0};
+function mqFechar(){ const ov=document.getElementById("mq-ov"); if(!ov||ov.hidden) return; ov.classList.remove("show"); document.body.classList.remove("gn-on"); setTimeout(()=>{ if(!ov.classList.contains("show")) ov.hidden=true; },220); }
+function mqRender(){
+  const ov=document.getElementById("mq-ov"); if(!ov) return;
+  const mA=todayISO().slice(0,7), sel=S.gPer==="mes"?S.gMes:null;
+  const porMes={}; S.gastos.forEach(g=>{ const m=g.data.slice(0,7); porMes[m]=(porMes[m]||0)+g.valor; });
+  const anos=new Set([+mA.slice(0,4),+mA.slice(0,4)+(+mA.slice(5)>=11?1:0)]); Object.keys(porMes).forEach(m=>anos.add(+m.slice(0,4))); if(sel) anos.add(+sel.slice(0,4));
+  const lst=[...anos].sort((a,b)=>a-b); if(!lst.includes(MQ.ano)) MQ.ano=lst[lst.length-1];
+  const y=MQ.ano, max=Math.max(1,...Array.from({length:12},(_,i)=>porMes[`${y}-${String(i+1).padStart(2,"0")}`]||0));
+  const totAno=Array.from({length:12},(_,i)=>porMes[`${y}-${String(i+1).padStart(2,"0")}`]||0).reduce((a,b)=>a+b,0);
+  const iy=lst.indexOf(y);
+  ov.innerHTML=`<div class="gn-sheet mq-sheet" tabindex="-1"><span class="gn-grab" aria-hidden="true"></span>
+    <div class="gn-h"><div><b>Escolher período</b><small>Toque em um mês para ver os gastos dele</small></div><button class="icon-btn gn-x" data-mq="x" aria-label="Fechar">${svgI('<path d="M6 6l12 12M18 6L6 18"/>',18)}</button></div>
+    <div class="seg mq-seg" role="group" aria-label="Ver por">${MQ_PER.map(([v,n])=>`<button class="seg-b" data-mq="per" data-v="${v}" aria-pressed="${S.gPer===v}">${n}</button>`).join("")}</div>
+    <div class="mq-ano"><button class="mq-arr" data-mq="ano" data-v="${lst[iy-1]??y}" ${iy<=0?"disabled":""} aria-label="Ano anterior">${svgI('<path d="M15 6l-6 6 6 6"/>',16)}</button>
+      <div><b>${y}</b><small>${totAno?fmt(totAno)+" em gastos":"sem gastos"}</small></div>
+      <button class="mq-arr" data-mq="ano" data-v="${lst[iy+1]??y}" ${iy>=lst.length-1?"disabled":""} aria-label="Próximo ano">${svgI('<path d="M9 6l6 6-6 6"/>',16)}</button></div>
+    <div class="mq-grid">${MESES.map((n,i)=>{ const m=`${y}-${String(i+1).padStart(2,"0")}`, v=porMes[m]||0, fut=m>mA;
+      return `<button class="mq-m${m===sel?" on":""}${m===mA?" now":""}${fut?" fut":""}" data-mq="mes" data-v="${m}" aria-pressed="${m===sel}" aria-label="${mLong(m)}: ${v?fmt(v):"sem gastos"}"><b>${n.slice(0,3)}</b><small>${v?fmtK(v):fut?"—":"R$ 0"}</small><span class="mq-bar"><i style="width:${v?Math.max(6,v/max*100):0}%"></i></span></button>`; }).join("")}</div>
+    <div class="mq-foot">${sel!==mA?`<button class="btn" data-mq="hoje">${svgI('<path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/>',15)}Mês atual</button>`:""}${sel&&sel<=mA?`<button class="btn" data-mq="resumo" data-v="${sel}">${svgI('<path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 6-6"/>',15)}Resumo do mês</button>`:""}</div>
+  </div>`;
+}
+
 function vMeses(G){
   const P=G.P, mAtual=P.mesAtual, sel=S.gPer==="mes"?S.gMes:null;
   const porMes={}; S.gastos.forEach(g=>{ const m=g.data.slice(0,7); porMes[m]=(porMes[m]||0)+g.valor; });
@@ -4631,9 +4737,9 @@ const GN={aberto:false,ativo:"sec-conta",lock:0};
 const svgI=(d,w=16)=>`<svg width="${w}" height="${w}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg>`;
 
 /* ---------- Páginas da aba Gastos (deslizar para o lado) ---------- */
-const GPG=[["Resumo",'<path d="M3 10.5 12 3l9 7.5"/><path d="M5 9v11h14V9"/>'],["Lista",'<path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/>'],["Análise",'<path d="M21 12a9 9 0 1 1-9-9v9z"/><path d="M15 3.5A9 9 0 0 1 20.5 9H15z"/>'],["Contas",'<path d="M9 11l3 3 8-8"/><path d="M20 12v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h9"/>']];
-const GP={pg:(()=>{ try{ const v=+localStorage.getItem("diario-gpg"); return v>=0&&v<4?v:0; }catch{ return 0; } })(),dir:0,prev:null};
-const GP_SEC={"sec-conta":0,"sec-bal":0,"sec-mov":1,"g-lista":1,"sec-dist":2,"sec-tempo":2,pg:3,em:3};
+const GPG=[["Extrato",'<path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/>'],["Resumo",'<path d="M12 3v18M5 7h14M7 7l-3 7a3 3 0 0 0 6 0zM17 7l-3 7a3 3 0 0 0 6 0z"/>'],["Análise",'<path d="M21 12a9 9 0 1 1-9-9v9z"/><path d="M15 3.5A9 9 0 0 1 20.5 9H15z"/>'],["Contas",'<path d="M9 11l3 3 8-8"/><path d="M20 12v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h9"/>']];
+const GP={pg:(()=>{ try{ const v=+localStorage.getItem("diario-gpg2"); return v>=0&&v<4?v:0; }catch{ return 0; } })(),dir:0,prev:null};
+const GP_SEC={"sec-conta":1,"sec-bal":1,"sec-mov":0,"g-lista":0,"sec-dist":2,"sec-tempo":2,pg:3,em:3};
 function vGPgTabs(){
   const k0=GP.prev??GP.pg; GP.prev=null;
   let nPg=0; try{ const D=pgMesDados(todayISO().slice(0,7)); nPg=[...D.atrasoAnt,...D.doMes].filter(i=>i.st==="atrasada"||i.st==="hoje").length; }catch{}
@@ -4644,7 +4750,7 @@ function vGPgTabs(){
 }
 function gpIr(k,dir){
   if(k<0||k>=GPG.length||k===GP.pg){ if(k<0||k>=GPG.length){ const g=document.getElementById("gp"); if(g){ g.classList.remove("bump-l","bump-r"); void g.offsetWidth; g.classList.add(k<0?"bump-l":"bump-r"); } } return; }
-  GP.prev=GP.pg; GP.dir=dir??(k>GP.pg?1:-1); GP.pg=k; try{ localStorage.setItem("diario-gpg",String(k)); }catch{}
+  GP.prev=GP.pg; GP.dir=dir??(k>GP.pg?1:-1); GP.pg=k; try{ localStorage.setItem("diario-gpg2",String(k)); }catch{}
   try{ navigator.vibrate&&navigator.vibrate(6); }catch{}
   render();
   requestAnimationFrame(()=>requestAnimationFrame(()=>{ const tl=document.querySelector(".gp-tl"); if(tl) tl.style.setProperty("--k",k); }));
@@ -4653,7 +4759,7 @@ function gpIr(k,dir){
 function gpTopo(){ const nav=document.getElementById("gnav"), gp=document.getElementById("gp"); if(!nav||!gp) return;
   const top=document.querySelector(".top"), off=nav.offsetHeight+(top&&!document.body.classList.contains("nav-off")?top.offsetHeight:0)+16;
   const alvo=gp.getBoundingClientRect().top+window.scrollY-off; if(window.scrollY>alvo) window.scrollTo({top:Math.max(0,alvo)}); }
-function gpMostrar(id){ const k=GP_SEC[id]; if(k==null||k===GP.pg) return false; GP.prev=GP.pg; GP.dir=k>GP.pg?1:-1; GP.pg=k; try{ localStorage.setItem("diario-gpg",String(k)); }catch{} return true; }
+function gpMostrar(id){ const k=GP_SEC[id]; if(k==null||k===GP.pg) return false; GP.prev=GP.pg; GP.dir=k>GP.pg?1:-1; GP.pg=k; try{ localStorage.setItem("diario-gpg2",String(k)); }catch{} return true; }
 function vGUltimos(G){
   const ult=[...G.doPer].sort((a,b)=>b.data.localeCompare(a.data)||(b.criado||0)-(a.criado||0)).slice(0,5);
   if(!ult.length) return "";
@@ -4991,18 +5097,40 @@ function txLinha(k,x){ const ent=k==="e", cor=ent?ecatCor(x.cat):catCor(x.cat), 
   return `<button class="tx" data-act="tx" data-k="${k}" data-id="${x.id}"><span class="tx-ic" style="--c:${cor}">${svgI(ic,18)}</span>
     <span class="tx-m"><b>${esc(x.desc)}</b><small>${txSub(k,x).filter(Boolean).map(esc).join(" · ")}${x.fixo?' <span class="tx-tag">Fixo</span>':""}${ent&&dataMes(x)!==x.data?` <span class="tx-tag">${mesNome(dataMes(x).slice(0,7))}</span>`:""}</small></span>
     <span class="tx-v ${ent||cred?"pos-t":""}">${ent||cred?"+ ":"− "}${fmt(Math.abs(x.valor))}</span></button>`; }
-function txLista(k,lista,agrupar,lim){
-  const L=lista.slice(0,lim); if(!agrupar) return `<div class="tx-l">${L.map(x=>txLinha(k,x)).join("")}</div>`;
-  const tot={}; lista.forEach(x=>tot[x.data]=(tot[x.data]||0)+x.valor);
-  const dias=[]; L.forEach(x=>{ let g=dias[dias.length-1]; if(!g||g.d!==x.data){ g={d:x.data,it:[]}; dias.push(g); } g.it.push(x); });
-  return dias.map(g=>`<div class="tx-dia"><div class="tx-dh"><span>${txDia(g.d)}</span><b>${k==="e"?"+ ":"− "}${fmt(Math.abs(tot[g.d]))}</b></div><div class="tx-l">${g.it.map(x=>txLinha(k,x)).join("")}</div></div>`).join(""); }
-function vMovGastosCorpo(G,lista,filtrando,origs,varias){
+function txLista(k,lista,agrupar,lim){ return txListaMix(lista.map(x=>({k,x})),agrupar,lim); }
+function txListaMix(itens,agrupar,lim){
+  const L=itens.slice(0,lim); if(!agrupar) return `<div class="tx-l">${L.map(({k,x})=>txLinha(k,x)).join("")}</div>`;
+  const tot={}; itens.forEach(({k,x})=>{ const t=(tot[x.data] ||= {e:0,g:0}); if(k==="e") t.e+=x.valor; else t.g+=x.valor; });
+  const dias=[]; L.forEach(it=>{ let g=dias[dias.length-1]; if(!g||g.d!==it.x.data){ g={d:it.x.data,it:[]}; dias.push(g); } g.it.push(it); });
+  const tt=t=>[t.e?`<span class="pos-t">+ ${fmt(t.e)}</span>`:"",t.g?`− ${fmt(Math.abs(t.g))}`:""].filter(Boolean).join(" · ");
+  return dias.map(g=>`<div class="tx-dia"><div class="tx-dh"><span>${txDia(g.d)}</span><b>${tt(tot[g.d])}</b></div><div class="tx-l">${g.it.map(({k,x})=>txLinha(k,x)).join("")}</div></div>`).join(""); }
+function vExHd(G,usoLim,nAv){
+  const sobra=G.totalE-G.total, taxa=G.totalE?sobra/G.totalE:NaN, aba=S.gAba||"tudo";
+  const lim=G.limTotal?`<div class="ex-lim ${usoLim>1?"neg":usoLim>.85?"warn":"pos"}"><span>Limite do mês</span><span class="gbar"><b style="width:${Math.min(100,usoLim*100).toFixed(1)}%"></b></span><b>${fmt(G.gastoComLim)} <small>de ${fmt(G.limTotal)}</small></b></div>`:"";
+  return `<section class="ex-hd" id="sec-ex" aria-label="Entrou e saiu em ${esc(G.P.label)}">
+    <button class="ex-k in ${aba==="entradas"?"on":""}" data-act="g-aba" data-v="entradas"><small>${svgI('<path d="M17 7 7 17M7 9v8h8"/>',13)}Entrou</small><b>${fmt(G.totalE)}</b></button>
+    <button class="ex-k out ${aba==="gastos"?"on":""}" data-act="g-aba" data-v="gastos"><small>${svgI('<path d="M7 17 17 7M9 7h8v8"/>',13)}Saiu</small><b>${fmt(G.total)}</b></button>
+    <button class="ex-k sob ${sobra<0?"neg":""}" data-act="gp-ir" data-v="1"><small>${sobra<0?"Faltou":"Sobrou"}</small><b>${fmt(Math.abs(sobra))}</b>${isFinite(taxa)&&sobra>0?`<i>${Math.round(taxa*100)}% do que entrou</i>`:""}</button>
+    ${lim}
+    ${nAv?`<button class="ex-av" data-act="gp-ir" data-v="1">${svgI('<path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/>',14)}${nAv} aviso${nAv>1?"s":""} no Resumo${svgI('<path d="M9 6l6 6-6 6"/>',14)}</button>`:""}
+  </section>`;
+}
+function vMovGastosCorpo(G,lista,filtrando,origs,varias,modo){
+  const tudo=modo==="tudo";
   const ord=S.gOrd||"recentes", nF=[S.gCat,S.gOrig,S.gMin].filter(Boolean).length+(ord!=="recentes"?1:0);
   const cats=GCATS.filter(([id])=>G.porCat[id]).sort((a,b)=>G.porCat[b[0]]-G.porCat[a[0]]);
   const ativos=[S.gCat?["g-cat-x",catNome(S.gCat),catCor(S.gCat)]:null,S.gOrig?["g-orig-x",origemNome(S.gOrig)]:null,S.gMin?["g-min-x",`A partir de R$ ${S.gMin}`]:null,ord!=="recentes"?["g-ord-x",ord==="maior"?"Maiores primeiro":"Menores primeiro"]:null].filter(Boolean);
   const soma=lista.reduce((t,g)=>t+g.valor,0);
+  let itens=null, somaE=0;
+  if(tudo){ const busca=(S.gBusca||"").trim().toLowerCase(), min=S.gMin?parseNum(S.gMin):null;
+    const ents=S.gCat?[]:G.entPer.filter(e=>(!S.gOrig||origemDe(e)===S.gOrig)&&(!busca||e.desc.toLowerCase().includes(busca))&&(min==null||e.valor>=min));
+    somaE=ents.reduce((t,e)=>t+e.valor,0);
+    itens=[...lista.map(x=>({k:"g",x})),...ents.map(x=>({k:"e",x}))];
+    const ord=S.gOrd||"recentes";
+    if(ord==="maior") itens.sort((a,b)=>b.x.valor-a.x.valor); else if(ord==="menor") itens.sort((a,b)=>a.x.valor-b.x.valor);
+    else itens.sort((a,b)=>b.x.data.localeCompare(a.x.data)||(b.x.criado||0)-(a.x.criado||0)); }
   return `<div class="tx-tools">
-      <label class="tx-busca">${svgI(ICO_BUSCA,17)}<input id="g-busca" type="search" placeholder="Buscar neste período" value="${esc(S.gBusca||"")}" aria-label="Buscar gasto"></label>
+      <label class="tx-busca">${svgI(ICO_BUSCA,17)}<input id="g-busca" type="search" placeholder="${tudo?"Buscar no período":"Buscar gastos"}" value="${esc(S.gBusca||"")}" aria-label="Buscar gasto"></label>
       <button class="btn tx-fbtn ${S.gFilt?"on":""}" data-act="g-filt" aria-expanded="${!!S.gFilt}">${svgI(ICO_FILT,16)}<span>Filtros</span>${nF?`<span class="tx-n">${nF}</span>`:""}</button>
     </div>
     ${S.gFilt?`<div class="tx-fp">
@@ -5012,9 +5140,9 @@ function vMovGastosCorpo(G,lista,filtrando,origs,varias){
         <div class="field"><label class="tx-fl-t" for="g-min">Valor a partir de</label><input class="inp money" id="g-min" inputmode="decimal" placeholder="R$ 0,00" value="${esc(S.gMin||"")}"></div></div>
     </div>`:""}
     ${ativos.length?`<div class="tx-ativos">${ativos.map(([a,n,c])=>`<button class="tx-chip on" data-act="${a}" aria-label="Tirar filtro ${esc(n)}">${c?`<i style="background:${c}"></i>`:""}${esc(n)}${svgI(ICO_X,12)}</button>`).join("")}<button class="copy" data-act="g-limpar">limpar tudo</button></div>`:""}
-    <div class="tx-res"><span>${lista.length} gasto${lista.length!==1?"s":""}${filtrando?" encontrados":""}</span><b>${fmt(soma)}</b></div>
-    ${lista.length?txLista("g",lista,ord==="recentes",S.gLim)+(lista.length>S.gLim?`<div class="mais"><button class="btn sm" data-act="g-mais">Mostrar mais ${Math.min(100,lista.length-S.gLim)} de ${lista.length-S.gLim}</button></div>`:"")
-      :`<div class="g-empty"><b>Nenhum gasto ${filtrando?"com esses filtros":""} em ${esc(G.P.label.toLowerCase())}</b><span>${filtrando?"Ajuste ou limpe os filtros.":"Toque em + Gasto ou importe o extrato do banco."}</span></div>`}`;
+    ${tudo?`<div class="tx-res"><span>${itens.length} movimentaç${itens.length!==1?"ões":"ão"}${filtrando?" encontradas":""}</span><b>${somaE?`<span class="pos-t">+ ${fmt(somaE)}</span> · `:""}− ${fmt(soma)}</b></div>`:`<div class="tx-res"><span>${lista.length} gasto${lista.length!==1?"s":""}${filtrando?" encontrados":""}</span><b>${fmt(soma)}</b></div>`}
+    ${tudo&&itens.length?txListaMix(itens,ord==="recentes",S.gLim)+(itens.length>S.gLim?`<div class="mais"><button class="btn sm" data-act="g-mais">Mostrar mais ${Math.min(100,itens.length-S.gLim)} de ${itens.length-S.gLim}</button></div>`:""):!tudo&&lista.length?txLista("g",lista,ord==="recentes",S.gLim)+(lista.length>S.gLim?`<div class="mais"><button class="btn sm" data-act="g-mais">Mostrar mais ${Math.min(100,lista.length-S.gLim)} de ${lista.length-S.gLim}</button></div>`:"")
+      :`<div class="g-empty"><b>Nenhum${tudo?"a movimentação":" gasto"} ${filtrando?"com esses filtros":""} em ${esc(G.P.label.toLowerCase())}</b><span>${filtrando?"Ajuste ou limpe os filtros.":"Toque em + Gasto ou importe o extrato do banco."}</span></div>`}`;
 }
 /* ---- detalhe de um lançamento (painel que sobe de baixo) ---- */
 const TX={k:null,id:null,del:false};
@@ -5254,7 +5382,7 @@ function vFluxo(G,varMes,usoLim,estado){
   </section>`;
 }
 function vGastos(){
-  const G=gCompute(); const ym=G.ym; const pg=GP.pg, anim=GP.dir; GP.dir=0; if(pg===3){ PG.aberto=true; EM.aberto=true; }
+  const G=gCompute(); const ym=G.ym; const pg=GP.pg, anim=GP.dir; GP.dir=0; const aba=S.gAba||"tudo"; if(pg===3){ PG.aberto=true; EM.aberto=true; }
   const ed=S.gEdit?S.gastos.get(S.gEdit):null;
   const aberto=!!ed||(S.gForm&&S.gTipo!=="entrada");
   const defData = ed?ed.data : (S.gPer!=="mes"||ym===G.mesAtual?todayISO():`${ym}-01`);
@@ -5273,9 +5401,8 @@ function vGastos(){
   const proj = S.gPer==="mes" ? (G.ehMesAtual?["Projeção do mês",fmt(G.projecao),`Média de ${fmt(G.media)} por dia`]:["Média por dia",fmt(G.media),`${G.dias} dias no mês`]) : ["Média por mês",fmt(G.total/G.P.nMeses),`Média de ${fmt(G.media)} por dia`];
   return `<div class="gx">
   ${vLembreteImport()}
-  ${vMeses(G)}
   <header class="gx-bar" id="sec-lanc">
-    <div class="gx-lbl"><b>Gastos e entradas</b><span>${S.gPer==="mes"?mLong(ym).toLowerCase():G.P.label.toLowerCase()}</span></div>
+    ${vMesCompacto(G)}
     <div class="gx-acts">
       <button class="btn bs-open" data-act="bs-open" title="Buscar em todo o histórico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><span class="hide-sm">Buscar</span></button>
       <button class="btn primary" data-act="g-novo" aria-pressed="${aberto&&!ed}"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>Gasto</button>
@@ -5308,21 +5435,21 @@ function vGastos(){
   </section>`}
 
   <div class="gp ${anim>0?"in-r":anim<0?"in-l":""}" id="gp" data-pg="${pg}" role="tabpanel" aria-label="${GPG[pg][0]}">
-  ${pg===0?`${vContas()}
-  ${vFluxo(G,varMes,usoLim,estado)}
-  ${vAvisosFaixa(avs)}
-  ${vGUltimos(G)}`:""}
-  ${pg===1?`  <h2 class="gx-sec" id="sec-mov"><span>Movimentações</span><small>${esc(G.P.label)}</small></h2>
+  ${pg===0?`  ${vExHd(G,usoLim,avs.length)}
   <section class="card mov" id="g-lista">
     <div class="mov-h">
-      <div class="tabs2" role="tablist" aria-label="Tipo de movimentação">
-        <button role="tab" class="tab2" data-act="g-aba" data-v="gastos" aria-selected="${S.gAba!=="entradas"}">Gastos <span>${G.doPer.length}</span> <b class="neg-t">${fmt(G.total)}</b></button>
-        <button role="tab" class="tab2" data-act="g-aba" data-v="entradas" aria-selected="${S.gAba==="entradas"}">Entradas <span>${G.entPer.length}</span> <b class="pos-t">${fmt(G.totalE)}</b></button>
+      <div class="tabs2 tabs3" role="tablist" aria-label="Tipo de movimentação">
+        <button role="tab" class="tab2" data-act="g-aba" data-v="tudo" aria-selected="${aba==="tudo"}">Tudo <span>${G.doPer.length+G.entPer.length}</span></button>
+        <button role="tab" class="tab2" data-act="g-aba" data-v="gastos" aria-selected="${aba==="gastos"}">Gastos <span>${G.doPer.length}</span></button>
+        <button role="tab" class="tab2" data-act="g-aba" data-v="entradas" aria-selected="${aba==="entradas"}">Entradas <span>${G.entPer.length}</span></button>
       </div>
-      ${S.gAba==="entradas"?`<button class="btn sm" data-act="e-nova">+ Entrada</button>`:`<button class="btn sm ghost" data-act="csv-gastos">Exportar CSV</button>`}
+      ${aba==="entradas"?`<button class="btn sm" data-act="e-nova">+ Entrada</button>`:`<button class="btn sm ghost" data-act="csv-gastos">Exportar CSV</button>`}
     </div>
-    ${S.gAba==="entradas"?vEntradasCorpo(G):vMovGastosCorpo(G,lista,filtrando,origs.sort((a,b)=>origemNome(a).localeCompare(origemNome(b))),varias)}
+    ${aba==="entradas"?vEntradasCorpo(G):vMovGastosCorpo(G,lista,filtrando,origs.sort((a,b)=>origemNome(a).localeCompare(origemNome(b))),varias,aba)}
   </section>`:""}
+  ${pg===1?`${vContas()}
+  ${vFluxo(G,varMes,usoLim,estado)}
+  ${vAvisosFaixa(avs)}`:""}
   ${pg===2?`  <h2 class="gx-sec" id="sec-dist"><span>Para onde foi o dinheiro</span><small>${esc(G.P.label)}</small></h2>
   <section class="grid">
     <div class="card span-7 g-dist2"><div class="card-h"><div><h2>Distribuição</h2><p><span class="dist-per">${esc(G.P.label)}</span> · <span id="dist-sub">${DIST[S.gDist][1]}</span></p></div>
@@ -5583,6 +5710,7 @@ app.addEventListener("click",async e=>{
   else if(act==="gi-undo-no"){ GI.undo=null; render(); }
   else if(act==="gi-undo-ok"){ await giDesfazer(b.dataset.id); }
   else if(act==="g-per"){ const v=b.dataset.v; if(v==="custom"&&S.gPer!=="custom"){ const P=gPeriodo(); S.gDe=P.de; S.gAte=P.ate; } S.gPer=v; S.gLim=100; render(); }
+  else if(act==="mq-abrir"){ mqAbrir(); }
   else if(act==="g-hoje"){ S.gPer="mes"; S.gMes=todayISO().slice(0,7); S.gLim=100; S.gEdit=null; S.gDel=null; PG.pay=null; render(); }
   else if(act==="g-ir-mes"){ S.gPer="mes"; S.gMes=b.dataset.v; S.gLim=100; S.gEdit=null; S.gDel=null; PG.pay=null; const sl=document.querySelector(".mx-strip"); const pos=sl?sl.scrollLeft:0; render(); const st=document.querySelector(".mx-strip"); if(st){ st.scrollLeft=pos; const c=st.querySelector(".mx-c.on"); if(c){ const alvo=c.offsetLeft-st.clientWidth/2+c.offsetWidth/2; st.scrollTo({left:alvo,behavior:"smooth"}); st.dataset.ok=alvo; mxCentrado=S.gPer+"|"+S.gMes; c.focus({preventScroll:true}); } } }
   else if(act==="g-loja"){ const v=b.dataset.v; S.gBusca=(S.gBusca&&S.gBusca.toLowerCase()===v.toLowerCase())?"":v; S.gLim=100; if(S.gBusca) gpMostrar("g-lista"); render(); if(S.gBusca){ const l=document.getElementById("g-lista"); if(l) l.scrollIntoView({behavior:"smooth",block:"start"}); } }
@@ -5656,7 +5784,7 @@ app.addEventListener("click",async e=>{
   else if(act==="a-form"){ S.aForm=!S.aForm; render(); if(S.aForm){ const f=document.getElementById("an"); if(f) f.focus(); } }
   else if(act==="g-novo"){ S.gTipo="gasto"; S.gForm=true; S.eEdit=null; S.gEdit=null; render(); const f=document.getElementById("gd"); if(f) f.focus(); }
   else if(act==="g-fechar"){ S.gForm=false; S.gTipo="gasto"; S.gEdit=null; render(); }
-  else if(act==="g-aba"){ S.gAba=b.dataset.v; render(); }
+  else if(act==="g-aba"){ const v=b.dataset.v; S.gAba=b.classList.contains("ex-k")&&(S.gAba||"tudo")===v?"tudo":v; S.gLim=100; if(GP.pg!==0) gpIr(0); else render(); }
   else if(act==="e-nova"){ S.gTipo="entrada"; S.gForm=true; S.gEdit=null; render(); window.scrollTo({top:0,behavior:"smooth"}); const f=document.getElementById("ed_"); if(f) f.focus({preventScroll:true}); }
   else if(act==="e-voltar"){ S.gTipo="gasto"; render(); const f=document.getElementById("gd"); if(f) f.focus(); }
   else if(act==="e-edit"){ S.eEdit=b.dataset.id; S.gEdit=null; S.eDel=null; render(); window.scrollTo({top:0,behavior:"smooth"}); }
@@ -5669,7 +5797,7 @@ app.addEventListener("click",async e=>{
   else if(act==="av-ver"){ if(b.dataset.cat){ S.gCat=b.dataset.cat; S.gBusca=""; } if(b.dataset.busca){ S.gBusca=b.dataset.busca; S.gCat=""; } S.gLim=100; gpMostrar("g-lista"); render(); const l=document.getElementById("g-lista"); if(l) l.scrollIntoView({behavior:"smooth",block:"start"}); }
   else if(act==="g-form"){ if(S.gForm&&S.gTipo==="entrada"){ S.gForm=false; S.gTipo="gasto"; render(); return; } S.gForm=!S.gForm; render(); if(S.gForm){ const f=document.getElementById("gd"); if(f) f.focus(); } }
   else if(act==="g-mes"){ S.gPer="mes"; S.gLim=100; S.gMes=ymAdd(S.gMes,+b.dataset.v); S.gEdit=null; S.gDel=null; PG.pay=null; render(); mxCentrar(true); }
-  else if(act==="g-filtro"){ S.gCat = S.gCat===b.dataset.v ? "" : b.dataset.v; S.gLim=100; if(S.gCat){ gpIr(1); if(GP.pg!==1) render(); } else render(); }
+  else if(act==="g-filtro"){ S.gCat = S.gCat===b.dataset.v ? "" : b.dataset.v; S.gLim=100; if(S.gCat){ S.gAba="gastos"; if(GP.pg!==0) gpIr(0); else render(); } else render(); }
   else if(act==="g-edit"){ S.gTipo="gasto"; S.eEdit=null; S.gEdit=b.dataset.id; S.gDel=null; render(); window.scrollTo({top:0,behavior:"smooth"}); const f=document.getElementById("gd"); if(f) f.focus({preventScroll:true}); }
   else if(act==="g-cancel"){ S.gEdit=null; render(); }
   else if(act==="g-del"){ S.gDel=b.dataset.id; render(); }
