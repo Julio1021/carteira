@@ -3719,11 +3719,15 @@ function giPlano(){
   const ccPagsN=ccPags.filter(p=>!extP.has(p.ext)&&![...S.cpags.values()].some(q=>q.cartao===p.cartao&&Math.abs(q.valor-p.valor)<0.01&&Math.abs(diasEntre(q.data,p.data))<=6));
   return {novos,ignorados,ja,dups,novosE,apagarE,ccPags:ccPagsN};
 }
+function giHist(){
+  const m={}; [...S.gastos.values(),...S.entradas.values()].forEach(g=>{ if(!g.imp||g.cartao) return; const x=(m[g.imp] ||= {id:g.imp,quando:+g.imp.split("_")[1]||0,n:0,ini:g.data,fim:g.data,orig:new Set()}); x.n++; if(g.data<x.ini) x.ini=g.data; if(g.data>x.fim) x.fim=g.data; try{ const o=origemDe(g); if(o!=="manual"&&o!=="ct:?") x.orig.add(origemNome(o)); }catch{} });
+  const feitas=Object.values(m).sort((a,b)=>b.quando-a.quando); if(!feitas.length) return "";
+  return `<div class="imp-hist" id="gi-hist"><h3 class="sub-h">Extratos importados</h3><p class="hint">Desfazer apaga só os lançamentos que vieram daquele arquivo. O que você lançou à mão continua.</p>${feitas.map(f=>`<div class="imp-row"><span><b>${[...f.orig].join(", ")||"Extrato"} · ${dBR(f.ini)} a ${dBR(f.fim)}</b><span class="hint"> · ${f.n} lançamento(s) · importado em ${f.quando?new Date(f.quando).toLocaleDateString("pt-BR"):"—"}</span></span>
+    ${GI.undo===f.id?`<span class="confirm-inl">Apagar os ${f.n} lançamentos desta importação? <button class="btn sm danger" data-act="gi-undo-ok" data-id="${f.id}">Apagar</button><button class="btn sm" data-act="gi-undo-no">Cancelar</button></span>`:`<button class="btn sm ghost danger" data-act="gi-undo" data-id="${f.id}">Excluir importação</button>`}</div>`).join("")}</div>`;
+}
 function vGImp(){
   if(!GI.open) return "";
-  const feitas=(()=>{ const m={}; [...S.gastos.values(),...S.entradas.values()].forEach(g=>{ if(!g.imp) return; const x=(m[g.imp] ||= {id:g.imp,quando:+g.imp.split("_")[1]||0,n:0,v:0,ini:g.data,fim:g.data}); x.n++; x.v+=g.valor; if(g.data<x.ini) x.ini=g.data; if(g.data>x.fim) x.fim=g.data; }); return Object.values(m).sort((a,b)=>b.quando-a.quando); })();
-  const hist=feitas.length?`<div class="imp-hist"><h3 class="sub-h">Extratos importados</h3>${feitas.map(f=>`<div class="imp-row"><span><b>${dBR(f.ini)} a ${dBR(f.fim)}</b> · ${f.n} lançamento(s) <span class="hint">· importado em ${new Date(f.quando).toLocaleDateString("pt-BR")}</span></span>
-    ${GI.undo===f.id?`<span class="confirm-inl">Apagar os ${f.n} lançamentos desta importação? <button class="btn sm danger" data-act="gi-undo-ok" data-id="${f.id}">Desfazer</button><button class="btn sm" data-act="gi-undo-no">Cancelar</button></span>`:`<button class="btn sm ghost danger" data-act="gi-undo" data-id="${f.id}">Desfazer importação</button>`}</div>`).join("")}</div>`:"";
+  const hist=giHist();
   let body="";
   if(GI.stage==="idle"||GI.stage==="erro"){
     body=`<label class="drop" id="gi-drop" for="gi-file">
@@ -5586,7 +5590,8 @@ function vGastos(){
   </section>`:""}
   ${pg===1?`${vContas()}
   ${vFluxo(G,varMes,usoLim,estado,true)}
-  ${vAvisosFaixa(avs)}`:""}
+  ${vAvisosFaixa(avs)}
+  ${GI.open?"":(()=>{ const h=giHist(); return h?`<section class="card gi-hist-card">${h}<div class="btns"><button class="btn sm" data-act="gi-rapido">Importar outro extrato</button></div></section>`:""; })()}`:""}
   ${pg===2?`  <h2 class="gx-sec" id="sec-dist"><span>Para onde foi o dinheiro</span><small>${esc(G.P.label)}</small></h2>
   <section class="grid">
     <div class="card span-7 g-dist2"><div class="card-h"><div><h2>Distribuição</h2><p><span class="dist-per">${esc(G.P.label)}</span> · <span id="dist-sub">${DIST[S.gDist][1]}</span></p></div>
