@@ -1840,6 +1840,78 @@ body[data-tab="lancar"] .fab{display:none!important}
 :root[data-glass] .ex-k.sob{background:color-mix(in srgb,var(--pos) 16%,var(--gl-glass2))}
 :root[data-glass] .ex-k.sob.neg{background:color-mix(in srgb,var(--neg) 16%,var(--gl-glass2))}
 @media (max-width:640px){ .ex-hd{gap:6px} .ex-k{padding:10px 8px;border-radius:14px} .ex-k b{font-size:14px;letter-spacing:-.02em} .ex-k small{font-size:10px} .ex-k i{font-size:10px} }
+
+/* ===== Gastos estilo app de banco ===== */
+.hx{position:relative;overflow:hidden;border-radius:24px;padding:14px 16px 16px;color:#fff;background:radial-gradient(120% 90% at 100% 0%,color-mix(in srgb,var(--accent) 70%,#fff 0%) 0%,transparent 60%),linear-gradient(150deg,var(--cta) 0%,color-mix(in srgb,var(--cta) 65%,#000) 100%);box-shadow:0 18px 40px -22px color-mix(in srgb,var(--cta) 80%,transparent)}
+.hx::after{content:"";position:absolute;right:-60px;bottom:-80px;width:220px;height:220px;border-radius:50%;background:rgba(255,255,255,.07);pointer-events:none}
+.hx-top{display:grid;grid-template-columns:40px 1fr 40px;align-items:center;gap:6px}
+.hx-arr{width:40px;height:40px;border-radius:50%;border:0;background:rgba(255,255,255,.14);color:#fff;display:grid;place-items:center;cursor:pointer}
+.hx-arr:hover{background:rgba(255,255,255,.24)}
+.hx-mes{justify-self:center;display:inline-flex;align-items:center;gap:5px;border:0;background:transparent;color:#fff;font:inherit;cursor:pointer;padding:6px 10px;border-radius:99px;max-width:100%}
+.hx-mes:hover{background:rgba(255,255,255,.12)}
+.hx-mes b{font-size:16px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hx-hoje{display:flex;align-items:center;gap:5px;margin:2px auto 0;border:0;background:rgba(255,255,255,.16);color:#fff;font:inherit;font-size:11.5px;font-weight:700;padding:4px 10px;border-radius:99px;cursor:pointer}
+.hx-datas{display:flex;align-items:center;gap:6px;justify-content:center;margin-top:8px;flex-wrap:wrap;font-size:12px}
+.hx-datas .inp{max-width:150px;min-height:36px;padding:6px 8px}
+.hx-main{position:relative;z-index:1;text-align:center;margin:14px 0 14px}
+.hx-main small{display:block;font-size:13px;opacity:.85;font-weight:600}
+.hx-main b{display:block;font-family:var(--f-display);font-size:38px;font-weight:700;letter-spacing:-.02em;line-height:1.1;margin:4px 0 3px;font-variant-numeric:tabular-nums}
+.hx-main span{font-size:12.5px;opacity:.85}
+.hx-main .copy{color:#fff;text-decoration:underline}
+.hx-io{position:relative;z-index:1;display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.hx-k{display:flex;align-items:center;gap:10px;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.12);color:#fff;border-radius:16px;padding:10px 12px;font:inherit;text-align:left;cursor:pointer;min-width:0;transition:background .15s ease}
+.hx-k:hover{background:rgba(255,255,255,.2)}
+.hx-k.on{background:#fff;color:var(--ink);border-color:#fff}
+.hx-k>span:last-child{min-width:0;display:flex;flex-direction:column}
+.hx-k small{font-size:11.5px;opacity:.85;font-weight:600}
+.hx-k b{font-size:15.5px;font-weight:750;font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hx-ki{flex:none;width:32px;height:32px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.18)}
+.hx-k.in .hx-ki{background:color-mix(in srgb,var(--pos) 55%,transparent)} .hx-k.out .hx-ki{background:color-mix(in srgb,var(--neg) 55%,transparent)}
+.hx-k.on.in .hx-ki{background:var(--pos-soft);color:var(--pos)} .hx-k.on.out .hx-ki{background:var(--neg-soft);color:var(--neg)}
+.hx-lim{position:relative;z-index:1;margin-top:12px}
+.hx-lim div{display:flex;justify-content:space-between;align-items:baseline;font-size:12px;margin-bottom:6px}
+.hx-lim div span{opacity:.85} .hx-lim b{font-size:12.5px} .hx-lim b small{opacity:.75;font-weight:500}
+.hx-lb{display:block;height:6px;border-radius:99px;background:rgba(255,255,255,.2);overflow:hidden}
+.hx-lb i{display:block;height:100%;border-radius:99px;background:#fff}
+.hx-lim.warn .hx-lb i{background:#ffd166} .hx-lim.neg .hx-lb i{background:#ff8a7a}
+.hx-conta{position:relative;z-index:1;margin-top:12px;width:100%;display:flex;align-items:center;gap:8px;border:0;border-top:1px solid rgba(255,255,255,.16);background:transparent;color:#fff;font:inherit;padding:12px 2px 0;cursor:pointer}
+.hx-conta span{font-size:12.5px;opacity:.85;flex:1;text-align:left} .hx-conta b{font-size:14px}
+.hx-atl{display:flex;justify-content:space-between;gap:4px;overflow-x:auto;scrollbar-width:none;padding:2px 2px 0}
+.hx-atl::-webkit-scrollbar{display:none}
+.hx-at{flex:1 1 0;min-width:52px;display:flex;flex-direction:column;align-items:center;gap:6px;border:0;background:transparent;color:var(--ink);font:inherit;font-size:12px;font-weight:600;cursor:pointer;padding:2px 0}
+.hx-ati{width:52px;height:52px;border-radius:50%;display:grid;place-items:center;background:var(--surface);border:1px solid var(--line);color:var(--accent);box-shadow:0 4px 12px -8px rgba(0,0,0,.4);transition:transform .12s ease,background .12s ease}
+.hx-at:hover .hx-ati{background:var(--accent-soft)} .hx-at:active .hx-ati{transform:scale(.94)}
+.hx-at[aria-pressed="true"] .hx-ati,.hx-at[data-act="g-novo"] .hx-ati{background:var(--cta);color:var(--cta-ink);border-color:var(--cta)}
+:root[data-glass] .hx-ati{background:var(--gl-glass2);border-color:var(--gl-bd)}
+:root .hx-at[data-act="g-novo"] .hx-ati,:root[data-glass] .hx-at[data-act="g-novo"] .hx-ati{background:var(--cta);color:var(--cta-ink);border-color:var(--cta)}
+/* abas das páginas: sublinhado simples */
+.gp-tabs.gnav{padding:0 4px;border-radius:0;background:color-mix(in srgb,var(--bg) 82%,transparent);border:0;border-bottom:1px solid var(--line);box-shadow:none}
+:root[data-glass] .gp-tabs.gnav{background:color-mix(in srgb,var(--gl-glass2) 90%,transparent);border-color:var(--gl-bd);border-radius:14px 14px 0 0}
+.gp-tabs .gp-t{flex-direction:row;font-size:13.5px;padding:12px 4px;border-radius:0}
+.gp-tabs .gp-t svg{display:none}
+.gp-tabs .gp-ind{top:auto;bottom:-1px;height:3px;border-radius:3px 3px 0 0;background:var(--accent);width:calc(25% - 1.5px)}
+.gp-tabs .gp-t[aria-selected="true"]{color:var(--ink)}
+.gp-tabs .gp-b{position:static;margin-left:2px}
+/* lista sem cartão em volta */
+.mov-app{background:transparent;border:0;padding:0;box-shadow:none}
+.mov-app .mov-h{margin:0 0 10px}
+.mov.mov-app .tabs2,:root[data-glass] .mov.mov-app .tabs2{background:transparent;padding:0;gap:6px;display:flex;max-width:none;border:0;box-shadow:none}
+.mov.mov-app .mov-h,:root[data-glass] .mov.mov-app .mov-h{background:transparent;border:0;padding:0;box-shadow:none}
+@media (min-width:900px){ body[data-tab="gastos"] .gx{width:100%;max-width:880px;margin:0 auto} }
+.mov-app .tab2{flex:0 0 auto;border:1px solid var(--line);background:var(--surface);border-radius:99px;padding:7px 14px;font-size:13px}
+.mov-app .tab2[aria-selected="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink);box-shadow:none}
+.mov-app .tx-dh{padding:12px 4px 6px}
+.tx-fl-f{display:flex;justify-content:flex-end}
+.ex-av{display:flex;align-items:center;gap:6px;justify-content:center;width:100%;border:1px dashed var(--line);background:transparent;color:var(--ink-2);border-radius:12px;padding:8px;font:inherit;font-size:12.5px;font-weight:600;cursor:pointer}
+body[data-tab="gastos"] .fab{display:none !important}
+.gx>.lb-imp{padding:10px 12px}
+@media (max-width:640px){
+  .hx{border-radius:22px;padding:12px 12px 14px}
+  .hx-main b{font-size:34px}
+  .hx-k{padding:9px 10px;gap:8px} .hx-k b{font-size:14.5px} .hx-ki{width:28px;height:28px}
+  .hx-ati{width:50px;height:50px}
+  .gp-tabs .gp-t{font-size:13px;padding:12px 2px}
+}
 </style>
 
 <header class="top">
@@ -2697,6 +2769,7 @@ const app=document.getElementById("app");
 const TAB_NOME={painel:"Painel",gastos:"Gastos",lancar:"Lançar valores",ativos:"Ativos",relatorios:"Relatórios",cartoes:"Cartões"};
 let tabAnt=null;
 function appVisual(){
+  { const tl=document.querySelector(".gp-tl[data-k]"); if(tl) requestAnimationFrame(()=>requestAnimationFrame(()=>tl.style.setProperty("--k",tl.dataset.k))); }
   const t=document.getElementById("m-tab"); if(t) t.textContent=TAB_NOME[S.tab]||""; document.body.dataset.tab=S.tab;
   if(S.tab==="cartoes"){ ccPrevCompra(); const fs=document.getElementById("cc-fats"); const on=fs&&fs.querySelector(".cc-f.on"); if(on) fs.scrollLeft=Math.max(0,on.offsetLeft-fs.clientWidth/2+on.clientWidth/2); }
   if(tabAnt!==S.tab){ app.classList.remove("tab-in"); void app.offsetWidth; if(tabAnt) app.classList.add("tab-in"); tabAnt=S.tab; }
@@ -3999,6 +4072,46 @@ let mxCentrado=null;
 /* ---------- Escolha do mês compacta + painel de meses ---------- */
 const MQ_PER=[["mes","Mês"],["3m","3 meses"],["6m","6 meses"],["12m","1 ano"],["tudo","Tudo"],["custom","Datas"]];
 function mqTag(P){ const mA=P.mesAtual; if(S.gPer!=="mes") return S.gPer==="custom"?"Período escolhido":"Período"; if(S.gMes===mA) return "Mês atual"; if(S.gMes>mA) return "Mês futuro"; const n=ymDiff(S.gMes,mA); return `Há ${n} ${n>1?"meses":"mês"}`; }
+
+/* ---------- Topo da aba Gastos estilo app de banco ---------- */
+function vHero(G,usoLim,novoOn){
+  const P=G.P, mes=S.gPer==="mes", atual=mes&&S.gMes===P.mesAtual, tit=mes?mLong(S.gMes):P.label, aba=S.gAba||"tudo";
+  const E=G.totalE, O=G.total, sobra=E-O, temE=E>0;
+  const quando=mes?(atual?"este mês":"em "+mLong(S.gMes).split(" ")[0].toLowerCase()):"no período";
+  const seta=(v,l,d)=>`<button class="hx-arr" data-act="g-mes" data-v="${v}" aria-label="${l}">${svgI(`<path d="${d}"/>`,18)}</button>`;
+  let conta=""; try{ if(S.contas.size) conta=`<button class="hx-conta" data-act="gp-ir" data-v="1"><span>Em conta</span><b>${fmt(saldoTotalContas())}</b>${svgI('<path d="M9 6l6 6-6 6"/>',14)}</button>`; }catch{}
+  const lim=G.limTotal?`<div class="hx-lim ${usoLim>1?"neg":usoLim>.85?"warn":""}"><div><span>Limite de gastos</span><b>${fmt(G.gastoComLim)} <small>de ${fmt(G.limTotal)}</small></b></div><span class="hx-lb"><i style="width:${Math.min(100,usoLim*100).toFixed(1)}%"></i></span></div>`:"";
+  const at=(act,n,ic,extra="")=>`<button class="hx-at" data-act="${act}" ${extra}><span class="hx-ati">${svgI(ic,21)}</span><span>${n}</span></button>`;
+  return `<section class="hx" id="sec-lanc" aria-label="Resumo de ${esc(tit)}">
+    <div class="hx-top" id="sec-mes">
+      ${mes?seta(-1,"Mês anterior","M15 6l-6 6 6 6"):"<span></span>"}
+      <button class="hx-mes" data-act="mq-abrir" aria-haspopup="dialog" aria-label="Escolher mês ou período. Agora: ${esc(tit)}"><b>${esc(tit)}</b>${svgI('<path d="M6 9l6 6 6-6"/>',15)}</button>
+      ${mes?seta(1,"Próximo mês","M9 6l6 6-6 6"):"<span></span>"}
+    </div>
+    ${!atual?`<button class="hx-hoje" data-act="g-hoje">${svgI('<path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/>',13)}Voltar para o mês atual</button>`:""}
+    ${S.gPer==="custom"?`<div class="per-dates hx-datas"><input type="date" class="inp" id="g-de" value="${P.de}" aria-label="De"><span>até</span><input type="date" class="inp" id="g-ate" value="${P.ate}" aria-label="Até"></div>`:""}
+    <div class="hx-main">
+      <small>${temE?(sobra<0?`Faltou ${quando}`:`Sobrou ${quando}`):`Você gastou ${quando}`}</small>
+      <b>${fmt(temE?Math.abs(sobra):O)}</b>
+      ${temE?`<span>${sobra<0?"gastou mais do que entrou":`${Math.round(sobra/E*100)}% do que entrou`}</span>`:`<span><button class="copy" data-act="e-nova">Lance suas entradas</button> para ver quanto sobra</span>`}
+    </div>
+    <div class="hx-io">
+      <button class="hx-k in ${aba==="entradas"?"on":""}" data-act="g-aba" data-v="entradas" aria-pressed="${aba==="entradas"}"><span class="hx-ki">${svgI('<path d="M17 7 7 17M7 9v8h8"/>',15)}</span><span><small>Entrou</small><b>${fmt(E)}</b></span></button>
+      <button class="hx-k out ${aba==="gastos"?"on":""}" data-act="g-aba" data-v="gastos" aria-pressed="${aba==="gastos"}"><span class="hx-ki">${svgI('<path d="M7 17 17 7M9 7h8v8"/>',15)}</span><span><small>Saiu</small><b>${fmt(O)}</b></span></button>
+    </div>
+    ${lim}
+    ${conta}
+  </section>
+  <nav class="hx-atl" aria-label="Atalhos">
+    ${at("g-novo","Gasto",'<path d="M12 5v14M5 12h14"/>',`aria-pressed="${!!novoOn}"`)}
+    ${at("e-nova","Entrada",'<path d="M12 19V5M5 12l7-7 7 7"/>')}
+    ${at("atl-cartao","Cartão",'<rect x="2" y="5" width="20" height="14" rx="3"/><path d="M2 10h20M6 15h4"/>')}
+    ${at("gi-rapido","Importar",'<path d="M12 3v12M7 10l5 5 5-5M4 15v4a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-4"/>')}
+    ${at("bs-open","Buscar",'<circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/>')}
+    ${at("g-orc-open","Limites",'<path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"/>')}
+  </nav>`;
+}
+
 function vMesCompacto(G){
   const P=G.P, mes=S.gPer==="mes", atual=mes&&S.gMes===P.mesAtual;
   const tit=mes?mLong(S.gMes):P.label;
@@ -4744,8 +4857,7 @@ function vGPgTabs(){
   const k0=GP.prev??GP.pg; GP.prev=null;
   let nPg=0; try{ const D=pgMesDados(todayISO().slice(0,7)); nPg=[...D.atrasoAnt,...D.doMes].filter(i=>i.st==="atrasada"||i.st==="hoje").length; }catch{}
   return `<nav class="gnav gp-tabs" id="gnav" aria-label="Páginas da aba Gastos">
-    <button class="gnav-menu" data-act="gn-menu" aria-haspopup="dialog" aria-label="Menu">${svgI('<path d="M4 6h16M4 12h16M4 18h16"/>',17)}<span>Menu</span></button>
-    <div class="gp-tl" role="tablist" style="--k:${k0}">${GPG.map(([n,ic],k)=>`<button role="tab" class="gp-t" data-act="gp-ir" data-v="${k}" aria-selected="${k===GP.pg}">${svgI(ic,15)}<span>${n}</span>${k===3&&nPg?`<i class="gp-b">${nPg}</i>`:""}</button>`).join("")}<span class="gp-ind" aria-hidden="true"></span></div>
+    <div class="gp-tl" role="tablist" style="--k:${k0}" data-k="${GP.pg}">${GPG.map(([n,ic],k)=>`<button role="tab" class="gp-t" data-act="gp-ir" data-v="${k}" aria-selected="${k===GP.pg}">${svgI(ic,15)}<span>${n}</span>${k===3&&nPg?`<i class="gp-b">${nPg}</i>`:""}</button>`).join("")}<span class="gp-ind" aria-hidden="true"></span></div>
   </nav>`;
 }
 function gpIr(k,dir){
@@ -5138,9 +5250,10 @@ function vMovGastosCorpo(G,lista,filtrando,origs,varias,modo){
       ${varias||S.gOrig?`<div class="tx-fl"><span class="tx-fl-t">Origem</span><div class="tx-chips hscroll">${[["","Todas"],...origs.map(o=>[o,origemNome(o)])].map(([o,n])=>`<button class="tx-chip ${(S.gOrig||"")===o?"on":""}" data-act="g-orig-set" data-v="${esc(o)}">${esc(n)}</button>`).join("")}</div></div>`:""}
       <div class="tx-fl tx-fl2"><div><span class="tx-fl-t">Ordem</span><div class="seg tx-seg">${[["recentes","Por data"],["maior","Maiores"],["menor","Menores"]].map(([v,n])=>`<button class="seg-b" data-act="g-ord-set" data-v="${v}" aria-pressed="${ord===v}">${n}</button>`).join("")}</div></div>
         <div class="field"><label class="tx-fl-t" for="g-min">Valor a partir de</label><input class="inp money" id="g-min" inputmode="decimal" placeholder="R$ 0,00" value="${esc(S.gMin||"")}"></div></div>
+      <div class="tx-fl-f"><button class="copy" data-act="csv-gastos">Exportar estes gastos (CSV)</button></div>
     </div>`:""}
     ${ativos.length?`<div class="tx-ativos">${ativos.map(([a,n,c])=>`<button class="tx-chip on" data-act="${a}" aria-label="Tirar filtro ${esc(n)}">${c?`<i style="background:${c}"></i>`:""}${esc(n)}${svgI(ICO_X,12)}</button>`).join("")}<button class="copy" data-act="g-limpar">limpar tudo</button></div>`:""}
-    ${tudo?`<div class="tx-res"><span>${itens.length} movimentaç${itens.length!==1?"ões":"ão"}${filtrando?" encontradas":""}</span><b>${somaE?`<span class="pos-t">+ ${fmt(somaE)}</span> · `:""}− ${fmt(soma)}</b></div>`:`<div class="tx-res"><span>${lista.length} gasto${lista.length!==1?"s":""}${filtrando?" encontrados":""}</span><b>${fmt(soma)}</b></div>`}
+    ${!filtrando?"":tudo?`<div class="tx-res"><span>${itens.length} movimentaç${itens.length!==1?"ões":"ão"}${filtrando?" encontradas":""}</span><b>${somaE?`<span class="pos-t">+ ${fmt(somaE)}</span> · `:""}− ${fmt(soma)}</b></div>`:`<div class="tx-res"><span>${lista.length} gasto${lista.length!==1?"s":""}${filtrando?" encontrados":""}</span><b>${fmt(soma)}</b></div>`}
     ${tudo&&itens.length?txListaMix(itens,ord==="recentes",S.gLim)+(itens.length>S.gLim?`<div class="mais"><button class="btn sm" data-act="g-mais">Mostrar mais ${Math.min(100,itens.length-S.gLim)} de ${itens.length-S.gLim}</button></div>`:""):!tudo&&lista.length?txLista("g",lista,ord==="recentes",S.gLim)+(lista.length>S.gLim?`<div class="mais"><button class="btn sm" data-act="g-mais">Mostrar mais ${Math.min(100,lista.length-S.gLim)} de ${lista.length-S.gLim}</button></div>`:"")
       :`<div class="g-empty"><b>Nenhum${tudo?"a movimentação":" gasto"} ${filtrando?"com esses filtros":""} em ${esc(G.P.label.toLowerCase())}</b><span>${filtrando?"Ajuste ou limpe os filtros.":"Toque em + Gasto ou importe o extrato do banco."}</span></div>`}`;
 }
@@ -5307,7 +5420,7 @@ function vLimGerais(lista){
   if(!lista.length) return "";
   return `<div class="lg-box"><span class="fx-l">Limites gerais</span>${lista.map(x=>`<div class="lg-row ${x.st}"><span class="lg-n">${x.nome}</span><span class="lg-v"><b>${fmt(x.gasto)}</b> de ${fmt(x.lim)}</span><span class="gbar ${x.st}"><b style="width:${Math.min(100,x.uso*100).toFixed(1)}%"></b></span>${x.st==="neg"?`<span class="lg-alert">Passou ${fmt(x.gasto-x.lim)}</span>`:x.t!=="dia"||x.gasto>0?`<span class="lg-ok">${x.st==="warn"?"Quase no limite · ":""}Restam ${fmt(x.lim-x.gasto)}</span>`:`<span class="lg-ok">Nenhum gasto hoje · ${fmt(x.lim)} disponíveis</span>`}</div>`).join("")}</div>`;
 }
-function vFluxo(G,varMes,usoLim,estado){
+function vFluxo(G,varMes,usoLim,estado,compacto){
   const E=G.totalE, O=G.total, sobra=E-O, temE=G.temEntradas&&E>0;
   const pctUso=temE?O/E:0, falta=sobra<0;
   const per=S.gPer==="mes"?(G.ehMesAtual?"este mês":"em "+mLong(G.ym).toLowerCase()):"no período";
@@ -5371,9 +5484,9 @@ function vFluxo(G,varMes,usoLim,estado){
     </div>`:"";
   return `<section class="card fx" id="sec-bal" aria-label="Balanço ${per}">
     <div class="fx-main">
-      <div class="fx-head"><h2>Balanço</h2><span>${esc(G.P.label)}</span></div>
+      <div class="fx-head"><h2>${compacto?"Como foi o mês":"Balanço"}</h2><span>${esc(G.P.label)}</span></div>
       ${avisoParcial}
-      ${eq}
+      ${compacto?"":eq}
       ${prev.length&&!temE?"":barra}
       ${prevBox}
       ${S.gPer==="mes"?vLimGerais(limGeraisStatus(G.ym)):""}
@@ -5401,15 +5514,7 @@ function vGastos(){
   const proj = S.gPer==="mes" ? (G.ehMesAtual?["Projeção do mês",fmt(G.projecao),`Média de ${fmt(G.media)} por dia`]:["Média por dia",fmt(G.media),`${G.dias} dias no mês`]) : ["Média por mês",fmt(G.total/G.P.nMeses),`Média de ${fmt(G.media)} por dia`];
   return `<div class="gx">
   ${vLembreteImport()}
-  <header class="gx-bar" id="sec-lanc">
-    ${vMesCompacto(G)}
-    <div class="gx-acts">
-      <button class="btn bs-open" data-act="bs-open" title="Buscar em todo o histórico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><span class="hide-sm">Buscar</span></button>
-      <button class="btn primary" data-act="g-novo" aria-pressed="${aberto&&!ed}"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>Gasto</button>
-      <button class="btn" data-act="e-nova"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>Entrada</button>
-      <button class="btn btn-imp" data-act="gi-rapido" title="Importar extrato do banco (OFX)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 10l5 5 5-5M4 15v4a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-4"/></svg>Extrato</button>
-    </div>
-  </header>
+  ${vHero(G,usoLim,aberto&&!ed)}
   ${vGPgTabs()}
   ${vGImp()}
   ${(S.gTipo==="entrada"&&S.gForm&&!ed)||S.eEdit?vFormEntrada():!aberto?"":`  <section class="card g-form-card ${ed?"editing":""}">
@@ -5435,20 +5540,19 @@ function vGastos(){
   </section>`}
 
   <div class="gp ${anim>0?"in-r":anim<0?"in-l":""}" id="gp" data-pg="${pg}" role="tabpanel" aria-label="${GPG[pg][0]}">
-  ${pg===0?`  ${vExHd(G,usoLim,avs.length)}
-  <section class="card mov" id="g-lista">
+  ${pg===0?`  ${avs.length?`<button class="ex-av" data-act="gp-ir" data-v="1">${svgI('<path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/>',14)}${avs.length} aviso${avs.length>1?"s":""} sobre o seu mês${svgI('<path d="M9 6l6 6-6 6"/>',14)}</button>`:""}
+  <section class="mov mov-app" id="g-lista">
     <div class="mov-h">
       <div class="tabs2 tabs3" role="tablist" aria-label="Tipo de movimentação">
-        <button role="tab" class="tab2" data-act="g-aba" data-v="tudo" aria-selected="${aba==="tudo"}">Tudo <span>${G.doPer.length+G.entPer.length}</span></button>
-        <button role="tab" class="tab2" data-act="g-aba" data-v="gastos" aria-selected="${aba==="gastos"}">Gastos <span>${G.doPer.length}</span></button>
-        <button role="tab" class="tab2" data-act="g-aba" data-v="entradas" aria-selected="${aba==="entradas"}">Entradas <span>${G.entPer.length}</span></button>
+        <button role="tab" class="tab2" data-act="g-aba" data-v="tudo" aria-selected="${aba==="tudo"}">Tudo</button>
+        <button role="tab" class="tab2" data-act="g-aba" data-v="gastos" aria-selected="${aba==="gastos"}">Saídas</button>
+        <button role="tab" class="tab2" data-act="g-aba" data-v="entradas" aria-selected="${aba==="entradas"}">Entradas</button>
       </div>
-      ${aba==="entradas"?`<button class="btn sm" data-act="e-nova">+ Entrada</button>`:`<button class="btn sm ghost" data-act="csv-gastos">Exportar CSV</button>`}
     </div>
     ${aba==="entradas"?vEntradasCorpo(G):vMovGastosCorpo(G,lista,filtrando,origs.sort((a,b)=>origemNome(a).localeCompare(origemNome(b))),varias,aba)}
   </section>`:""}
   ${pg===1?`${vContas()}
-  ${vFluxo(G,varMes,usoLim,estado)}
+  ${vFluxo(G,varMes,usoLim,estado,true)}
   ${vAvisosFaixa(avs)}`:""}
   ${pg===2?`  <h2 class="gx-sec" id="sec-dist"><span>Para onde foi o dinheiro</span><small>${esc(G.P.label)}</small></h2>
   <section class="grid">
@@ -5711,6 +5815,7 @@ app.addEventListener("click",async e=>{
   else if(act==="gi-undo-ok"){ await giDesfazer(b.dataset.id); }
   else if(act==="g-per"){ const v=b.dataset.v; if(v==="custom"&&S.gPer!=="custom"){ const P=gPeriodo(); S.gDe=P.de; S.gAte=P.ate; } S.gPer=v; S.gLim=100; render(); }
   else if(act==="mq-abrir"){ mqAbrir(); }
+  else if(act==="atl-cartao"){ S.tab="cartoes"; CC.form=ccLista().length?"compra":"cartao"; CC.imp=null; render(); window.scrollTo({top:0}); setTimeout(()=>{ const f=document.querySelector(".cc-form"); if(f) f.scrollIntoView({behavior:"smooth",block:"start"}); const i=document.getElementById("ccc_d")||document.getElementById("cc_n"); if(i) i.focus({preventScroll:true}); try{ ccPrevCompra(); }catch{} },80); }
   else if(act==="g-hoje"){ S.gPer="mes"; S.gMes=todayISO().slice(0,7); S.gLim=100; S.gEdit=null; S.gDel=null; PG.pay=null; render(); }
   else if(act==="g-ir-mes"){ S.gPer="mes"; S.gMes=b.dataset.v; S.gLim=100; S.gEdit=null; S.gDel=null; PG.pay=null; const sl=document.querySelector(".mx-strip"); const pos=sl?sl.scrollLeft:0; render(); const st=document.querySelector(".mx-strip"); if(st){ st.scrollLeft=pos; const c=st.querySelector(".mx-c.on"); if(c){ const alvo=c.offsetLeft-st.clientWidth/2+c.offsetWidth/2; st.scrollTo({left:alvo,behavior:"smooth"}); st.dataset.ok=alvo; mxCentrado=S.gPer+"|"+S.gMes; c.focus({preventScroll:true}); } } }
   else if(act==="g-loja"){ const v=b.dataset.v; S.gBusca=(S.gBusca&&S.gBusca.toLowerCase()===v.toLowerCase())?"":v; S.gLim=100; if(S.gBusca) gpMostrar("g-lista"); render(); if(S.gBusca){ const l=document.getElementById("g-lista"); if(l) l.scrollIntoView({behavior:"smooth",block:"start"}); } }
@@ -5784,7 +5889,7 @@ app.addEventListener("click",async e=>{
   else if(act==="a-form"){ S.aForm=!S.aForm; render(); if(S.aForm){ const f=document.getElementById("an"); if(f) f.focus(); } }
   else if(act==="g-novo"){ S.gTipo="gasto"; S.gForm=true; S.eEdit=null; S.gEdit=null; render(); const f=document.getElementById("gd"); if(f) f.focus(); }
   else if(act==="g-fechar"){ S.gForm=false; S.gTipo="gasto"; S.gEdit=null; render(); }
-  else if(act==="g-aba"){ const v=b.dataset.v; S.gAba=b.classList.contains("ex-k")&&(S.gAba||"tudo")===v?"tudo":v; S.gLim=100; if(GP.pg!==0) gpIr(0); else render(); }
+  else if(act==="g-aba"){ const v=b.dataset.v; S.gAba=(b.classList.contains("ex-k")||b.classList.contains("hx-k"))&&(S.gAba||"tudo")===v?"tudo":v; S.gLim=100; if(GP.pg!==0) gpIr(0); else render(); }
   else if(act==="e-nova"){ S.gTipo="entrada"; S.gForm=true; S.gEdit=null; render(); window.scrollTo({top:0,behavior:"smooth"}); const f=document.getElementById("ed_"); if(f) f.focus({preventScroll:true}); }
   else if(act==="e-voltar"){ S.gTipo="gasto"; render(); const f=document.getElementById("gd"); if(f) f.focus(); }
   else if(act==="e-edit"){ S.eEdit=b.dataset.id; S.gEdit=null; S.eDel=null; render(); window.scrollTo({top:0,behavior:"smooth"}); }
