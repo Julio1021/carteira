@@ -2053,6 +2053,15 @@ button.rz-row:hover{background:var(--surface-2)}
 .gi-tg-t small{font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .gi-tg>svg{color:var(--muted)}
 .gi-hist-card{padding:14px 16px}
+
+.gi-dono-cf{border:2px solid var(--accent);background:var(--accent-soft);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:10px}
+.gi-dono-cf>b{font-size:15px} .gi-dono-cf p{margin:0;font-size:12.5px;color:var(--ink-2)}
+.gi-dc-l{display:flex;flex-direction:column;gap:6px}
+.gi-dc{display:flex;flex-direction:column;align-items:flex-start;gap:2px;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:12px;padding:10px 12px;font:inherit;text-align:left;cursor:pointer}
+.gi-dc b{font-size:14px} .gi-dc small{font-size:11.5px;color:var(--muted)}
+.gi-dc.on{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent) inset}
+.gi-dc-im{font-weight:600}
+.gi-dono-cf .btn{align-self:flex-start}
 </style>
 
 <header class="top">
@@ -3754,6 +3763,19 @@ function ofxAdivinhaDono(tx){
   for(const k in D){ const x=D[k]; const s=x.fat*100+(x.cps.size>=2?40*x.cps.size:0)+(x.env&&x.rec&&x.cps.size>=2?Math.min(x.env,x.rec):0); if(s>sc){ sc=s; best=x; } }
   return best&&sc>0?ofxTitle(best.orig):"";
 }
+/* Nomes que podem ser do titular, para a pessoa confirmar (quem só troca Pix com você também aparece aqui) */
+function ofxCandidatosDono(tx){
+  const D={}, reg=(nome)=>{ const k=nomeChave(nome); if(!k||k.split(" ").length<2) return null; return (D[k] ||= {nome:ofxTitle(nome),env:0,rec:0,cps:new Set(),fat:0,ve:0,vr:0}); };
+  tx.forEach(t=>{ const m=ofxNorm(t.memo), nm=ofxNorm(t.nome);
+    if(/FATURA/.test(m+" "+nm)){ const f=String(t.nome||"").split(/\s+-\s+/).pop(); const x=f&&f!==t.nome?reg(f):null; if(x) x.fat++; return; }
+    if(!/^PIX (ENVIADO|RECEBIDO)|TRANSFERENCIA|TED|DOC/.test(m)) return;
+    const x=reg(t.nome); if(!x) return;
+    if(t.valor<0){ x.env++; x.ve+=-t.valor; } else { x.rec++; x.vr+=t.valor; }
+    const cp=m.match(/CP\s*:\s*(\d{4,})/); if(cp) x.cps.add(cp[1]); });
+  return Object.values(D).map(x=>({...x,n:x.env+x.rec,bancos:x.cps.size,score:x.fat*100+(x.cps.size>=2?40*x.cps.size:0)+(x.env&&x.rec&&x.cps.size>=2?Math.min(x.env,x.rec):0)}))
+    .filter(x=>x.fat||x.n>=1).sort((a,b)=>b.score-a.score||b.n-a.n).slice(0,5);
+}
+function giDonoImpacto(){ const O=GI.ofx; if(!O||!GI.dono) return null; let e=0,r=0,n=0; O.tx.forEach(t=>{ if(/FATURA/.test(ofxNorm(t.memo)+" "+ofxNorm(t.nome))) return; if(nomeIgual(GI.dono,t.nome)){ n++; if(t.valor<0) e+=-t.valor; else r+=t.valor; } }); return {e,r,n}; }
 /* Chave para não duplicar: data|valor|estabelecimento|ocorrência no dia */
 function ofxChavesUnicas(tx){
   const cont={};
@@ -3791,7 +3813,7 @@ async function giArquivo(file){
     if(/<CREDITCARDMSGSRSV1>|<CCSTMTRS>/i.test(txt)){ GI.stage="erro"; GI.err="Esse arquivo é a fatura de um cartão de crédito. Importe pela aba Cartões, em Importar fatura, para as compras e parcelas entrarem no cartão certo."; render(); return; }
     const ofx=parseOFX(txt);
     if(!ofx.tx.length){ GI.stage="erro"; GI.err="O extrato não tem transações no período."; render(); return; }
-    GI.ofx=ofx; GI.dono=((S.contas.get(ofxContaId(ofx))||{}).dono)||([...S.contas.values()].find(c=>c.dono)||{}).dono||ofxAdivinhaDono(ofx.tx); GI.desde=ofx.inicio||ofx.tx[0].data; GI.over={}; GI.stage="previa"; render();
+    GI.ofx=ofx; { const ct=S.contas.get(ofxContaId(ofx)); GI.donoConf=!!(ct&&ct.dono); GI.cands=ofxCandidatosDono(ofx.tx); const fatC=GI.cands.find(c=>c.fat); GI.dono=(ct&&ct.dono)||(fatC&&fatC.nome)||([...S.contas.values()].find(c=>c.dono)||{}).dono||""; } GI.desde=ofx.inicio||ofx.tx[0].data; GI.over={}; GI.stage="previa"; render();
   }catch(e){ GI.stage="erro"; GI.err="Não foi possível ler o arquivo. Confira se ele abre normalmente e tente de novo."; render(); }
 }
 function giPlano(){
@@ -3894,6 +3916,16 @@ function vGImpPrevia(){
       <div><span class="eyebrow">A importar</span><b>${validos.length} gastos · ${validosE.length} entradas</b><small>Saídas ${fmt(total)} · entradas ${fmt(totalE)}</small></div>
       <div><span class="eyebrow">Fora da importação</span><b>${ign.reduce((s,[,x])=>s+x.n,0)+P.ja.length}</b><small>${P.ja.length?`${P.ja.length} já importado(s) antes`:"Entradas, investimentos e transferências"}</small></div>
     </div>
+    ${GI.donoConf?"":(()=>{ const im=giDonoImpacto(), cs=GI.cands||[], tem=cs.some(c=>GI.dono&&nomeIgual(c.nome,GI.dono));
+      return `<div class="gi-dono-cf" role="group" aria-label="Confirme o titular">
+        <b>Primeiro, confirme: de quem é esta conta?</b>
+        <p>Pix entre o titular e ele mesmo (de um banco para outro) não conta como gasto nem como entrada. Se escolher o nome errado, o dinheiro que você <u>recebe de outra pessoa</u> ou <u>manda para ela</u> some das contas.</p>
+        <div class="gi-dc-l">${cs.map(c=>`<button class="gi-dc ${GI.dono&&nomeIgual(c.nome,GI.dono)?"on":""}" data-act="gi-dono-set" data-v="${esc(c.nome)}"><b>${esc(c.nome)}</b><small>${c.fat?`paga a fatura do cartão · `:""}${c.n} Pix/transf.${c.bancos>1?` · ${c.bancos} bancos`:""}${c.ve?` · enviou ${fmt(c.ve)}`:""}${c.vr?` · recebeu ${fmt(c.vr)}`:""}</small></button>`).join("")}
+          ${GI.dono&&!tem?`<button class="gi-dc on" data-act="gi-dono-set" data-v="${esc(GI.dono)}"><b>${esc(GI.dono)}</b><small>nome das suas outras contas</small></button>`:""}
+          <button class="gi-dc" data-act="gi-dono-outro"><b>Outro nome…</b><small>digitar o nome do titular</small></button></div>
+        ${GI.dono&&im?`<p class="gi-dc-im">Com <b>${esc(GI.dono)}</b> como titular, ${im.n?`${im.n} movimento(s) ficam fora dos gastos e entradas${im.e?` (${fmt(im.e)} enviados`:""}${im.r?`${im.e?", ":" ("}${fmt(im.r)} recebidos`:""}${im.e||im.r?")":""}.`:"nenhum Pix fica de fora."}</p>`:""}
+        <button class="btn primary sm" data-act="gi-dono-ok" ${GI.dono?"":"disabled"}>Confirmar titular</button>
+      </div>`; })()}
     <div class="gi-opts">
       <div class="field"><label for="gi-desde">Importar a partir de</label><input type="date" class="inp" id="gi-desde" value="${GI.desde}" min="${O.inicio||""}" max="${O.fim||""}"></div>
       <div class="field"><label for="gi-dono">Seu nome no banco</label><input class="inp" id="gi-dono" value="${esc(GI.dono)}" placeholder="Nome do titular"><small class="hint">Pix para esse nome conta como transferência entre suas contas, não como gasto.</small></div>
@@ -3921,7 +3953,7 @@ function vGImpPrevia(){
       ${listaE.length>12?`<button class="btn sm" style="margin-top:10px" data-act="gi-todosE">${GI.verTodosE?"Mostrar menos":`Mostrar todas (${listaE.length})`}</button>`:""}
     </div>`:""}
     <div class="savebar"><span class="hint">${validos.length} gasto(s) e ${validosE.length} entrada(s). Você pode desfazer depois.</span>
-      <div class="btns"><button class="btn" data-act="gi-close">Cancelar</button><button class="btn primary" data-act="gi-ok" ${validos.length+validosE.length||giSaldoNovo()?"":"disabled"}>${validos.length+validosE.length?"Importar":"Atualizar saldo"}</button></div></div>
+      <div class="btns"><button class="btn" data-act="gi-close">Cancelar</button>${GI.donoConf?"":`<span class="hint">Confirme o titular para importar.</span>`}<button class="btn primary" data-act="gi-ok" ${GI.donoConf&&(validos.length+validosE.length||giSaldoNovo())?"":"disabled"}>${validos.length+validosE.length?"Importar":"Atualizar saldo"}</button></div></div>
   </div>`;
 }
 function giSaldoNovo(){ const O=GI.ofx; if(!O||!O.saldo) return null; const id=ofxContaId(O), ex=S.contas.get(id); if(ex&&ex.data>O.saldo.data) return null; if(ex&&ex.data===O.saldo.data&&Math.abs(ex.saldo-O.saldo.valor)<0.005) return null; return {...(ex||{}),kind:"conta",id,nome:ex?ex.nome:ofxNomeBanco(O),saldo:O.saldo.valor,data:O.saldo.data,origem:"extrato",ts:Date.now(),...(GI.dono?{dono:GI.dono}:{})}; }
@@ -6100,7 +6132,10 @@ app.addEventListener("click",async e=>{
   else if(act==="gi-close"){ giReset(false); render(); }
   else if(act==="gi-todosE"){ GI.verTodosE=!GI.verTodosE; render(); }
   else if(act==="gi-todos"){ GI.verTodos=!GI.verTodos; render(); }
-  else if(act==="gi-ok"){ await giConfirmar(); }
+  else if(act==="gi-ok"){ if(!GI.donoConf){ toast("Confirme primeiro de quem é a conta"); return; } await giConfirmar(); }
+  else if(act==="gi-dono-set"){ GI.dono=b.dataset.v; render(); }
+  else if(act==="gi-dono-ok"){ GI.donoConf=true; render(); toast(`Titular: ${GI.dono}`); }
+  else if(act==="gi-dono-outro"){ const i=document.getElementById("gi-dono"); if(i){ i.focus(); i.select(); i.scrollIntoView({block:"center"}); } }
   else if(act==="gi-undo"){ GI.undo=b.dataset.id; render(); }
   else if(act==="gi-undo-no"){ GI.undo=null; render(); }
   else if(act==="gi-undo-ok"){ await giDesfazer(b.dataset.id); }
@@ -6247,7 +6282,7 @@ app.addEventListener("change",e=>{
   if(e.target.id==="gi-prop"){ GI.proprias=e.target.checked; render(); return; }
   if(e.target.dataset.giCat!==undefined){ GI.over[e.target.dataset.giCat]=e.target.value; render(); return; }
   if(e.target.id==="gi-desde"){ GI.desde=e.target.value||(GI.ofx&&GI.ofx.inicio)||""; render(); return; }
-  if(e.target.id==="gi-dono"){ GI.dono=e.target.value.trim(); render(); return; }
+  if(e.target.id==="gi-dono"){ GI.dono=e.target.value.trim(); GI.donoConf=!!GI.dono; render(); return; }
   if(e.target.id==="gi-dup"){ GI.pularDup=e.target.checked; render(); return; }
   if(e.target.id==="imp-file"){ impArquivo(e.target.files[0]); return; }
   if(e.target.dataset.impDest){ IMP.map[e.target.dataset.impDest]=e.target.value; render(); return; }
