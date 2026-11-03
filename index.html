@@ -1764,6 +1764,30 @@ body[data-tab="lancar"] .fab{display:none!important}
   .tx{padding:11px 10px;gap:11px}
   .tx-sh-v{font-size:30px}
 }
+
+/* ===== Páginas da aba Gastos ===== */
+.gp-tabs{gap:6px}
+.gp-tl{position:relative;flex:1;min-width:0;display:grid;grid-template-columns:repeat(4,1fr);gap:2px}
+.gp-t{position:relative;z-index:1;display:flex;align-items:center;justify-content:center;gap:6px;border:0;background:transparent;color:var(--ink-2);font:inherit;font-weight:700;font-size:13px;padding:9px 4px;border-radius:10px;cursor:pointer;white-space:nowrap;transition:color .2s ease}
+.gp-t[aria-selected="true"]{color:var(--accent)}
+.gp-t:focus-visible{outline:2px solid var(--focus);outline-offset:-2px}
+.gp-b{position:absolute;top:2px;right:calc(50% - 34px);min-width:16px;height:16px;border-radius:99px;background:var(--neg);color:#fff;font-style:normal;font-size:10px;font-weight:800;display:grid;place-items:center;padding:0 4px}
+.gp-ind{position:absolute;z-index:0;left:0;top:0;bottom:0;width:calc(25% - 1.5px);border-radius:10px;background:var(--accent-soft);transform:translateX(calc(var(--k,0) * (100% + 2px)));transition:transform .28s cubic-bezier(.3,.7,.2,1)}
+.gp{touch-action:pan-y;transition:transform .22s ease,opacity .22s ease;display:flex;flex-direction:column;gap:18px;min-height:50vh}
+.gp>:empty{display:none}
+.gp.in-r{animation:gpInR .26s cubic-bezier(.3,.7,.2,1)} .gp.in-l{animation:gpInL .26s cubic-bezier(.3,.7,.2,1)}
+@keyframes gpInR{from{transform:translateX(18%);opacity:.2}to{transform:none;opacity:1}}
+@keyframes gpInL{from{transform:translateX(-18%);opacity:.2}to{transform:none;opacity:1}}
+.gp.bump-l{animation:gpBL .3s ease} .gp.bump-r{animation:gpBR .3s ease}
+@keyframes gpBL{40%{transform:translateX(14px)}} @keyframes gpBR{40%{transform:translateX(-14px)}}
+.gp .gx-sec:first-child{margin-top:4px}
+.gp-ult .tx-l{margin-top:4px}
+.gp [data-act="pg-tog"],.gp [data-act="em-tog"]{display:none}
+@media (prefers-reduced-motion:reduce){ .gp.in-r,.gp.in-l,.gp.bump-l,.gp.bump-r{animation:none} .gp-ind{transition:none} }
+@media (max-width:640px){
+  .gp-t{flex-direction:column;gap:3px;font-size:11.5px;padding:7px 2px}
+  .gp-b{right:calc(50% - 22px);top:1px}
+}
 </style>
 
 <header class="top">
@@ -4605,6 +4629,52 @@ const GN_ACT=[["g-novo","Novo gasto","Registrar uma despesa",'<path d="M12 5v14M
   ["g-orc-open","Limites","Teto de gastos",'<path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"/>',"acc"],["gn-resumo","Resumo do mês","Fechamento e destaques",'<path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 6-6"/>',"acc"]];
 const GN={aberto:false,ativo:"sec-conta",lock:0};
 const svgI=(d,w=16)=>`<svg width="${w}" height="${w}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg>`;
+
+/* ---------- Páginas da aba Gastos (deslizar para o lado) ---------- */
+const GPG=[["Resumo",'<path d="M3 10.5 12 3l9 7.5"/><path d="M5 9v11h14V9"/>'],["Lista",'<path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/>'],["Análise",'<path d="M21 12a9 9 0 1 1-9-9v9z"/><path d="M15 3.5A9 9 0 0 1 20.5 9H15z"/>'],["Contas",'<path d="M9 11l3 3 8-8"/><path d="M20 12v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h9"/>']];
+const GP={pg:(()=>{ try{ const v=+localStorage.getItem("diario-gpg"); return v>=0&&v<4?v:0; }catch{ return 0; } })(),dir:0,prev:null};
+const GP_SEC={"sec-conta":0,"sec-bal":0,"sec-mov":1,"g-lista":1,"sec-dist":2,"sec-tempo":2,pg:3,em:3};
+function vGPgTabs(){
+  const k0=GP.prev??GP.pg; GP.prev=null;
+  let nPg=0; try{ const D=pgMesDados(todayISO().slice(0,7)); nPg=[...D.atrasoAnt,...D.doMes].filter(i=>i.st==="atrasada"||i.st==="hoje").length; }catch{}
+  return `<nav class="gnav gp-tabs" id="gnav" aria-label="Páginas da aba Gastos">
+    <button class="gnav-menu" data-act="gn-menu" aria-haspopup="dialog" aria-label="Menu">${svgI('<path d="M4 6h16M4 12h16M4 18h16"/>',17)}<span>Menu</span></button>
+    <div class="gp-tl" role="tablist" style="--k:${k0}">${GPG.map(([n,ic],k)=>`<button role="tab" class="gp-t" data-act="gp-ir" data-v="${k}" aria-selected="${k===GP.pg}">${svgI(ic,15)}<span>${n}</span>${k===3&&nPg?`<i class="gp-b">${nPg}</i>`:""}</button>`).join("")}<span class="gp-ind" aria-hidden="true"></span></div>
+  </nav>`;
+}
+function gpIr(k,dir){
+  if(k<0||k>=GPG.length||k===GP.pg){ if(k<0||k>=GPG.length){ const g=document.getElementById("gp"); if(g){ g.classList.remove("bump-l","bump-r"); void g.offsetWidth; g.classList.add(k<0?"bump-l":"bump-r"); } } return; }
+  GP.prev=GP.pg; GP.dir=dir??(k>GP.pg?1:-1); GP.pg=k; try{ localStorage.setItem("diario-gpg",String(k)); }catch{}
+  try{ navigator.vibrate&&navigator.vibrate(6); }catch{}
+  render();
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{ const tl=document.querySelector(".gp-tl"); if(tl) tl.style.setProperty("--k",k); }));
+  gpTopo();
+}
+function gpTopo(){ const nav=document.getElementById("gnav"), gp=document.getElementById("gp"); if(!nav||!gp) return;
+  const top=document.querySelector(".top"), off=nav.offsetHeight+(top&&!document.body.classList.contains("nav-off")?top.offsetHeight:0)+16;
+  const alvo=gp.getBoundingClientRect().top+window.scrollY-off; if(window.scrollY>alvo) window.scrollTo({top:Math.max(0,alvo)}); }
+function gpMostrar(id){ const k=GP_SEC[id]; if(k==null||k===GP.pg) return false; GP.prev=GP.pg; GP.dir=k>GP.pg?1:-1; GP.pg=k; try{ localStorage.setItem("diario-gpg",String(k)); }catch{} return true; }
+function vGUltimos(G){
+  const ult=[...G.doPer].sort((a,b)=>b.data.localeCompare(a.data)||(b.criado||0)-(a.criado||0)).slice(0,5);
+  if(!ult.length) return "";
+  return `<section class="card gp-ult"><div class="card-h"><div><h2>Últimos gastos</h2><p>${G.doPer.length} no período · ${fmt(G.total)}</p></div><button class="btn sm" data-act="gp-ir" data-v="1">Ver todos ${svgI('<path d="M9 6l6 6-6 6"/>',14)}</button></div>${txLista("g",ult,false,5)}</section>`;
+}
+(function(){ let x0=0,y0=0,t0=0,on=false,lock=0,el=null;
+  const ignora=t=>!t.closest||t.closest(".av-faixa,.car,.hscroll,.tx-chips,.tx-cats,.e-cats,.tbl-wrap,.tree,canvas,input,textarea,select,.mx-wrap,.chart-box,[data-noswipe]");
+  document.addEventListener("touchstart",e=>{ on=false; lock=0; if(S.tab!=="gastos"||document.body.classList.contains("gn-on")||document.body.classList.contains("bs-on")||e.touches.length>1) return;
+    el=e.target.closest&&e.target.closest("#gp"); if(!el||ignora(e.target)) return; const t=e.touches[0]; x0=t.clientX; y0=t.clientY; t0=Date.now(); on=true; },{passive:true});
+  document.addEventListener("touchmove",e=>{ if(!on) return; const t=e.touches[0], dx=t.clientX-x0, dy=t.clientY-y0;
+    if(!lock){ if(Math.abs(dx)<10&&Math.abs(dy)<10) return; lock=Math.abs(dx)>Math.abs(dy)*1.3?1:-1; if(lock<0){ on=false; return; } el.style.transition="none"; }
+    const borda=(dx>0&&GP.pg===0)||(dx<0&&GP.pg===GPG.length-1), f=borda?.18:.45;
+    el.style.transform=`translateX(${dx*f}px)`; el.style.opacity=String(1-Math.min(.35,Math.abs(dx)/900)); },{passive:true});
+  const fim=e=>{ if(!on) return; on=false; const t=e.changedTouches?e.changedTouches[0]:null, dx=t?t.clientX-x0:0, vel=Math.abs(dx)/Math.max(1,Date.now()-t0);
+    const ir=lock>0&&(Math.abs(dx)>window.innerWidth*.22||(Math.abs(dx)>40&&vel>.45));
+    const g=el; g.style.transition=""; g.style.transform=""; g.style.opacity="";
+    if(ir) gpIr(GP.pg+(dx<0?1:-1),dx<0?1:-1); };
+  document.addEventListener("touchend",fim,{passive:true}); document.addEventListener("touchcancel",fim,{passive:true});
+  document.addEventListener("keydown",e=>{ if(S.tab!=="gastos"||!e.target.closest||!e.target.closest(".gp-tl")) return; if(e.key==="ArrowRight"||e.key==="ArrowLeft"){ e.preventDefault(); gpIr(GP.pg+(e.key==="ArrowRight"?1:-1)); setTimeout(()=>{ const b=document.querySelector(`.gp-t[data-v="${GP.pg}"]`); if(b) b.focus(); },30); } });
+})();
+
 function vGNav(){
   return `<nav class="gnav" id="gnav" aria-label="Atalhos da aba Gastos">
     <button class="gnav-menu" data-act="gn-menu" aria-haspopup="dialog">${svgI('<path d="M4 6h16M4 12h16M4 18h16"/>',17)}<span>Menu</span></button>
@@ -4649,7 +4719,7 @@ function gnFechar(){ const ov=document.getElementById("gn-ov"); if(!ov||ov.hidde
 function gnIr(id){
   if(id==="pg"&&!PG.aberto){ PG.aberto=true; try{ localStorage.setItem("diario-pg-aberto","1"); }catch{} }
   if(id==="em"&&!EM.aberto){ EM.aberto=true; try{ localStorage.setItem("diario-em-aberto","1"); }catch{} }
-  GN.aberto=false; GN.ativo=id; GN.lock=Date.now()+1200; render();
+  gpMostrar(id); GN.aberto=false; GN.ativo=id; GN.lock=Date.now()+1200; render(); { const tl=document.querySelector(".gp-tl"); if(tl) requestAnimationFrame(()=>tl.style.setProperty("--k",GP.pg)); }
   const el=document.getElementById(id); if(!el) return;
   const nav=document.getElementById("gnav"), top=document.querySelector(".top");
   const off=(nav?nav.offsetHeight:0)+(top&&!document.body.classList.contains("nav-off")?top.offsetHeight:0)+12;
@@ -5184,7 +5254,7 @@ function vFluxo(G,varMes,usoLim,estado){
   </section>`;
 }
 function vGastos(){
-  const G=gCompute(); const ym=G.ym;
+  const G=gCompute(); const ym=G.ym; const pg=GP.pg, anim=GP.dir; GP.dir=0; if(pg===3){ PG.aberto=true; EM.aberto=true; }
   const ed=S.gEdit?S.gastos.get(S.gEdit):null;
   const aberto=!!ed||(S.gForm&&S.gTipo!=="entrada");
   const defData = ed?ed.data : (S.gPer!=="mes"||ym===G.mesAtual?todayISO():`${ym}-01`);
@@ -5202,12 +5272,8 @@ function vGastos(){
   const ICO={in:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M17 7 7 17M7 9v8h8"/></svg>',out:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg>',save:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 10l5 5 5-5"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>',proj:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/></svg>'};
   const proj = S.gPer==="mes" ? (G.ehMesAtual?["Projeção do mês",fmt(G.projecao),`Média de ${fmt(G.media)} por dia`]:["Média por dia",fmt(G.media),`${G.dias} dias no mês`]) : ["Média por mês",fmt(G.total/G.P.nMeses),`Média de ${fmt(G.media)} por dia`];
   return `<div class="gx">
-  ${vGNav()}
   ${vLembreteImport()}
-  ${vContas()}
   ${vMeses(G)}
-  ${vPagar()}
-  ${vEmprestimos()}
   <header class="gx-bar" id="sec-lanc">
     <div class="gx-lbl"><b>Gastos e entradas</b><span>${S.gPer==="mes"?mLong(ym).toLowerCase():G.P.label.toLowerCase()}</span></div>
     <div class="gx-acts">
@@ -5217,7 +5283,7 @@ function vGastos(){
       <button class="btn btn-imp" data-act="gi-rapido" title="Importar extrato do banco (OFX)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 10l5 5 5-5M4 15v4a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-4"/></svg>Extrato</button>
     </div>
   </header>
-
+  ${vGPgTabs()}
   ${vGImp()}
   ${(S.gTipo==="entrada"&&S.gForm&&!ed)||S.eEdit?vFormEntrada():!aberto?"":`  <section class="card g-form-card ${ed?"editing":""}">
     <div class="card-h"><div><h2>${ed?"Editar gasto":"Novo gasto"}</h2><p>${ed?"Altere os dados e salve":aberto?"Registre cada despesa assim que ela acontecer":"Registre gastos e entradas de dinheiro"}</p></div>
@@ -5241,11 +5307,12 @@ function vGastos(){
     </form>`:""}
   </section>`}
 
+  <div class="gp ${anim>0?"in-r":anim<0?"in-l":""}" id="gp" data-pg="${pg}" role="tabpanel" aria-label="${GPG[pg][0]}">
+  ${pg===0?`${vContas()}
   ${vFluxo(G,varMes,usoLim,estado)}
-
   ${vAvisosFaixa(avs)}
-
-  <h2 class="gx-sec" id="sec-mov"><span>Movimentações</span><small>${esc(G.P.label)}</small></h2>
+  ${vGUltimos(G)}`:""}
+  ${pg===1?`  <h2 class="gx-sec" id="sec-mov"><span>Movimentações</span><small>${esc(G.P.label)}</small></h2>
   <section class="card mov" id="g-lista">
     <div class="mov-h">
       <div class="tabs2" role="tablist" aria-label="Tipo de movimentação">
@@ -5255,9 +5322,8 @@ function vGastos(){
       ${S.gAba==="entradas"?`<button class="btn sm" data-act="e-nova">+ Entrada</button>`:`<button class="btn sm ghost" data-act="csv-gastos">Exportar CSV</button>`}
     </div>
     ${S.gAba==="entradas"?vEntradasCorpo(G):vMovGastosCorpo(G,lista,filtrando,origs.sort((a,b)=>origemNome(a).localeCompare(origemNome(b))),varias)}
-  </section>
-
-  <h2 class="gx-sec" id="sec-dist"><span>Para onde foi o dinheiro</span><small>${esc(G.P.label)}</small></h2>
+  </section>`:""}
+  ${pg===2?`  <h2 class="gx-sec" id="sec-dist"><span>Para onde foi o dinheiro</span><small>${esc(G.P.label)}</small></h2>
   <section class="grid">
     <div class="card span-7 g-dist2"><div class="card-h"><div><h2>Distribuição</h2><p><span class="dist-per">${esc(G.P.label)}</span> · <span id="dist-sub">${DIST[S.gDist][1]}</span></p></div>
         ${G.total?`<div class="car-nav"><button class="icon-btn nav" data-act="dist" data-v="-1" aria-label="Gráfico anterior"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M15 6l-6 6 6 6"/></svg></button><span class="dots">${DIST.map((d,k)=>`<button class="dot-b" data-act="dist-go" data-v="${k}" aria-label="${d[0]}" aria-current="${k===S.gDist}"></button>`).join("")}</span><button class="icon-btn nav" data-act="dist" data-v="1" aria-label="Próximo gráfico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></button></div>`:""}</div>
@@ -5295,8 +5361,10 @@ function vGastos(){
       <div class="card-h"><div><h2>${G.temEntradas?"Entradas e gastos":"Evolução dos gastos"}</h2><p>${G.temEntradas?"Quanto entrou, quanto saiu e quanto sobrou em cada mês":"Total gasto por mês"}${G.limMes?" · linha tracejada: orçamento":""}</p></div></div>
       <div class="chart-box sm"><canvas id="c-gmes" role="img" aria-label="Gráfico da evolução mensal dos gastos"></canvas></div>
     </div>
-  </section>
-
+  </section>`:""}
+  ${pg===3?`${vPagar()}
+  ${vEmprestimos()}`:""}
+  </div>
   ${S.gOrcOpen?vOrc(G):""}
   </div>`;
 }
@@ -5489,6 +5557,7 @@ app.addEventListener("click",async e=>{
   else if(act==="gn-sc"){ const sc=document.querySelector(".gnav-sc"); if(sc) sc.scrollBy({left:(+b.dataset.v)*Math.max(160,sc.clientWidth*.7),behavior:"smooth"}); }
   else if(false){}
   else if(act==="gn-ir"){ gnIr(b.dataset.v); }
+  else if(act==="gp-ir"){ gpIr(+b.dataset.v); }
   else if(act==="gn-pg"){ gnIr("pg"); }
   else if(act==="gn-em"){ gnIr("em"); }
   else if(act==="gn-resumo"){ GN.aberto=false; S.tab="relatorios"; S.rsMes=S.gPer==="mes"?S.gMes:null; render(); window.scrollTo({top:0}); }
@@ -5516,7 +5585,7 @@ app.addEventListener("click",async e=>{
   else if(act==="g-per"){ const v=b.dataset.v; if(v==="custom"&&S.gPer!=="custom"){ const P=gPeriodo(); S.gDe=P.de; S.gAte=P.ate; } S.gPer=v; S.gLim=100; render(); }
   else if(act==="g-hoje"){ S.gPer="mes"; S.gMes=todayISO().slice(0,7); S.gLim=100; S.gEdit=null; S.gDel=null; PG.pay=null; render(); }
   else if(act==="g-ir-mes"){ S.gPer="mes"; S.gMes=b.dataset.v; S.gLim=100; S.gEdit=null; S.gDel=null; PG.pay=null; const sl=document.querySelector(".mx-strip"); const pos=sl?sl.scrollLeft:0; render(); const st=document.querySelector(".mx-strip"); if(st){ st.scrollLeft=pos; const c=st.querySelector(".mx-c.on"); if(c){ const alvo=c.offsetLeft-st.clientWidth/2+c.offsetWidth/2; st.scrollTo({left:alvo,behavior:"smooth"}); st.dataset.ok=alvo; mxCentrado=S.gPer+"|"+S.gMes; c.focus({preventScroll:true}); } } }
-  else if(act==="g-loja"){ const v=b.dataset.v; S.gBusca=(S.gBusca&&S.gBusca.toLowerCase()===v.toLowerCase())?"":v; S.gLim=100; render(); if(S.gBusca){ const l=document.getElementById("g-lista"); if(l) l.scrollIntoView({behavior:"smooth",block:"start"}); } }
+  else if(act==="g-loja"){ const v=b.dataset.v; S.gBusca=(S.gBusca&&S.gBusca.toLowerCase()===v.toLowerCase())?"":v; S.gLim=100; if(S.gBusca) gpMostrar("g-lista"); render(); if(S.gBusca){ const l=document.getElementById("g-lista"); if(l) l.scrollIntoView({behavior:"smooth",block:"start"}); } }
   else if(act==="g-limpar"){ S.gCat=""; S.gBusca=""; S.gMin=""; S.gOrig=""; S.gOrd="recentes"; S.gLim=100; render(); }
   else if(act==="g-mais"){ S.gLim+=100; render(); }
   else if(act==="dist"){ distIr(S.gDist+(+b.dataset.v)); }
@@ -5563,7 +5632,7 @@ app.addEventListener("click",async e=>{
   else if(act==="pg-hoje"){ PG.mes=todayISO().slice(0,7); PG.pay=null; render(); }
   else if(act==="pg-pay"){ PG.pay=PG.pay===b.dataset.k?null:b.dataset.k; PG.desf=null; render(); const f=document.getElementById("pgpv"); if(f){ f.focus(); f.select(); } }
   else if(act==="pg-pay-no"){ PG.pay=null; render(); }
-  else if(act==="pg-ir"||act==="pg-ver"){ S.tab="gastos"; PG.aberto=true; S.gPer="mes"; S.gMes=todayISO().slice(0,7); PG.pay=act==="pg-ir"?b.dataset.k:null; render();
+  else if(act==="pg-ir"||act==="pg-ver"){ S.tab="gastos"; gpMostrar("pg"); PG.aberto=true; S.gPer="mes"; S.gMes=todayISO().slice(0,7); PG.pay=act==="pg-ir"?b.dataset.k:null; render();
     const k=b.dataset.k; const alvo=k?document.getElementById("pg_"+k.replace("|","_")):document.getElementById("pg"); if(alvo) alvo.scrollIntoView({behavior:"smooth",block:k?"center":"start"}); const f=document.getElementById("pgpv"); if(f) f.focus({preventScroll:true}); }
   else if(act==="pg-link"){ await pgVincular(b.dataset.k,b.dataset.g); }
   else if(act==="pg-nao"){ await pgRejeitar(b.dataset.k,b.dataset.g); }
@@ -5597,10 +5666,10 @@ app.addEventListener("click",async e=>{
   else if(act==="e-del-ok"){ const id=b.dataset.id; S.eDel=null; if(S.eEdit===id) S.eEdit=null; await safe(store.del(id),"Entrada excluída"); render(); }
   else if(act==="e-mais"){ S.eLim+=50; render(); }
   else if(act==="av-ok"){ S.avOcultos.add(b.dataset.k); render(); }
-  else if(act==="av-ver"){ if(b.dataset.cat){ S.gCat=b.dataset.cat; S.gBusca=""; } if(b.dataset.busca){ S.gBusca=b.dataset.busca; S.gCat=""; } S.gLim=100; render(); const l=document.getElementById("g-lista"); if(l) l.scrollIntoView({behavior:"smooth",block:"start"}); }
+  else if(act==="av-ver"){ if(b.dataset.cat){ S.gCat=b.dataset.cat; S.gBusca=""; } if(b.dataset.busca){ S.gBusca=b.dataset.busca; S.gCat=""; } S.gLim=100; gpMostrar("g-lista"); render(); const l=document.getElementById("g-lista"); if(l) l.scrollIntoView({behavior:"smooth",block:"start"}); }
   else if(act==="g-form"){ if(S.gForm&&S.gTipo==="entrada"){ S.gForm=false; S.gTipo="gasto"; render(); return; } S.gForm=!S.gForm; render(); if(S.gForm){ const f=document.getElementById("gd"); if(f) f.focus(); } }
   else if(act==="g-mes"){ S.gPer="mes"; S.gLim=100; S.gMes=ymAdd(S.gMes,+b.dataset.v); S.gEdit=null; S.gDel=null; PG.pay=null; render(); mxCentrar(true); }
-  else if(act==="g-filtro"){ S.gCat = S.gCat===b.dataset.v ? "" : b.dataset.v; render(); }
+  else if(act==="g-filtro"){ S.gCat = S.gCat===b.dataset.v ? "" : b.dataset.v; S.gLim=100; if(S.gCat){ gpIr(1); if(GP.pg!==1) render(); } else render(); }
   else if(act==="g-edit"){ S.gTipo="gasto"; S.eEdit=null; S.gEdit=b.dataset.id; S.gDel=null; render(); window.scrollTo({top:0,behavior:"smooth"}); const f=document.getElementById("gd"); if(f) f.focus({preventScroll:true}); }
   else if(act==="g-cancel"){ S.gEdit=null; render(); }
   else if(act==="g-del"){ S.gDel=b.dataset.id; render(); }
