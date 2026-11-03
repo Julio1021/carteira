@@ -1912,6 +1912,21 @@ body[data-tab="gastos"] .fab{display:none !important}
   .hx-ati{width:50px;height:50px}
   .gp-tabs .gp-t{font-size:13px;padding:12px 2px}
 }
+
+/* ===== Aba inicial ===== */
+.ini-box{border:1px solid var(--line);border-radius:14px;padding:12px;margin-bottom:14px;background:var(--surface-2)}
+.ini-sw{display:flex;align-items:center;gap:12px;cursor:pointer;width:100%;border:0;background:transparent;color:var(--ink);font:inherit;text-align:left;padding:0}
+.ini-t{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px} .ini-t b{font-size:14px} .ini-t small{font-size:12px;color:var(--muted)}
+.ini-sw i{flex:none;position:relative;width:46px;height:28px;border-radius:99px;background:var(--line);transition:background .18s ease}
+.ini-sw i::after{content:"";position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.3);transition:transform .18s ease}
+.ini-sw[aria-checked="true"] i{background:var(--accent)} .ini-sw[aria-checked="true"] i::after{transform:translateX(18px)}
+.ini-sw:focus-visible i{outline:2px solid var(--focus);outline-offset:2px}
+.ini-ops{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:10px}
+.ini-op{display:flex;flex-direction:column;align-items:flex-start;gap:1px;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:10px;padding:8px 9px;font:inherit;cursor:pointer;text-align:left}
+.ini-op b{font-size:12.5px} .ini-op small{font-size:10.5px;color:var(--muted)}
+.ini-op[aria-checked="true"]{border-color:var(--accent);background:var(--accent-soft)}
+:root[data-glass] .theme-pop{background:rgba(255,255,255,.9) !important;-webkit-backdrop-filter:blur(28px) saturate(160%);backdrop-filter:blur(28px) saturate(160%)}
+:root[data-glass="dark"] .theme-pop{background:rgba(18,22,30,.9) !important}
 </style>
 
 <header class="top">
@@ -1930,7 +1945,7 @@ body[data-tab="gastos"] .fab{display:none !important}
       <button role="tab" data-tab="relatorios" aria-selected="false">Relatórios</button>
     </nav>
     <div class="sync" id="sync"><i></i><span>Conectando…</span></div>
-    <div class="theme-wrap"><button class="theme-btn" id="theme-btn" aria-haspopup="true" aria-expanded="false"><span class="sw" id="theme-sw"></span><span>Tema</span></button><div class="theme-pop" id="theme-pop" hidden></div></div>
+    <div class="theme-wrap"><button class="theme-btn" id="theme-btn" aria-haspopup="true" aria-expanded="false"><span class="sw" id="theme-sw"></span><span>Ajustes</span></button><div class="theme-pop" id="theme-pop" hidden></div></div>
   </div>
 </header>
 <nav class="bnav" aria-label="Seções"><button data-tab="painel" aria-selected="false"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9v11a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V9"/></svg><span>Painel</span></button><button data-tab="gastos" aria-selected="false"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2.5h12v19l-3-2-3 2-3-2-3 2z"/><path d="M9 7.5h6M9 11.5h6M9 15.5h4"/></svg><span>Gastos</span></button><button data-tab="cartoes" aria-selected="false"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="3"/><path d="M2 10h20M6 15h4"/></svg><span>Cartões</span></button><button data-tab="ativos" aria-selected="false"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h4v-4z"/></svg><span>Ativos</span></button><button data-tab="relatorios" aria-selected="false"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 6-6"/></svg><span>Relatórios</span></button></nav>
@@ -1972,7 +1987,18 @@ const uid = () => Math.random().toString(36).slice(2,9)+Date.now().toString(36).
 const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
 
 /* ---------- Estado ---------- */
-const S = { assets:new Map(), entries:new Map(), ready:false, tab:"painel", range:"6M", assetMode:"valor",
+/* ---------- Aba que abre primeiro ---------- */
+const INI_KEY="diario-aba-inicial", ULT_KEY="diario-aba-ultima";
+const INI_OPS=[["painel","Painel","Investimentos"],["gastos","Gastos","Entrou e saiu"],["ultima","A última","Onde você parou"]];
+function iniPref(){ try{ const v=localStorage.getItem(INI_KEY); return INI_OPS.some(o=>o[0]===v)?v:"painel"; }catch{ return "painel"; } }
+function iniAba(){ const p=iniPref(); if(p==="gastos") return "gastos"; if(p==="ultima"){ try{ const u=localStorage.getItem(ULT_KEY); if(["painel","gastos","cartoes","lancar","ativos","relatorios"].includes(u)) return u; }catch{} } return "painel"; }
+function iniNav(){ const g=iniPref()==="gastos";
+  document.querySelectorAll("nav.tabs, nav.bnav").forEach(nav=>{ const bp=nav.querySelector('[data-tab="painel"]'), bg=nav.querySelector('[data-tab="gastos"]'); if(!bp||!bg) return;
+    if(g&&bp.compareDocumentPosition(bg)&Node.DOCUMENT_POSITION_FOLLOWING) nav.insertBefore(bg,bp);
+    if(!g&&bg.compareDocumentPosition(bp)&Node.DOCUMENT_POSITION_FOLLOWING) nav.insertBefore(bp,bg); }); }
+function iniDefinir(v){ try{ localStorage.setItem(INI_KEY,v); }catch{} iniNav(); renderPicker();
+  toast(v==="gastos"?"Pronto: o app vai abrir direto em Gastos":v==="ultima"?"Pronto: o app vai abrir na última aba que você usou":"Pronto: o app volta a abrir no Painel"); }
+const S = { assets:new Map(), entries:new Map(), ready:false, tab:iniAba(), range:"6M", assetMode:"valor",
   entryDate: todayISO(), drafts:{}, confirmDel:null, histFilter:"", repYear:null,
   detalhar:{}, regras:new Map(), entradas:new Map(), contas:new Map(), rendas:new Map(), emps:new Map(), recebs:new Map(), rdEdit:null, pagar:new Map(), pagtos:new Map(), ctEdit:null, ctNova:false, ctDel:null, gTipo:"gasto", eEdit:null, eDel:null, eLim:10, avOcultos:new Set(), gastos:new Map(), orc:new Map(), cartoes:new Map(), cpags:new Map(), gPer:"mes", gDist:0, gForm:false, aForm:false, gAba:"tudo", gDe:"", gAte:"", gOrd:"recentes", gBusca:"", gMin:"", gLim:100, gMes: todayISO().slice(0,7), gEdit:null, gCat:"", gDel:null, gOrcOpen:false };
 
@@ -2752,14 +2778,20 @@ function applyTheme(id,{save=true}={}){
 }
 function renderPicker(){
   const pop=document.getElementById("theme-pop");
-  pop.innerHTML=`<h3>Escolha um tema</h3><p>${Object.keys(T).length} temas. A mudança vale na hora e fica salva para as próximas visitas.</p>${["Vidro","Escuro","Claro"].map(tp=>{ const nm={Vidro:"Vidro líquido",Escuro:"Temas escuros",Claro:"Temas claros"}[tp]; return `<div class="theme-sec">${nm}</div><div class="theme-grid" role="radiogroup" aria-label="${nm}">${
+  const ip=iniPref(), gOn=ip==="gastos";
+  pop.innerHTML=`<div class="ini-box">
+      <button class="ini-sw" role="switch" aria-checked="${gOn}" data-ini-sw="1" aria-label="Abrir o app na aba Gastos"><span class="ini-t"><b>Abrir o app em Gastos</b><small>${gOn?"Gastos é a primeira aba ao abrir":"Desligado: abre no Painel de investimentos"}</small></span>
+        <i aria-hidden="true"></i></button>
+      <div class="ini-ops" role="radiogroup" aria-label="Aba que abre primeiro">${INI_OPS.map(([v,n,d])=>`<button role="radio" class="ini-op" data-ini="${v}" aria-checked="${ip===v}"><b>${n}</b><small>${d}</small></button>`).join("")}</div>
+    </div>
+    <h3>Escolha um tema</h3><p>${Object.keys(T).length} temas. A mudança vale na hora e fica salva para as próximas visitas.</p>${["Vidro","Escuro","Claro"].map(tp=>{ const nm={Vidro:"Vidro líquido",Escuro:"Temas escuros",Claro:"Temas claros"}[tp]; return `<div class="theme-sec">${nm}</div><div class="theme-grid" role="radiogroup" aria-label="${nm}">${
     Object.entries(T).filter(([,t])=>t.tipo===tp).map(([id,t])=>{const v=t.v;return `<button class="theme-opt" role="radio" aria-checked="${id===temaAtual}" data-tema="${id}">
       <div class="pv ${t.glass?"pv-gl":""}" style="background:${t.pv||v[0]}"><span style="background:${v[18]}"></span><div class="r"><span style="background:${v[15].startsWith("linear")?v[2]:v[15]};border:1px solid ${v[6]}"></span><span style="background:${v[26]}"></span></div></div>
       <div class="lb"><span>${t.nome}</span></div></button>`;}).join("")}</div>`; }).join("")}`;
 }
 const tBtn=document.getElementById("theme-btn"), tPop=document.getElementById("theme-pop");
 tBtn.addEventListener("click",e=>{ e.stopPropagation(); tPop.hidden=!tPop.hidden; tBtn.setAttribute("aria-expanded",!tPop.hidden); });
-tPop.addEventListener("click",e=>{ e.stopPropagation(); const o=e.target.closest("[data-tema]"); if(o){ applyTheme(o.dataset.tema); toast("Tema aplicado: "+T[o.dataset.tema].nome); } });
+tPop.addEventListener("click",e=>{ e.stopPropagation(); const sw=e.target.closest("[data-ini-sw]"); if(sw){ iniDefinir(iniPref()==="gastos"?"painel":"gastos"); return; } const io=e.target.closest("[data-ini]"); if(io){ iniDefinir(io.dataset.ini); return; } const o=e.target.closest("[data-tema]"); if(o){ applyTheme(o.dataset.tema); toast("Tema aplicado: "+T[o.dataset.tema].nome); } });
 document.addEventListener("click",()=>{ if(!tPop.hidden){ tPop.hidden=true; tBtn.setAttribute("aria-expanded","false"); } });
 document.addEventListener("keydown",e=>{ if(e.key==="Escape"&&S.gOrcOpen){ S.gOrcOpen=false; render(); return; } if(e.key==="Escape"&&!tPop.hidden){ tPop.hidden=true; tBtn.setAttribute("aria-expanded","false"); tBtn.focus(); } });
 
@@ -2770,7 +2802,7 @@ const TAB_NOME={painel:"Painel",gastos:"Gastos",lancar:"Lançar valores",ativos:
 let tabAnt=null;
 function appVisual(){
   { const tl=document.querySelector(".gp-tl[data-k]"); if(tl) requestAnimationFrame(()=>requestAnimationFrame(()=>tl.style.setProperty("--k",tl.dataset.k))); }
-  const t=document.getElementById("m-tab"); if(t) t.textContent=TAB_NOME[S.tab]||""; document.body.dataset.tab=S.tab;
+  const t=document.getElementById("m-tab"); if(t) t.textContent=TAB_NOME[S.tab]||""; document.body.dataset.tab=S.tab; try{ localStorage.setItem(ULT_KEY,S.tab); }catch{}
   if(S.tab==="cartoes"){ ccPrevCompra(); const fs=document.getElementById("cc-fats"); const on=fs&&fs.querySelector(".cc-f.on"); if(on) fs.scrollLeft=Math.max(0,on.offsetLeft-fs.clientWidth/2+on.clientWidth/2); }
   if(tabAnt!==S.tab){ app.classList.remove("tab-in"); void app.offsetWidth; if(tabAnt) app.classList.add("tab-in"); tabAnt=S.tab; }
   app.querySelectorAll(".tbl-wrap table").forEach(tb=>{
@@ -5727,6 +5759,7 @@ function toast(msg){ const t=document.getElementById("toast"); t.textContent=msg
 async function safe(p,msg){ try{ await p; if(msg) toast(msg); }catch(e){ toast("Não foi possível salvar. Verifique a conexão e tente de novo."); } }
 
 document.getElementById("fab").addEventListener("click",()=>fabAbrir());
+iniNav();
 document.querySelector("nav.bnav").addEventListener("click",e=>{ const b=e.target.closest("button[data-tab]"); if(!b) return; try{ navigator.vibrate&&navigator.vibrate(8); }catch{} if(S.tab===b.dataset.tab){ window.scrollTo({top:0,behavior:"smooth"}); return; } S.tab=b.dataset.tab; S.confirmDel=null; S.editAsset=null; S.gEdit=null; S.gDel=null; render(); window.scrollTo({top:0}); });
 document.querySelector("nav.tabs").addEventListener("click",e=>{ const b=e.target.closest("button[data-tab]"); if(!b) return; S.tab=b.dataset.tab; S.confirmDel=null; S.editAsset=null; S.gEdit=null; S.gDel=null; render(); window.scrollTo({top:0}); });
 
