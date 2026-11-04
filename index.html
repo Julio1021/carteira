@@ -1782,7 +1782,7 @@ body[data-tab="lancar"] .fab{display:none!important}
 @keyframes gpBL{40%{transform:translateX(14px)}} @keyframes gpBR{40%{transform:translateX(-14px)}}
 .gp .gx-sec:first-child{margin-top:4px}
 .gp-ult .tx-l{margin-top:4px}
-.gp [data-act="pg-tog"],.gp [data-act="em-tog"]{display:none}
+.gp [data-act="pg-tog"],.gp [data-act="em-tog"]{pointer-events:none;cursor:default} .gp .pg-chev{display:none}
 @media (prefers-reduced-motion:reduce){ .gp.in-r,.gp.in-l,.gp.bump-l,.gp.bump-r{animation:none} .gp-ind{transition:none} }
 @media (max-width:640px){
   .gp-t{flex-direction:column;gap:3px;font-size:11.5px;padding:7px 2px}
@@ -2085,6 +2085,18 @@ button.rz-row:hover{background:var(--surface-2)}
 .cx-pop{display:flex;align-items:center;gap:12px;width:100%;color:var(--ink);font:inherit;text-align:left;cursor:pointer}
 .cx-pop>svg:first-child{color:var(--accent);flex:none} .cx-pop span{flex:1;display:flex;flex-direction:column;gap:2px} .cx-pop b{font-size:14px} .cx-pop small{font-size:12px;color:var(--muted)}
 @media (max-width:640px){ .cx-a{padding-left:0} }
+
+/* ===== hierarquia: 3 páginas, herói único ===== */
+.gp-tl{grid-template-columns:repeat(var(--n,4),1fr)}
+.gp-ind,.gp-tabs .gp-ind{width:calc(100% / var(--n,4) - 1.5px)}
+.hx-eye{border:0;background:transparent;color:inherit;opacity:.85;cursor:pointer;padding:2px 4px;margin-left:4px;vertical-align:-3px;border-radius:6px}
+.hx-eye:hover{opacity:1;background:rgba(255,255,255,.14)}
+.hx-conta{display:flex;align-items:center;gap:12px}
+.hx-conta .hx-c1,.hx-conta .hx-c2{display:flex;flex-direction:column;gap:1px;text-align:left}
+.hx-conta .hx-c1{flex:1 1 auto} .hx-conta .hx-c2{flex:0 0 auto;text-align:right;align-items:flex-end}
+.hx-conta small{font-size:11.5px;opacity:.8;font-weight:600} .hx-conta b{font-size:15px;font-variant-numeric:tabular-nums}
+.hx-conta span{opacity:1 !important}
+.hx+.rz{margin-top:-6px}
 </style>
 
 <header class="top">
@@ -4376,7 +4388,10 @@ function vHero(G,usoLim,novoOn){
   const E=G.totalE, O=G.total, sobra=E-O, temE=E>0;
   const quando=mes?(atual?"este mês":"em "+mLong(S.gMes).split(" ")[0].toLowerCase()):"no período";
   const seta=(v,l,d)=>`<button class="hx-arr" data-act="g-mes" data-v="${v}" aria-label="${l}">${svgI(`<path d="${d}"/>`,18)}</button>`;
-  let conta=""; try{ if(S.contas.size) conta=`<button class="hx-conta" data-act="gp-ir" data-v="1"><span>Em conta</span><b>${rzV(saldoTotalContas())}</b>${svgI('<path d="M9 6l6 6-6 6"/>',14)}</button>`; }catch{}
+  let conta=""; try{ const PP=rzPrev(G), tot=S.contas.size?saldoTotalContas():null, proj=tot!=null&&PP.atual?tot+PP.aRec-Math.max(0,PP.gastoFim-PP.O):null;
+    const cs=[...S.contas.values()], rec=cs.length?cs.reduce((m,c)=>c.data>m?c.data:m,cs[0].data):null, dd=rec?diasDesde(rec):null, ab=RZ.contas||S.ctNova||S.ctEdit||S.ctDel||S.ctAj;
+    conta=tot==null?`<button class="hx-conta" data-act="ct-nova"><span class="hx-c1"><small>Em conta</small><b>Adicionar conta</b></span>${svgI('<path d="M12 5v14M5 12h14"/>',15)}</button>`
+      :`<button class="hx-conta" data-act="rz-contas" aria-expanded="${!!ab}"><span class="hx-c1"><small>Em conta${dd!=null?` · ${dd===0?"hoje":dd===1?"ontem":`há ${dd} dias`}`:""}</small><b>${rzV(tot)}</b></span>${proj!=null?`<span class="hx-c2"><small>No fim do mês</small><b>≈ ${rzV(proj)}</b></span>`:""}${svgI(ab?'<path d="M6 15l6-6 6 6"/>':'<path d="M6 9l6 6 6-6"/>',15)}</button>`; }catch{}
   const lim=G.limTotal?`<div class="hx-lim ${usoLim>1?"neg":usoLim>.85?"warn":""}"><div><span>Limite de gastos</span><b>${fmt(G.gastoComLim)} <small>de ${fmt(G.limTotal)}</small></b></div><span class="hx-lb"><i style="width:${Math.min(100,usoLim*100).toFixed(1)}%"></i></span></div>`:"";
   const at=(act,n,ic,extra="")=>`<button class="hx-at" data-act="${act}" ${extra}><span class="hx-ati">${svgI(ic,21)}</span><span>${n}</span></button>`;
   return `<section class="hx" id="sec-lanc" aria-label="Resumo de ${esc(tit)}">
@@ -4388,7 +4403,7 @@ function vHero(G,usoLim,novoOn){
     ${!atual?`<button class="hx-hoje" data-act="g-hoje">${svgI('<path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/>',13)}Voltar para o mês atual</button>`:""}
     ${S.gPer==="custom"?`<div class="per-dates hx-datas"><input type="date" class="inp" id="g-de" value="${P.de}" aria-label="De"><span>até</span><input type="date" class="inp" id="g-ate" value="${P.ate}" aria-label="Até"></div>`:""}
     <div class="hx-main">
-      <small>${temE?(sobra<0?`Faltou ${quando}`:`Sobrou ${quando}`):`Você gastou ${quando}`}</small>
+      <small>${temE?(sobra<0?`Faltou ${quando}`:`Sobrou ${quando}`):`Você gastou ${quando}`}<button class="hx-eye" data-act="rz-olho" aria-pressed="${RZ.ocultar}" aria-label="${RZ.ocultar?"Mostrar":"Esconder"} valores">${svgI(RZ.ocultar?'<path d="M3 3l18 18"/><path d="M10.6 5.1A10 10 0 0 1 12 5c6 0 10 7 10 7a17 17 0 0 1-3.2 3.9M6.6 6.6C3.9 8.4 2 12 2 12s4 7 10 7c1.7 0 3.2-.5 4.5-1.2"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/>':'<path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>',15)}</button></small>
       <b>${rzV(temE?Math.abs(sobra):O)}</b>
       ${temE?`<span>${sobra<0?"gastou mais do que entrou":`${Math.round(sobra/E*100)}% do que entrou`}</span>`:`<span><button class="copy" data-act="e-nova">Lance suas entradas</button> para ver quanto sobra</span>`}
     </div>
@@ -4399,6 +4414,7 @@ function vHero(G,usoLim,novoOn){
     ${lim}
     ${conta}
   </section>
+  ${RZ.contas||S.ctNova||S.ctEdit||S.ctDel||S.ctAj?vResumoListas().contas:""}
   <nav class="hx-atl" aria-label="Atalhos">
     ${at("g-novo","Gasto",'<path d="M12 5v14M5 12h14"/>',`aria-pressed="${!!novoOn}"`)}
     ${at("e-nova","Entrada",'<path d="M12 19V5M5 12l7-7 7 7"/>')}
@@ -5147,19 +5163,19 @@ const GN={aberto:false,ativo:"sec-conta",lock:0};
 const svgI=(d,w=16)=>`<svg width="${w}" height="${w}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg>`;
 
 /* ---------- Páginas da aba Gastos (deslizar para o lado) ---------- */
-const GPG=[["Extrato",'<path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/>'],["Resumo",'<path d="M12 3v18M5 7h14M7 7l-3 7a3 3 0 0 0 6 0zM17 7l-3 7a3 3 0 0 0 6 0z"/>'],["Análise",'<path d="M21 12a9 9 0 1 1-9-9v9z"/><path d="M15 3.5A9 9 0 0 1 20.5 9H15z"/>'],["Contas",'<path d="M9 11l3 3 8-8"/><path d="M20 12v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h9"/>']];
-const GP={pg:(()=>{ try{ const v=+localStorage.getItem("diario-gpg2"); return v>=0&&v<4?v:0; }catch{ return 0; } })(),dir:0,prev:null};
-const GP_SEC={"sec-conta":1,"sec-bal":1,"sec-mov":0,"g-lista":0,"sec-dist":2,"sec-tempo":2,pg:3,em:3};
+const GPG=[["Extrato",'<path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/>'],["Análise",'<path d="M21 12a9 9 0 1 1-9-9v9z"/><path d="M15 3.5A9 9 0 0 1 20.5 9H15z"/>'],["Agenda",'<rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/>']];
+const GP={pg:(()=>{ try{ const v=+localStorage.getItem("diario-gpg3"); return v>=0&&v<3?v:0; }catch{ return 0; } })(),dir:0,prev:null};
+const GP_SEC={"sec-conta":0,"sec-bal":1,"sec-mov":0,"g-lista":0,"sec-dist":1,"sec-tempo":1,pg:2,em:2};
 function vGPgTabs(){
   const k0=GP.prev??GP.pg; GP.prev=null;
   let nPg=0; try{ const D=pgMesDados(todayISO().slice(0,7)); nPg=[...D.atrasoAnt,...D.doMes].filter(i=>i.st==="atrasada"||i.st==="hoje").length; }catch{}
   return `<nav class="gnav gp-tabs" id="gnav" aria-label="Páginas da aba Gastos">
-    <div class="gp-tl" role="tablist" style="--k:${k0}" data-k="${GP.pg}">${GPG.map(([n,ic],k)=>`<button role="tab" class="gp-t" data-act="gp-ir" data-v="${k}" aria-selected="${k===GP.pg}">${svgI(ic,15)}<span>${n}</span>${k===3&&nPg?`<i class="gp-b">${nPg}</i>`:""}</button>`).join("")}<span class="gp-ind" aria-hidden="true"></span></div>
+    <div class="gp-tl" role="tablist" style="--k:${k0};--n:${GPG.length}" data-k="${GP.pg}">${GPG.map(([n,ic],k)=>`<button role="tab" class="gp-t" data-act="gp-ir" data-v="${k}" aria-selected="${k===GP.pg}">${svgI(ic,15)}<span>${n}</span>${k===2&&nPg?`<i class="gp-b">${nPg}</i>`:""}</button>`).join("")}<span class="gp-ind" aria-hidden="true"></span></div>
   </nav>`;
 }
 function gpIr(k,dir){
   if(k<0||k>=GPG.length||k===GP.pg){ if(k<0||k>=GPG.length){ const g=document.getElementById("gp"); if(g){ g.classList.remove("bump-l","bump-r"); void g.offsetWidth; g.classList.add(k<0?"bump-l":"bump-r"); } } return; }
-  GP.prev=GP.pg; GP.dir=dir??(k>GP.pg?1:-1); GP.pg=k; try{ localStorage.setItem("diario-gpg2",String(k)); }catch{}
+  GP.prev=GP.pg; GP.dir=dir??(k>GP.pg?1:-1); GP.pg=k; try{ localStorage.setItem("diario-gpg3",String(k)); }catch{}
   try{ navigator.vibrate&&navigator.vibrate(6); }catch{}
   render();
   requestAnimationFrame(()=>requestAnimationFrame(()=>{ const tl=document.querySelector(".gp-tl"); if(tl) tl.style.setProperty("--k",k); }));
@@ -5168,7 +5184,7 @@ function gpIr(k,dir){
 function gpTopo(){ const nav=document.getElementById("gnav"), gp=document.getElementById("gp"); if(!nav||!gp) return;
   const top=document.querySelector(".top"), off=nav.offsetHeight+(top&&!document.body.classList.contains("nav-off")?top.offsetHeight:0)+16;
   const alvo=gp.getBoundingClientRect().top+window.scrollY-off; if(window.scrollY>alvo) window.scrollTo({top:Math.max(0,alvo)}); }
-function gpMostrar(id){ const k=GP_SEC[id]; if(k==null||k===GP.pg) return false; GP.prev=GP.pg; GP.dir=k>GP.pg?1:-1; GP.pg=k; try{ localStorage.setItem("diario-gpg2",String(k)); }catch{} return true; }
+function gpMostrar(id){ const k=GP_SEC[id]; if(k==null||k===GP.pg) return false; GP.prev=GP.pg; GP.dir=k>GP.pg?1:-1; GP.pg=k; try{ localStorage.setItem("diario-gpg3",String(k)); }catch{} return true; }
 function vGUltimos(G){
   const ult=[...G.doPer].sort((a,b)=>b.data.localeCompare(a.data)||(b.criado||0)-(a.criado||0)).slice(0,5);
   if(!ult.length) return "";
@@ -5565,6 +5581,13 @@ function vRzMes(G,P){
       <button class="rz-ext" data-act="gp-ir" data-v="0">Ver extrato completo${svgI('<path d="M9 6l6 6-6 6"/>',16)}</button></div>
   </section>`;
 }
+function vAnaliseTopo(G,avs){
+  const P=rzPrev(G), lim=S.gPer==="mes"?vLimGerais(limGeraisStatus(G.ym)):"";
+  return `<h2 class="gx-sec" id="sec-prev"><span>${P.atual?"Como o mês está indo":"Como foi o mês"}</span><small>${esc(G.P.label)}</small></h2>
+    ${vAvisosFaixa(avs)}
+    ${vRzMes(G,P)}
+    ${lim?`<section class="card rz-card rz-lim">${lim}</section>`:""}`;
+}
 function vResumoPg(G,avs){
   const P=rzPrev(G), L=vResumoListas();
   const lim=S.gPer==="mes"?vLimGerais(limGeraisStatus(G.ym)):"";
@@ -5919,7 +5942,7 @@ function vFluxo(G,varMes,usoLim,estado,compacto){
   </section>`;
 }
 function vGastos(){
-  const G=gCompute(); const ym=G.ym; const pg=GP.pg, anim=GP.dir; GP.dir=0; const aba=S.gAba||"tudo"; if(pg===3){ PG.aberto=true; EM.aberto=true; }
+  const G=gCompute(); const ym=G.ym; const pg=GP.pg, anim=GP.dir; GP.dir=0; const aba=S.gAba||"tudo"; if(pg===2){ PG.aberto=true; EM.aberto=true; }
   const ed=S.gEdit?S.gastos.get(S.gEdit):null;
   const aberto=!!ed||(S.gForm&&S.gTipo!=="entrada");
   const defData = ed?ed.data : (S.gPer!=="mes"||ym===G.mesAtual?todayISO():`${ym}-01`);
@@ -5974,10 +5997,10 @@ function vGastos(){
       </div>
     </div>
     ${aba==="entradas"?vEntradasCorpo(G):vMovGastosCorpo(G,lista,filtrando,origs.sort((a,b)=>origemNome(a).localeCompare(origemNome(b))),varias,aba)}
-  </section>`:""}
-  ${pg===1?`${vResumoPg(G,avs)}
+  </section>
   ${GI.open?"":(()=>{ const h=giHist(true); return h?`<section class="card gi-hist-card">${h}${RZ.imp||GI.undo?`<div class="btns"><button class="btn sm" data-act="gi-rapido">Importar outro extrato</button></div>`:""}</section>`:""; })()}`:""}
-  ${pg===2?`  <h2 class="gx-sec" id="sec-dist"><span>Para onde foi o dinheiro</span><small>${esc(G.P.label)}</small></h2>
+  ${pg===1?`  ${vAnaliseTopo(G,avs)}
+  <h2 class="gx-sec" id="sec-dist"><span>Para onde foi o dinheiro</span><small>${esc(G.P.label)}</small></h2>
   <section class="grid">
     <div class="card span-7 g-dist2"><div class="card-h"><div><h2>Distribuição</h2><p><span class="dist-per">${esc(G.P.label)}</span> · <span id="dist-sub">${DIST[S.gDist][1]}</span></p></div>
         ${G.total?`<div class="car-nav"><button class="icon-btn nav" data-act="dist" data-v="-1" aria-label="Gráfico anterior"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M15 6l-6 6 6 6"/></svg></button><span class="dots">${DIST.map((d,k)=>`<button class="dot-b" data-act="dist-go" data-v="${k}" aria-label="${d[0]}" aria-current="${k===S.gDist}"></button>`).join("")}</span><button class="icon-btn nav" data-act="dist" data-v="1" aria-label="Próximo gráfico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></button></div>`:""}</div>
@@ -6016,7 +6039,8 @@ function vGastos(){
       <div class="chart-box sm"><canvas id="c-gmes" role="img" aria-label="Gráfico da evolução mensal dos gastos"></canvas></div>
     </div>
   </section>`:""}
-  ${pg===3?`${vPagar()}
+  ${pg===2?`${vRzReceb()}
+  ${vPagar()}
   ${vEmprestimos()}`:""}
   </div>
   ${S.gOrcOpen?vOrc(G):""}
