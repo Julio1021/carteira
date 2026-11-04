@@ -2303,21 +2303,18 @@ body[data-tab="painel"] .fab,body[data-tab="ativos"] .fab,body[data-tab="relator
 :root[data-tema="linsaf"] .bnav{background:rgba(255,255,255,.94);border-color:#E6E0D5;box-shadow:0 10px 30px -12px rgba(22,28,45,.28);backdrop-filter:blur(12px)}
 :root[data-tema="linsaf"] .tx-l{box-shadow:0 1px 2px rgba(22,28,45,.04),0 6px 18px -12px rgba(22,28,45,.12);border-color:#E9E3D8}
 
-/* ===== Celular: sem cabeçalho; Ajustes vira uma bolinha que respira ===== */
+/* ===== Celular: sem cabeçalho; Ajustes vira uma bolinha que respira no centro do menu ===== */
 @media (max-width:760px){
-  body .top{position:fixed !important;top:calc(env(safe-area-inset-top,0px) + 6px) !important;right:10px;left:auto;width:auto;z-index:30;background:none !important;border:0 !important;box-shadow:none !important;-webkit-backdrop-filter:none !important;backdrop-filter:none !important;transform:none !important;border-radius:0 !important}
-  body .top .top-in{padding:0 !important;min-height:0 !important;display:block !important;background:none !important}
-  body .top .brand,body .top .tabs,body .top .sync{display:none !important}
-  body .theme-wrap{position:static}
-  body .theme-btn{width:30px;height:30px;padding:0 !important;border-radius:50% !important;display:grid !important;place-items:center;gap:0;background:var(--surface) !important;border:1px solid var(--line) !important;box-shadow:0 4px 14px -6px rgba(0,0,0,.35);color:transparent !important}
+  body .top{display:none !important}
+  body .bnav.tem-aj{grid-template-columns:1fr 1fr 46px 1fr 1fr}
+  body .bnav .theme-wrap{position:static;display:grid;place-items:center;align-self:center}
+  body .theme-btn{width:34px;height:34px;padding:0 !important;border-radius:50% !important;display:grid !important;place-items:center;gap:0;background:var(--surface) !important;border:1px solid var(--line) !important;box-shadow:0 3px 10px -4px rgba(0,0,0,.3);color:transparent !important;position:relative;margin:0;min-width:0;transform:none}
   body .theme-btn>span{display:none !important}
-  body .theme-btn::before{content:"";width:11px;height:11px;border-radius:50%;background:radial-gradient(circle at 35% 35%,color-mix(in srgb,var(--accent) 55%,#fff),var(--accent) 70%);animation:ajRespira 3.2s ease-in-out infinite}
-  body .theme-btn::after{content:"";position:absolute;width:30px;height:30px;border-radius:50%;border:1.5px solid var(--accent);opacity:0;animation:ajOnda 3.2s ease-out infinite;pointer-events:none}
-  body .theme-btn{position:relative}
+  body .theme-btn::before{content:"";position:static;width:12px;height:12px;border-radius:50%;background:radial-gradient(circle at 35% 35%,color-mix(in srgb,var(--accent) 55%,#fff),var(--accent) 70%);animation:ajRespira 3.2s ease-in-out infinite;transform:none;top:auto;left:auto}
+  body .theme-btn::after{content:"";position:absolute;inset:0;margin:auto;width:34px;height:34px;border-radius:50%;border:1.5px solid var(--accent);opacity:0;animation:ajOnda 3.2s ease-out infinite;pointer-events:none}
   body .theme-btn[aria-expanded="true"]::before{animation:none;transform:scale(1.2)}
   body .theme-btn[aria-expanded="true"]::after{animation:none}
-  body .theme-pop{position:fixed !important;top:calc(env(safe-area-inset-top,0px) + 44px) !important;left:12px !important;right:12px !important;width:auto !important}
-  main#app{padding-top:calc(40px + env(safe-area-inset-top,0px))}
+  body .theme-pop{position:fixed !important;z-index:45 !important;top:auto !important;bottom:calc(env(safe-area-inset-bottom,0px) + 92px) !important;left:12px !important;right:12px !important;width:auto !important;max-height:min(70vh,620px) !important}
   body .gnav{top:8px}
 }
 @keyframes ajRespira{0%,100%{transform:scale(.78)}50%{transform:scale(1.18)}}
@@ -3476,7 +3473,7 @@ function appVisual(){
   });
 }
 function render(){
-  document.querySelectorAll("nav.tabs button, nav.bnav button").forEach(b=>b.setAttribute("aria-selected",b.dataset.tab===NAV_GRUPO[S.tab]));
+  document.querySelectorAll("nav.tabs button[data-tab], nav.bnav button[data-tab]").forEach(b=>b.setAttribute("aria-selected",b.dataset.tab===NAV_GRUPO[S.tab]));
   if(!S.ready){ app.innerHTML='<div class="loading">Carregando sua carteira…</div>'; return; }
   const C=compute();
   const fn={inicio:vInicio,plano:vPlano,painel:vPainel,lancar:vLancar,ativos:vAtivos,relatorios:vRelatorios,gastos:vGastos,cartoes:vCartoes}[S.tab]||vInicio;
@@ -5316,7 +5313,7 @@ document.addEventListener("keydown",e=>{ if(e.key==="/"&&S.tab==="gastos"&&!/INP
   const mq=window.matchMedia("(max-width:760px)");
   function aplicar(){
     tick=false; const y=Math.max(0,window.scrollY), d=y-ultY; ultY=y;
-    if(!mq.matches||y<60||document.body.classList.contains("bs-on")){ document.body.classList.remove("nav-off"); acc=0; return; }
+    if(!mq.matches||y<60||document.body.classList.contains("bs-on")||document.getElementById("theme-btn").getAttribute("aria-expanded")==="true"){ document.body.classList.remove("nav-off"); acc=0; return; }
     if((d>0&&acc<0)||(d<0&&acc>0)) acc=0; acc+=d;
     if(acc>24) document.body.classList.add("nav-off");
     else if(acc<-12) document.body.classList.remove("nav-off");
@@ -5326,6 +5323,20 @@ document.addEventListener("keydown",e=>{ if(e.key==="/"&&S.tab==="gastos"&&!/INP
   document.addEventListener("focusin",e=>{ if(e.target.matches&&e.target.matches("input,select,textarea")) document.body.classList.remove("nav-off"); });
 })();
 
+
+
+/* ---------- Celular: Ajustes mora no centro do menu de baixo ---------- */
+(function(){
+  const mq=window.matchMedia("(max-width:760px)"), w=document.querySelector(".theme-wrap"), casa=w&&w.parentNode, bn=document.querySelector("nav.bnav");
+  if(!w||!bn) return;
+  const mark=document.createComment("aj"); casa.insertBefore(mark,w);
+  function lugar(){
+    const pop=document.getElementById("theme-pop");
+    if(mq.matches){ const ref=bn.querySelector('[data-tab="plano"]'); if(w.parentNode!==bn) bn.insertBefore(w,ref); bn.classList.add("tem-aj"); if(pop&&pop.parentNode!==document.body) document.body.appendChild(pop); }
+    else { if(w.parentNode!==casa) casa.insertBefore(w,mark.nextSibling); bn.classList.remove("tem-aj"); if(pop&&pop.parentNode!==w) w.appendChild(pop); }
+  }
+  lugar(); mq.addEventListener?mq.addEventListener("change",lugar):mq.addListener(lugar);
+})();
 
 /* ---------- Empréstimos (dinheiro a receber) ---------- */
 const EM={aberto:(()=>{ try{ return localStorage.getItem("diario-em-aberto")!=="0"; }catch{ return true; } })(),form:null,rec:null,del:null,ver:{}};
