@@ -2133,6 +2133,23 @@ body[data-tab="inicio"] .fab{display:none !important}
 .pt-nav button[aria-current="page"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
 :root[data-glass] .pt-nav button:not([aria-current="page"]){background:var(--gl-glass2);border-color:var(--gl-bd)}
 @media (max-width:640px){ .pl-ls{grid-template-columns:1fr} }
+
+/* ===== Extrato: contas e cartões ===== */
+.ex-or{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin:0 0 10px;padding:1px}
+.ex-or::-webkit-scrollbar{display:none}
+.ex-or .tx-chip svg{opacity:.75}
+.ex-fat{border:1px solid var(--line);border-radius:18px;padding:12px;margin:0 0 12px;background:linear-gradient(135deg,color-mix(in srgb,var(--cc) 14%,var(--surface)),var(--surface))}
+:root[data-glass] .ex-fat{border-color:var(--gl-bd);background:linear-gradient(135deg,color-mix(in srgb,var(--cc) 22%,transparent),var(--gl-glass2))}
+.ex-fat-ms{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
+.ex-fat-ms::-webkit-scrollbar{display:none}
+.ex-fm{flex:0 0 auto;display:flex;flex-direction:column;align-items:center;gap:1px;min-width:62px;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:12px;padding:6px 8px;font:inherit;cursor:pointer}
+.ex-fm b{font-size:13px;text-transform:capitalize} .ex-fm small{font-size:10.5px;color:var(--muted);font-variant-numeric:tabular-nums}
+.ex-fm.on{border-color:var(--cc);box-shadow:0 0 0 1px var(--cc) inset;background:color-mix(in srgb,var(--cc) 12%,var(--surface))}
+.ex-fat-h{margin-top:10px} .ex-fat-h small{font-size:12px;color:var(--muted);font-weight:600} .ex-fat-h b{display:block;font-family:var(--f-display);font-size:26px;font-weight:800;margin:2px 0;font-variant-numeric:tabular-nums} .ex-fat-h span{font-size:12.5px;color:var(--ink-2)}
+.ex-st{font-style:normal;font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;padding:2px 7px;border-radius:99px;margin-right:4px;background:var(--surface-2);color:var(--ink-2)}
+.ex-st.ab{background:var(--accent-soft);color:var(--accent)} .ex-st.ok{background:var(--pos-soft);color:var(--pos)} .ex-st.neg{background:var(--neg-soft);color:var(--neg)} .ex-st.fe{background:color-mix(in srgb,#e0a020 20%,transparent);color:#a86c00}
+.ex-fat-p{margin:8px 0 0;font-size:12px;color:var(--muted)}
+.ex-fat-a{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
 </style>
 
 <header class="top">
@@ -5866,6 +5883,36 @@ function vExHd(G,usoLim,nAv){
     ${nAv?`<button class="ex-av" data-act="gp-ir" data-v="1">${svgI('<path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/>',14)}${nAv} aviso${nAv>1?"s":""} no Resumo${svgI('<path d="M9 6l6 6-6 6"/>',14)}</button>`:""}
   </section>`;
 }
+
+/* ---------- Cartões dentro do Extrato: a fatura vira filtro ---------- */
+function exCartao(){
+  if(!S.gOrig||!String(S.gOrig).startsWith("cc:")) return null;
+  const c=S.cartoes.get(S.gOrig.slice(3)); if(!c) return null;
+  const R=ccResumo(c); if(!S.gFat||!R.fats.some(f=>f.ym===S.gFat)) S.gFat=R.atual;
+  const F=R.fats.find(f=>f.ym===S.gFat)||ccFatura(c,S.gFat,R.proj);
+  const busca=(S.gBusca||"").trim().toLowerCase(), min=S.gMin?parseNum(S.gMin):null;
+  let lista=F.itens.filter(g=>g.id&&!g.prev&&S.gastos.has(g.id)).filter(g=>(!S.gCat||g.cat===S.gCat)&&(!busca||g.desc.toLowerCase().includes(busca))&&(min==null||g.valor>=min));
+  const ord=S.gOrd||"recentes"; lista=lista.slice().sort(ord==="maior"?(a,b)=>b.valor-a.valor:ord==="menor"?(a,b)=>a.valor-b.valor:(a,b)=>b.data.localeCompare(a.data)||(b.criado||0)-(a.criado||0));
+  const previstas=F.itens.filter(g=>g.prev);
+  return {c,R,F,lista,previstas};
+}
+function vExOrigens(G){
+  const cts=[...S.contas.values()].map(c=>["ct:"+c.id,c.nome,null]), ccs=ccLista().map(c=>["cc:"+c.id,c.nome,c.cor]);
+  const outras=[...new Set(G.doPer.map(origemDe))].filter(o=>!o.startsWith("ct:")&&!o.startsWith("cc:")&&o!=="manual"&&o!=="ct:?").map(o=>[o,origemNome(o),null]);
+  const ops=[...cts,...outras,...ccs]; if(ops.length<2&&!ccs.length) return "";
+  const cur=S.gOrig||"";
+  return `<div class="ex-or hscroll" role="group" aria-label="Conta ou cartão">${[["","Todas",null],...ops].map(([v,n,cor])=>`<button class="tx-chip ${cur===v?"on":""}" data-act="g-orig-set" data-v="${esc(v)}">${v.startsWith("cc:")?`<i style="background:${cor||"var(--accent)"}"></i>${svgI('<rect x="2" y="5" width="20" height="14" rx="3"/><path d="M2 10h20"/>',13)}`:""}${esc(n)}</button>`).join("")}</div>`;
+}
+function vExFatura(X){
+  const {c,R,F,previstas}=X, ST={futura:["Futura","fut"],aberta:["Aberta","ab"],fechada:["Fechada","fe"],paga:["Paga","ok"],vencida:["Vencida","neg"]}[F.st]||["",""];
+  const ini=Math.max(0,R.fats.findIndex(f=>f.ym>=ymAdd(R.atual,-4)));
+  return `<section class="ex-fat" style="--cc:${c.cor||"var(--accent)"}">
+    <div class="ex-fat-ms hscroll">${R.fats.slice(ini,ini+10).map(f=>`<button class="ex-fm ${f.ym===F.ym?"on":""}" data-act="ex-fat" data-v="${f.ym}"><b>${MES_ABR[+f.ym.slice(5)-1]}</b><small>${brlC.format(f.total)}</small></button>`).join("")}</div>
+    <div class="ex-fat-h"><div><small>Fatura de ${mLong(F.ym).toLowerCase()} · ${esc(c.nome)}</small><b>${rzV(F.total)}</b><span><i class="ex-st ${ST[1]}">${ST[0]}</i> fecha ${dShort(F.fech)} · vence ${dShort(F.venc)}${F.pago>0.009&&F.st!=="paga"?` · pago ${fmt(F.pago)}`:""}</span></div></div>
+    ${previstas.length?`<p class="ex-fat-p">Inclui ${previstas.length} parcela(s) prevista(s) de ${fmt(previstas.reduce((t,g)=>t+g.valor,0))} que ainda não chegaram na fatura.</p>`:""}
+    <div class="ex-fat-a"><button class="btn sm" data-act="ex-cc-det" data-id="${c.id}">Detalhes e parcelas</button><button class="btn sm" data-act="ex-cc-imp" data-id="${c.id}">Importar fatura</button>${F.st==="fechada"||F.st==="vencida"?`<button class="btn sm primary" data-act="ex-cc-det" data-id="${c.id}" data-pagar="1">Registrar pagamento</button>`:""}</div>
+  </section>`;
+}
 function vMovGastosCorpo(G,lista,filtrando,origs,varias,modo){
   const tudo=modo==="tudo";
   const ord=S.gOrd||"recentes", nF=[S.gCat,S.gOrig,S.gMin].filter(Boolean).length+(ord!=="recentes"?1:0);
@@ -6178,7 +6225,8 @@ function vGastos(){
   const varMes = G.prevTotal ? (G.total-G.prevTotal)/G.prevTotal : NaN;
   const usoLim = G.limTotal ? G.gastoComLim/G.limTotal : NaN;
   const estado = !G.limTotal ? "neu" : usoLim>1 ? "neg" : usoLim>0.85 ? "warn" : "pos";
-  const lista = G.lista; const filtrando=!!(S.gCat||S.gBusca||S.gMin||S.gOrig);
+  let lista = G.lista; const filtrando=!!(S.gCat||S.gBusca||S.gMin||(S.gOrig&&!String(S.gOrig).startsWith("cc:")));
+  const XC=exCartao(); if(XC) lista=XC.lista;
   const origs=[...new Set(G.doPer.map(origemDe))], varias=origs.length>1;
   const catOpts = GCATS.map(([id,n])=>`<option value="${id}" ${ed&&ed.cat===id?"selected":""}>${n}</option>`).join("");
   const pagOpts = PAGS.map(p=>`<option ${ed&&ed.pag===p?"selected":""}>${p}</option>`).join("");
@@ -6225,7 +6273,9 @@ function vGastos(){
         <button role="tab" class="tab2" data-act="g-aba" data-v="entradas" aria-selected="${aba==="entradas"}">Entradas</button>
       </div>
     </div>
-    ${aba==="entradas"?vEntradasCorpo(G):vMovGastosCorpo(G,lista,filtrando,origs.sort((a,b)=>origemNome(a).localeCompare(origemNome(b))),varias,aba)}
+    ${aba!=="entradas"?vExOrigens(G):""}
+    ${XC&&aba!=="entradas"?vExFatura(XC):""}
+    ${aba==="entradas"?vEntradasCorpo(G):vMovGastosCorpo(G,lista,filtrando,origs.sort((a,b)=>origemNome(a).localeCompare(origemNome(b))),varias,XC?"gastos":aba)}
   </section>
   ${GI.open?"":(()=>{ const h=giHist(true); return h?`<section class="card gi-hist-card">${h}${RZ.imp||GI.undo?`<div class="btns"><button class="btn sm" data-act="gi-rapido">Importar outro extrato</button></div>`:""}</section>`:""; })()}`:""}
   ${pg===1?`  ${vAnaliseTopo(G,avs)}
@@ -6474,10 +6524,13 @@ app.addEventListener("click",async e=>{
   else if(act==="tx"){ txAbrir(b.dataset.k,b.dataset.id); }
   else if(act==="g-filt"){ S.gFilt=!S.gFilt; render(); }
   else if(act==="g-cat-set"){ S.gCat=b.dataset.v; S.gLim=100; render(); }
-  else if(act==="g-orig-set"){ S.gOrig=b.dataset.v; S.gLim=100; render(); }
+  else if(act==="g-orig-set"){ S.gOrig=b.dataset.v; S.gFat=null; if(String(S.gOrig).startsWith("cc:")&&S.gAba==="entradas") S.gAba="tudo"; S.gLim=100; render(); }
+  else if(act==="ex-fat"){ S.gFat=b.dataset.v; S.gLim=100; render(); }
+  else if(act==="ex-cc-det"){ CC.sel=b.dataset.id; CC.fat=S.gFat||null; CC.form=null; CC.imp=null; CC.pagar=!!b.dataset.pagar; S.tab="cartoes"; render(); window.scrollTo({top:0}); }
+  else if(act==="ex-cc-imp"){ CC.sel=b.dataset.id; CC.fat=null; CC.form=null; CC.imp=null; S.tab="cartoes"; render(); window.scrollTo({top:0}); setTimeout(()=>{ const i=document.getElementById("cc-file"); if(i) i.click(); },60); }
   else if(act==="g-ord-set"){ S.gOrd=b.dataset.v; S.gLim=100; render(); }
   else if(act==="g-cat-x"){ S.gCat=""; render(); }
-  else if(act==="g-orig-x"){ S.gOrig=""; render(); }
+  else if(act==="g-orig-x"){ S.gOrig=""; S.gFat=null; render(); }
   else if(act==="g-min-x"){ S.gMin=""; render(); }
   else if(act==="g-ord-x"){ S.gOrd="recentes"; render(); }
   else if(act==="gi-open"){ GI.open=true; render(); const c=document.getElementById("gi"); if(c) c.scrollIntoView({behavior:"smooth",block:"start"}); }
