@@ -1181,7 +1181,10 @@ body.bs-on{overflow:hidden}
 @media (max-width:760px){
   .top{transition:transform .28s ease}
   .bnav{transition:transform .28s ease,opacity .28s ease}
-  body.nav-off .top{transform:translateY(calc(-100% - env(safe-area-inset-top,0px) - 4px))}
+  .top{position:fixed;left:0;right:0;top:0;transition:transform .3s cubic-bezier(.2,.8,.2,1),box-shadow .3s ease;box-shadow:0 10px 28px -14px rgba(0,0,0,.35)}
+  body.top-off .top{transform:translateY(calc(-100% - env(safe-area-inset-top,0px) - 6px));box-shadow:none}
+  main#app{padding-top:calc(14px + env(safe-area-inset-top,0px))}
+  body.top-off .gnav{top:8px}
   body.nav-off .bnav{transform:translateY(calc(100% + 24px + env(safe-area-inset-bottom,0px)));opacity:0;pointer-events:none}
   body.nav-off .toast{bottom:calc(20px + env(safe-area-inset-bottom,0px))}
 }
@@ -5304,6 +5307,36 @@ document.addEventListener("keydown",e=>{ if(e.key==="/"&&S.tab==="gastos"&&!/INP
   }
   window.addEventListener("scroll",()=>{ if(!tick){ tick=true; requestAnimationFrame(aplicar); } },{passive:true});
   document.addEventListener("focusin",e=>{ if(e.target.matches&&e.target.matches("input,select,textarea")) document.body.classList.remove("nav-off"); });
+})();
+
+
+/* ---------- Celular: cabeçalho escondido; aparece ao mexer na tela e some sozinho ---------- */
+(function(){
+  const mq=window.matchMedia("(max-width:760px)"), B=document.body;
+  let ultY=window.scrollY, ultT=0, acc=0, idle=null, ty=null;
+  const preso=()=>{ const b=document.getElementById("theme-btn"); return (b&&b.getAttribute("aria-expanded")==="true")||(document.activeElement&&document.activeElement.closest&&document.activeElement.closest(".top")); };
+  const esconder=()=>{ clearTimeout(idle); if(mq.matches&&!preso()) B.classList.add("top-off"); };
+  const agendar=(ms=2600)=>{ clearTimeout(idle); idle=setTimeout(esconder,ms); };
+  const mostrar=()=>{ B.classList.remove("top-off"); agendar(); };
+  function sync(){ if(!mq.matches){ clearTimeout(idle); B.classList.remove("top-off"); } else esconder(); }
+  window.addEventListener("scroll",()=>{
+    if(!mq.matches) return;
+    const now=performance.now(), y=Math.max(0,window.scrollY), d=y-ultY; ultY=y;
+    if(now-ultT>450){ acc=0; mostrar(); }            /* começou a mexer: aparece */
+    ultT=now;
+    if((d>0&&acc<0)||(d<0&&acc>0)) acc=0; acc+=d;
+    if(acc>140) esconder();                          /* rolando direto para baixo: some */
+    else if(acc<-12) mostrar();                      /* voltou para cima: aparece */
+    else if(!B.classList.contains("top-off")) agendar();
+  },{passive:true});
+  /* no topo da página (sem rolagem possível): puxar para baixo também mostra */
+  window.addEventListener("touchstart",e=>{ ty=e.touches[0].clientY; },{passive:true});
+  window.addEventListener("touchmove",e=>{ if(ty!=null&&window.scrollY<=0&&e.touches[0].clientY-ty>30){ ty=null; mostrar(); } },{passive:true});
+  const tb=document.getElementById("theme-btn");
+  if(tb) new MutationObserver(()=>{ if(tb.getAttribute("aria-expanded")==="true"){ clearTimeout(idle); B.classList.remove("top-off"); } else agendar(1800); }).observe(tb,{attributes:true,attributeFilter:["aria-expanded"]});
+  document.querySelector(".top")&&document.querySelector(".top").addEventListener("pointerdown",()=>agendar(3500));
+  mq.addEventListener?mq.addEventListener("change",sync):mq.addListener(sync);
+  if(mq.matches){ B.classList.remove("top-off"); agendar(1800); }   /* ao abrir: mostra rapidinho e recolhe */
 })();
 
 /* ---------- Empréstimos (dinheiro a receber) ---------- */
