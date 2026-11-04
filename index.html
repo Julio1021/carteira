@@ -1782,7 +1782,7 @@ body[data-tab="lancar"] .fab{display:none!important}
 @keyframes gpBL{40%{transform:translateX(14px)}} @keyframes gpBR{40%{transform:translateX(-14px)}}
 .gp .gx-sec:first-child{margin-top:4px}
 .gp-ult .tx-l{margin-top:4px}
-.gp [data-act="pg-tog"],.gp [data-act="em-tog"]{pointer-events:none;cursor:default} .gp .pg-chev{display:none}
+.gp [data-act="pg-tog"],.gp [data-act="em-tog"]{display:none}
 @media (prefers-reduced-motion:reduce){ .gp.in-r,.gp.in-l,.gp.bump-l,.gp.bump-r{animation:none} .gp-ind{transition:none} }
 @media (max-width:640px){
   .gp-t{flex-direction:column;gap:3px;font-size:11.5px;padding:7px 2px}
@@ -2062,41 +2062,6 @@ button.rz-row:hover{background:var(--surface-2)}
 .gi-dc.on{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent) inset}
 .gi-dc-im{font-weight:600}
 .gi-dono-cf .btn{align-self:flex-start}
-
-/* ===== Caixinha ===== */
-.cx-sheet{max-width:560px}
-.cx-drop{width:100%;display:flex;flex-direction:column;align-items:center;gap:4px;border:2px dashed var(--accent);background:var(--accent-soft);color:var(--ink);border-radius:16px;padding:18px 12px;font:inherit;cursor:pointer;margin-top:8px}
-.cx-drop svg{color:var(--accent)} .cx-drop b{font-size:14.5px} .cx-drop small{font-size:12px;color:var(--muted);text-align:center}
-.cx-drop:disabled{opacity:.6;cursor:wait}
-.cx-err{color:var(--neg);font-size:13px;margin:10px 0 0}
-.cx-l{display:flex;flex-direction:column;gap:8px;margin-top:14px}
-.cx-it{border:1px solid var(--line);border-radius:14px;padding:10px 12px;background:var(--surface)}
-.cx-row{display:grid;grid-template-columns:42px minmax(0,1fr);gap:11px;align-items:center}
-.cx-ic,.cx-th{width:42px;height:42px;border-radius:11px}
-.cx-ic{display:grid;place-items:center;background:var(--accent-soft);color:var(--accent)}
-.cx-th{object-fit:cover;background:var(--surface-2)}
-.cx-m{min-width:0;display:flex;flex-direction:column;gap:2px} .cx-m b{font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis} .cx-m small{font-size:12px;color:var(--muted)} .cx-m small.velho{color:var(--neg)}
-.cx-a{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:9px;padding-left:53px;font-size:13px}
-.cx-pv{display:block;width:100%;max-height:60vh;object-fit:contain;border:0;border-radius:10px;margin-top:10px;background:var(--surface-2);min-height:200px}
-.cx-limpar{margin-top:12px}
-.cx-vazio{margin-top:14px;text-align:center}
-.cx-off{display:flex;flex-direction:column;gap:10px;margin-top:8px;padding:14px;border:1px solid var(--line);border-radius:14px;background:var(--surface-2)}
-.cx-off p{margin:0;font-size:13px;color:var(--ink-2)} .cx-off .btn{align-self:flex-start;gap:7px}
-.cx-pop{display:flex;align-items:center;gap:12px;width:100%;color:var(--ink);font:inherit;text-align:left;cursor:pointer}
-.cx-pop>svg:first-child{color:var(--accent);flex:none} .cx-pop span{flex:1;display:flex;flex-direction:column;gap:2px} .cx-pop b{font-size:14px} .cx-pop small{font-size:12px;color:var(--muted)}
-@media (max-width:640px){ .cx-a{padding-left:0} }
-
-/* ===== hierarquia: 3 páginas, herói único ===== */
-.gp-tl{grid-template-columns:repeat(var(--n,4),1fr)}
-.gp-ind,.gp-tabs .gp-ind{width:calc(100% / var(--n,4) - 1.5px)}
-.hx-eye{border:0;background:transparent;color:inherit;opacity:.85;cursor:pointer;padding:2px 4px;margin-left:4px;vertical-align:-3px;border-radius:6px}
-.hx-eye:hover{opacity:1;background:rgba(255,255,255,.14)}
-.hx-conta{display:flex;align-items:center;gap:12px}
-.hx-conta .hx-c1,.hx-conta .hx-c2{display:flex;flex-direction:column;gap:1px;text-align:left}
-.hx-conta .hx-c1{flex:1 1 auto} .hx-conta .hx-c2{flex:0 0 auto;text-align:right;align-items:flex-end}
-.hx-conta small{font-size:11.5px;opacity:.8;font-weight:600} .hx-conta b{font-size:15px;font-variant-numeric:tabular-nums}
-.hx-conta span{opacity:1 !important}
-.hx+.rz{margin-top:-6px}
 </style>
 
 <header class="top">
@@ -2168,7 +2133,7 @@ function iniNav(){ const g=iniPref()==="gastos";
     if(!g&&bg.compareDocumentPosition(bp)&Node.DOCUMENT_POSITION_FOLLOWING) nav.insertBefore(bp,bg); }); }
 function iniDefinir(v){ try{ localStorage.setItem(INI_KEY,v); }catch{} iniNav(); renderPicker();
   toast(v==="gastos"?"Pronto: o app vai abrir direto em Gastos":v==="ultima"?"Pronto: o app vai abrir na última aba que você usou":"Pronto: o app volta a abrir no Painel"); }
-const S = { arqs:new Map(), assets:new Map(), entries:new Map(), ready:false, tab:iniAba(), range:"6M", assetMode:"valor",
+const S = { assets:new Map(), entries:new Map(), ready:false, tab:iniAba(), range:"6M", assetMode:"valor",
   entryDate: todayISO(), drafts:{}, confirmDel:null, histFilter:"", repYear:null,
   detalhar:{}, regras:new Map(), entradas:new Map(), contas:new Map(), rendas:new Map(), emps:new Map(), recebs:new Map(), rdEdit:null, pagar:new Map(), pagtos:new Map(), ctEdit:null, ctNova:false, ctDel:null, gTipo:"gasto", eEdit:null, eDel:null, eLim:10, avOcultos:new Set(), gastos:new Map(), orc:new Map(), cartoes:new Map(), cpags:new Map(), gPer:"mes", gDist:0, gForm:false, aForm:false, gAba:"tudo", gDe:"", gAte:"", gOrd:"recentes", gBusca:"", gMin:"", gLim:100, gMes: todayISO().slice(0,7), gEdit:null, gCat:"", gDel:null, gOrcOpen:false };
 
@@ -2177,12 +2142,12 @@ const store = { mode:null, put:null, del:null };
 const LS_KEY = "diario-carteira-v1";
 function lsLoad(){ try{ const raw=localStorage.getItem(LS_KEY); return raw?JSON.parse(raw):[]; }catch{ return []; } }
 function lsSave(){ try{ localStorage.setItem(LS_KEY, JSON.stringify([...S.assets.values(),...S.entries.values(),...S.gastos.values(),...S.orc.values(),...S.regras.values(),...S.entradas.values(),...S.contas.values(),...S.pagar.values(),...S.pagtos.values(),...S.rendas.values(),...S.emps.values(),...S.recebs.values(),...S.cartoes.values(),...S.cpags.values()])); }catch{} }
-const bucket = k => ({arq:S.arqs,ativo:S.assets,lanc:S.entries,gasto:S.gastos,orc:S.orc,regra:S.regras,entrada:S.entradas,conta:S.contas,pagar:S.pagar,pagto:S.pagtos,renda:S.rendas,emprestimo:S.emps,receb:S.recebs,cartao:S.cartoes,cpag:S.cpags})[k];
+const bucket = k => ({ativo:S.assets,lanc:S.entries,gasto:S.gastos,orc:S.orc,regra:S.regras,entrada:S.entradas,conta:S.contas,pagar:S.pagar,pagto:S.pagtos,renda:S.rendas,emprestimo:S.emps,receb:S.recebs,cartao:S.cartoes,cpag:S.cpags})[k];
 let renderT=null; const scheduleRender=()=>{ clearTimeout(renderT); renderT=setTimeout(render,40); };
 function ingest(docs){
-  S.arqs.clear(); S.assets.clear(); S.entries.clear(); S.gastos.clear(); S.orc.clear(); S.regras.clear(); S.entradas.clear(); S.contas.clear(); S.pagar.clear(); S.pagtos.clear(); S.rendas.clear(); S.emps.clear(); S.recebs.clear(); S.cartoes.clear(); S.cpags.clear();
-  for(const d of docs){ if(d.kind==="arq"){ S.arqs.set(d.id,d); continue; } if(d.kind==="cartao"){ S.cartoes.set(d.id,d); continue; } if(d.kind==="cpag"){ S.cpags.set(d.id,d); continue; } if(d.kind==="emprestimo") S.emps.set(d.id,d); else if(d.kind==="receb") S.recebs.set(d.id,d); else if(d.kind==="renda") S.rendas.set(d.id,d); else if(d.kind==="pagar") S.pagar.set(d.id,d); else if(d.kind==="pagto") S.pagtos.set(d.id,d); else if(d.kind==="conta") S.contas.set(d.id,d); else if(d.kind==="entrada") S.entradas.set(d.id,d); else if(d.kind==="regra") S.regras.set(d.id,d); else if(d.kind==="ativo") S.assets.set(d.id,d); else if(d.kind==="lanc") S.entries.set(d.id,d); else if(d.kind==="gasto") S.gastos.set(d.id,d); else if(d.kind==="orc") S.orc.set(d.id,d); else if(d.kind==="pref" && d.tema && d.tema!==temaAtual && T[d.tema]) applyTheme(d.tema,{save:false}); }
-  const primeira=!S.ready; S.ready=true; if(primeira) render(); else scheduleRender(); try{ const ov=document.getElementById("cx-ov"); if(ov&&!ov.hidden) cxRender(); }catch{}
+  S.assets.clear(); S.entries.clear(); S.gastos.clear(); S.orc.clear(); S.regras.clear(); S.entradas.clear(); S.contas.clear(); S.pagar.clear(); S.pagtos.clear(); S.rendas.clear(); S.emps.clear(); S.recebs.clear(); S.cartoes.clear(); S.cpags.clear();
+  for(const d of docs){ if(d.kind==="cartao"){ S.cartoes.set(d.id,d); continue; } if(d.kind==="cpag"){ S.cpags.set(d.id,d); continue; } if(d.kind==="emprestimo") S.emps.set(d.id,d); else if(d.kind==="receb") S.recebs.set(d.id,d); else if(d.kind==="renda") S.rendas.set(d.id,d); else if(d.kind==="pagar") S.pagar.set(d.id,d); else if(d.kind==="pagto") S.pagtos.set(d.id,d); else if(d.kind==="conta") S.contas.set(d.id,d); else if(d.kind==="entrada") S.entradas.set(d.id,d); else if(d.kind==="regra") S.regras.set(d.id,d); else if(d.kind==="ativo") S.assets.set(d.id,d); else if(d.kind==="lanc") S.entries.set(d.id,d); else if(d.kind==="gasto") S.gastos.set(d.id,d); else if(d.kind==="orc") S.orc.set(d.id,d); else if(d.kind==="pref" && d.tema && d.tema!==temaAtual && T[d.tema]) applyTheme(d.tema,{save:false}); }
+  const primeira=!S.ready; S.ready=true; if(primeira) render(); else scheduleRender();
 }
 function setSync(mode){
   const el=document.getElementById("sync");
@@ -2572,82 +2537,6 @@ async function bkAplicar(modo){
     BK.etapa=""; bkFechar(); toast(modo==="substituir"?"Backup restaurado.":`${docs.length} registros acrescentados.`); render();
   }catch{ BK.etapa=""; bkFechar(); toast("A importação parou no meio. Tente de novo com o mesmo arquivo."); }
 }
-
-/* ---------- Caixinha de arquivos: passar arquivos entre aparelhos (pelo Claude) ---------- */
-const CX={assets:undefined,env:false,erro:"",del:null,ver:null};
-const CX_TIPOS={png:"image/png",jpg:"image/jpeg",jpeg:"image/jpeg",webp:"image/webp",gif:"image/gif",heic:null,pdf:"application/pdf",json:"application/json",csv:"text/csv",txt:"text/plain",ofx:"text/plain",qfx:"text/plain",md:"text/markdown",mp4:"video/mp4",webm:"video/webm"};
-async function cxAssets(){ if(CX.assets!==undefined) return CX.assets; try{ CX.assets=window.claude&&window.claude.use&&store.mode==="cloud"?await window.claude.use("assets"):null; }catch{ CX.assets=null; } return CX.assets; }
-const cxExt=n=>(String(n).split(".").pop()||"").toLowerCase();
-const cxTam=b=>b>=1048576?(b/1048576).toLocaleString("pt-BR",{maximumFractionDigits:1})+" MB":Math.max(1,Math.round(b/1024))+" KB";
-function cxIco(f){ const e=cxExt(f.nome); if(/^image\//.test(f.tipo)) return '<rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="9" cy="9" r="2"/><path d="M21 15l-5-5L5 21"/>'; if(f.tipo==="application/pdf") return '<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/>'; if(e==="ofx"||e==="qfx") return '<path d="M3 21h18M5 21V10M19 21V10M9 21V10M15 21V10M2 10l10-7 10 7z"/>'; if(e==="json") return '<path d="M8 3H7a2 2 0 0 0-2 2v5a2 2 0 0 1-2 2 2 2 0 0 1 2 2v5a2 2 0 0 0 2 2h1M16 3h1a2 2 0 0 1 2 2v5a2 2 0 0 0 2 2 2 2 0 0 0-2 2v5a2 2 0 0 1-2 2h-1"/>'; return '<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/>'; }
-function cxQuando(ms){ const d=Math.floor((Date.now()-ms)/864e5), h=Math.floor((Date.now()-ms)/36e5), m=Math.floor((Date.now()-ms)/6e4); return m<1?"agora":m<60?`há ${m} min`:h<24?`há ${h} h`:d===1?"ontem":`há ${d} dias`; }
-async function cxAbrir(){
-  let ov=document.getElementById("cx-ov");
-  if(!ov){ ov=document.createElement("div"); ov.id="cx-ov"; ov.className="gn-ov"; ov.setAttribute("role","dialog"); ov.setAttribute("aria-modal","true"); ov.setAttribute("aria-label","Caixinha de arquivos"); document.body.appendChild(ov);
-    ov.addEventListener("click",async e=>{ if(e.target===ov){ cxFechar(); return; } const b=e.target.closest("[data-cx]"); if(!b) return; const a=b.dataset.cx, id=b.dataset.id, f=id?S.arqs.get(id):null;
-      if(a==="x") cxFechar();
-      else if(a==="add"){ const i=document.getElementById("cx-file"); if(i) i.click(); }
-      else if(a==="ver"){ CX.ver=CX.ver===id?null:id; cxRender(); }
-      else if(a==="baixar"&&f){ try{ const r=await fetch("/_blob/"+f.asset); if(!r.ok) throw 0; await salvarArquivo(f.nome,await r.blob()); }catch{ toast("Não foi possível baixar. Tente de novo."); } }
-      else if(a==="usar"&&f){ try{ const r=await fetch("/_blob/"+f.asset); if(!r.ok) throw 0; const bl=await r.blob(); const e2=cxExt(f.nome); cxFechar();
-          if(e2==="ofx"||e2==="qfx"){ S.tab="gastos"; GI.open=true; render(); await giArquivo(new File([bl],f.nome,{type:"text/plain"})); setTimeout(()=>{ const c=document.getElementById("gi"); if(c) c.scrollIntoView({behavior:"smooth",block:"start"}); },60); }
-          else if(e2==="json"){ const pk=JSON.parse(await bl.text()); if(!pk||pk.app!=="diario-da-carteira"||!Array.isArray(pk.docs)) throw 1; BK.pacote=pk; BK.etapa="escolher"; bkModal(); } }
-        catch(er){ toast(er===1?"Esse arquivo não é um backup do Diário da Carteira.":"Não foi possível abrir o arquivo."); } }
-      else if(a==="del"){ CX.del=id; cxRender(); }
-      else if(a==="del-no"){ CX.del=null; cxRender(); }
-      else if(a==="del-ok"&&f){ CX.del=null; await cxApagar([f]); }
-      else if(a==="limpar"){ const velhos=[...S.arqs.values()].filter(x=>Date.now()-(x.criado||0)>7*864e5); if(velhos.length) await cxApagar(velhos); }
-      else if(a==="share"){ const i=document.getElementById("cx-share"); if(i) i.click(); } });
-    document.addEventListener("keydown",e=>{ if(e.key==="Escape"&&!ov.hidden&&ov.classList.contains("show")) cxFechar(); }); }
-  if(!document.getElementById("cx-file")){ const i=document.createElement("input"); i.type="file"; i.id="cx-file"; i.multiple=true; i.hidden=true; document.body.appendChild(i); i.addEventListener("change",async()=>{ const fs=[...(i.files||[])]; i.value=""; if(fs.length) await cxEnviar(fs); }); }
-  if(!document.getElementById("cx-share")){ const i=document.createElement("input"); i.type="file"; i.id="cx-share"; i.hidden=true; document.body.appendChild(i); i.addEventListener("change",async()=>{ const f=i.files&&i.files[0]; i.value=""; if(!f) return; try{ if(navigator.canShare&&navigator.canShare({files:[f]})) await navigator.share({files:[f],title:f.name}); else toast("Este aparelho não permite compartilhar arquivos daqui."); }catch(e){ if(e&&e.name!=="AbortError") toast("Não foi possível compartilhar."); } }); }
-  CX.del=null; cxRender(); ov.hidden=false; document.body.classList.add("gn-on"); requestAnimationFrame(()=>ov.classList.add("show"));
-  await cxAssets(); cxRender();
-}
-function cxFechar(){ const ov=document.getElementById("cx-ov"); if(!ov||ov.hidden) return; ov.classList.remove("show"); document.body.classList.remove("gn-on"); setTimeout(()=>{ if(!ov.classList.contains("show")) ov.hidden=true; },220); }
-async function cxEnviar(fs){
-  const A=await cxAssets(); if(!A){ toast("A caixinha só funciona pelo Claude."); return; }
-  CX.env=true; CX.erro=""; cxRender(); let ok=0;
-  for(const f of fs){
-    const e=cxExt(f.name); let tipo=CX_TIPOS[e]; if(tipo===undefined&&/^(image|video)\//.test(f.type)) tipo=f.type;
-    if(!tipo){ CX.erro=`"${f.name}" não pode ir para a caixinha. Aceita fotos, PDF, extrato OFX, backup JSON, CSV e TXT.`; continue; }
-    if(f.size>20*1048576){ CX.erro=`"${f.name}" passa de 20 MB.`; continue; }
-    try{
-      let blob=f;
-      if(tipo.startsWith("text/")||tipo==="application/json"){ const buf=await f.arrayBuffer(); let txt; try{ txt=new TextDecoder("utf-8",{fatal:true}).decode(buf); }catch{ txt=new TextDecoder("windows-1252").decode(buf); } blob=new Blob([txt],{type:tipo}); }
-      const r=await A.upload(blob,{type:tipo});
-      await store.put({kind:"arq",id:"arq_"+uid(),nome:f.name,tipo:r.contentType||tipo,tam:r.sizeBytes||f.size,asset:r.id,criado:Date.now()}); ok++;
-    }catch(er){ CX.erro=er&&er.code==="quota_exceeded"?"A caixinha está cheia. Apague alguns arquivos.":er&&er.code==="unsupported_type"?`"${f.name}": tipo de arquivo não aceito.`:`Não foi possível enviar "${f.name}".`; }
-  }
-  CX.env=false; cxRender(); if(ok) toast(ok>1?`${ok} arquivos na caixinha`:"Arquivo na caixinha. Abra no outro aparelho.");
-}
-async function cxApagar(lista){
-  const A=await cxAssets(); let n=0;
-  for(const f of lista){ try{ if(A&&f.asset) await A.delete(f.asset).catch(er=>{ if(!er||er.code!=="not_found") throw er; }); await store.del(f.id); n++; }catch{} }
-  cxRender(); toast(n?(n>1?`${n} arquivos apagados`:"Arquivo apagado"):"Não foi possível apagar.");
-}
-function cxRender(){
-  const ov=document.getElementById("cx-ov"); if(!ov) return;
-  const A=CX.assets, fs=[...S.arqs.values()].sort((a,b)=>(b.criado||0)-(a.criado||0)), velhos=fs.filter(x=>Date.now()-(x.criado||0)>7*864e5).length;
-  const podeShare=!!(navigator.canShare);
-  let corpo;
-  if(A===undefined) corpo=`<p class="hint">Abrindo a caixinha…</p>`;
-  else if(!A) corpo=`<div class="cx-off"><b>A caixinha funciona no Diário da Carteira aberto pelo Claude</b><p>No computador ou no app do Claude, os arquivos ficam guardados na sua conta e aparecem nos dois aparelhos. Neste app instalado os dados ficam só no celular, então ele não alcança a caixinha.</p>
-      ${podeShare?`<button class="btn" data-cx="share">${svgI('<circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/>',16)}Enviar um arquivo (WhatsApp, Drive, e-mail…)</button>`:""}</div>`;
-  else corpo=`<button class="cx-drop" data-cx="add" ${CX.env?"disabled":""}>${svgI('<path d="M12 16V4M7 9l5-5 5 5M4 16v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/>',22)}<b>${CX.env?"Enviando…":"Colocar arquivo na caixinha"}</b><small>Fotos, PDF, extrato OFX, backup JSON, CSV ou TXT · até 20 MB</small></button>
-    ${CX.erro?`<p class="cx-err" role="alert">${esc(CX.erro)}</p>`:""}
-    ${fs.length?`<div class="cx-l">${fs.map(f=>{ const e=cxExt(f.nome), img=/^image\//.test(f.tipo), usar=e==="ofx"||e==="qfx"?"Importar extrato":e==="json"?"Importar backup":"", velho=Date.now()-(f.criado||0)>7*864e5;
-        return `<div class="cx-it"><div class="cx-row">${img?`<img class="cx-th" src="/_blob/${esc(f.asset)}" alt="" loading="lazy">`:`<span class="cx-ic">${svgI(cxIco(f),18)}</span>`}
-          <span class="cx-m"><b>${esc(f.nome)}</b><small class="${velho?"velho":""}">${cxTam(f.tam||0)} · ${cxQuando(f.criado||0)}${velho?" · temporário antigo":""}</small></span></div>
-          ${CX.del===f.id?`<div class="cx-a"><span>Apagar de vez?</span><button class="btn sm danger" data-cx="del-ok" data-id="${f.id}">Apagar</button><button class="btn sm" data-cx="del-no">Cancelar</button></div>`
-          :`<div class="cx-a">${usar?`<button class="btn sm primary" data-cx="usar" data-id="${f.id}">${usar}</button>`:""}${img||f.tipo==="application/pdf"?`<button class="btn sm" data-cx="ver" data-id="${f.id}">${CX.ver===f.id?"Fechar":"Ver"}</button>`:""}<button class="btn sm" data-cx="baixar" data-id="${f.id}">Baixar</button><button class="btn sm ghost danger" data-cx="del" data-id="${f.id}" aria-label="Apagar ${esc(f.nome)}">Apagar</button></div>`}
-          ${CX.ver===f.id?(img?`<img class="cx-pv" src="/_blob/${esc(f.asset)}" alt="${esc(f.nome)}">`:`<iframe class="cx-pv" src="/_blob/${esc(f.asset)}" title="${esc(f.nome)}"></iframe>`):""}</div>`; }).join("")}</div>
-      ${velhos?`<button class="copy cx-limpar" data-cx="limpar">Apagar os ${velhos} arquivo(s) com mais de 7 dias</button>`:""}`
-      :`<p class="hint cx-vazio">Nada por aqui. Coloque um arquivo neste aparelho e abra a caixinha no outro para baixar.</p>`}`;
-  ov.innerHTML=`<div class="gn-sheet cx-sheet" tabindex="-1"><span class="gn-grab" aria-hidden="true"></span>
-    <div class="gn-h"><div><b>Caixinha de arquivos</b><small>Para passar arquivos rápidos entre o celular e o computador</small></div><button class="icon-btn gn-x" data-cx="x" aria-label="Fechar">${svgI('<path d="M6 6l12 12M18 6L6 18"/>',18)}</button></div>
-    ${corpo}</div>`;
-}
 function vBackup(){
   const u=bkUltimo(), dias=u?diasEntre(u,todayISO())-1:null;
   return `<section class="card bk" id="sec-backup">
@@ -2655,7 +2544,6 @@ function vBackup(){
     <div class="bk-acts">
       <button class="bk-b" data-act="bk-exp">${svgI('<path d="M12 3v12M7 10l5 5 5-5M4 19h16"/>',20)}<span><b>Exportar backup</b><small>Baixa um arquivo com todos os seus dados</small></span></button>
       <button class="bk-b" data-act="bk-imp">${svgI('<path d="M12 21V9M7 14l5-5 5 5M4 5h16"/>',20)}<span><b>Importar backup</b><small>Carrega um arquivo exportado em outro aparelho</small></span></button>
-      <button class="bk-b" data-act="cx-abrir">${svgI('<path d="M21 8v13H3V8M1 3h22v5H1zM10 12h4"/>',20)}<span><b>Caixinha de arquivos${S.arqs.size?` · ${S.arqs.size}`:""}</b><small>Passe um arquivo do celular para o PC (ou o contrário)</small></span></button>
     </div>
   </section>`;
 }
@@ -3031,7 +2919,6 @@ function renderPicker(){
         <i aria-hidden="true"></i></button>
       <div class="ini-ops" role="radiogroup" aria-label="Aba que abre primeiro">${INI_OPS.map(([v,n,d])=>`<button role="radio" class="ini-op" data-ini="${v}" aria-checked="${ip===v}"><b>${n}</b><small>${d}</small></button>`).join("")}</div>
     </div>
-    <button class="ini-box cx-pop" data-cx-pop="1">${svgI('<path d="M21 8v13H3V8M1 3h22v5H1zM10 12h4"/>',20)}<span><b>Caixinha de arquivos${S.arqs.size?` · ${S.arqs.size}`:""}</b><small>Passe arquivos rápidos entre o celular e o PC</small></span>${svgI('<path d="M9 6l6 6-6 6"/>',16)}</button>
     <h3>Escolha um tema</h3><p>${Object.keys(T).length} temas. A mudança vale na hora e fica salva para as próximas visitas.</p>${["Vidro","Escuro","Claro"].map(tp=>{ const nm={Vidro:"Vidro líquido",Escuro:"Temas escuros",Claro:"Temas claros"}[tp]; return `<div class="theme-sec">${nm}</div><div class="theme-grid" role="radiogroup" aria-label="${nm}">${
     Object.entries(T).filter(([,t])=>t.tipo===tp).map(([id,t])=>{const v=t.v;return `<button class="theme-opt" role="radio" aria-checked="${id===temaAtual}" data-tema="${id}">
       <div class="pv ${t.glass?"pv-gl":""}" style="background:${t.pv||v[0]}"><span style="background:${v[18]}"></span><div class="r"><span style="background:${v[15].startsWith("linear")?v[2]:v[15]};border:1px solid ${v[6]}"></span><span style="background:${v[26]}"></span></div></div>
@@ -3039,7 +2926,7 @@ function renderPicker(){
 }
 const tBtn=document.getElementById("theme-btn"), tPop=document.getElementById("theme-pop");
 tBtn.addEventListener("click",e=>{ e.stopPropagation(); tPop.hidden=!tPop.hidden; tBtn.setAttribute("aria-expanded",!tPop.hidden); });
-tPop.addEventListener("click",e=>{ e.stopPropagation(); const cp=e.target.closest("[data-cx-pop]"); if(cp){ tPop.hidden=true; tBtn.setAttribute("aria-expanded","false"); cxAbrir(); return; } const sw=e.target.closest("[data-ini-sw]"); if(sw){ iniDefinir(iniPref()==="gastos"?"painel":"gastos"); return; } const io=e.target.closest("[data-ini]"); if(io){ iniDefinir(io.dataset.ini); return; } const o=e.target.closest("[data-tema]"); if(o){ applyTheme(o.dataset.tema); toast("Tema aplicado: "+T[o.dataset.tema].nome); } });
+tPop.addEventListener("click",e=>{ e.stopPropagation(); const sw=e.target.closest("[data-ini-sw]"); if(sw){ iniDefinir(iniPref()==="gastos"?"painel":"gastos"); return; } const io=e.target.closest("[data-ini]"); if(io){ iniDefinir(io.dataset.ini); return; } const o=e.target.closest("[data-tema]"); if(o){ applyTheme(o.dataset.tema); toast("Tema aplicado: "+T[o.dataset.tema].nome); } });
 document.addEventListener("click",()=>{ if(!tPop.hidden){ tPop.hidden=true; tBtn.setAttribute("aria-expanded","false"); } });
 document.addEventListener("keydown",e=>{ if(e.key==="Escape"&&S.gOrcOpen){ S.gOrcOpen=false; render(); return; } if(e.key==="Escape"&&!tPop.hidden){ tPop.hidden=true; tBtn.setAttribute("aria-expanded","false"); tBtn.focus(); } });
 
@@ -4388,10 +4275,7 @@ function vHero(G,usoLim,novoOn){
   const E=G.totalE, O=G.total, sobra=E-O, temE=E>0;
   const quando=mes?(atual?"este mês":"em "+mLong(S.gMes).split(" ")[0].toLowerCase()):"no período";
   const seta=(v,l,d)=>`<button class="hx-arr" data-act="g-mes" data-v="${v}" aria-label="${l}">${svgI(`<path d="${d}"/>`,18)}</button>`;
-  let conta=""; try{ const PP=rzPrev(G), tot=S.contas.size?saldoTotalContas():null, proj=tot!=null&&PP.atual?tot+PP.aRec-Math.max(0,PP.gastoFim-PP.O):null;
-    const cs=[...S.contas.values()], rec=cs.length?cs.reduce((m,c)=>c.data>m?c.data:m,cs[0].data):null, dd=rec?diasDesde(rec):null, ab=RZ.contas||S.ctNova||S.ctEdit||S.ctDel||S.ctAj;
-    conta=tot==null?`<button class="hx-conta" data-act="ct-nova"><span class="hx-c1"><small>Em conta</small><b>Adicionar conta</b></span>${svgI('<path d="M12 5v14M5 12h14"/>',15)}</button>`
-      :`<button class="hx-conta" data-act="rz-contas" aria-expanded="${!!ab}"><span class="hx-c1"><small>Em conta${dd!=null?` · ${dd===0?"hoje":dd===1?"ontem":`há ${dd} dias`}`:""}</small><b>${rzV(tot)}</b></span>${proj!=null?`<span class="hx-c2"><small>No fim do mês</small><b>≈ ${rzV(proj)}</b></span>`:""}${svgI(ab?'<path d="M6 15l6-6 6 6"/>':'<path d="M6 9l6 6 6-6"/>',15)}</button>`; }catch{}
+  let conta=""; try{ if(S.contas.size) conta=`<button class="hx-conta" data-act="gp-ir" data-v="1"><span>Em conta</span><b>${rzV(saldoTotalContas())}</b>${svgI('<path d="M9 6l6 6-6 6"/>',14)}</button>`; }catch{}
   const lim=G.limTotal?`<div class="hx-lim ${usoLim>1?"neg":usoLim>.85?"warn":""}"><div><span>Limite de gastos</span><b>${fmt(G.gastoComLim)} <small>de ${fmt(G.limTotal)}</small></b></div><span class="hx-lb"><i style="width:${Math.min(100,usoLim*100).toFixed(1)}%"></i></span></div>`:"";
   const at=(act,n,ic,extra="")=>`<button class="hx-at" data-act="${act}" ${extra}><span class="hx-ati">${svgI(ic,21)}</span><span>${n}</span></button>`;
   return `<section class="hx" id="sec-lanc" aria-label="Resumo de ${esc(tit)}">
@@ -4403,7 +4287,7 @@ function vHero(G,usoLim,novoOn){
     ${!atual?`<button class="hx-hoje" data-act="g-hoje">${svgI('<path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/>',13)}Voltar para o mês atual</button>`:""}
     ${S.gPer==="custom"?`<div class="per-dates hx-datas"><input type="date" class="inp" id="g-de" value="${P.de}" aria-label="De"><span>até</span><input type="date" class="inp" id="g-ate" value="${P.ate}" aria-label="Até"></div>`:""}
     <div class="hx-main">
-      <small>${temE?(sobra<0?`Faltou ${quando}`:`Sobrou ${quando}`):`Você gastou ${quando}`}<button class="hx-eye" data-act="rz-olho" aria-pressed="${RZ.ocultar}" aria-label="${RZ.ocultar?"Mostrar":"Esconder"} valores">${svgI(RZ.ocultar?'<path d="M3 3l18 18"/><path d="M10.6 5.1A10 10 0 0 1 12 5c6 0 10 7 10 7a17 17 0 0 1-3.2 3.9M6.6 6.6C3.9 8.4 2 12 2 12s4 7 10 7c1.7 0 3.2-.5 4.5-1.2"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/>':'<path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>',15)}</button></small>
+      <small>${temE?(sobra<0?`Faltou ${quando}`:`Sobrou ${quando}`):`Você gastou ${quando}`}</small>
       <b>${rzV(temE?Math.abs(sobra):O)}</b>
       ${temE?`<span>${sobra<0?"gastou mais do que entrou":`${Math.round(sobra/E*100)}% do que entrou`}</span>`:`<span><button class="copy" data-act="e-nova">Lance suas entradas</button> para ver quanto sobra</span>`}
     </div>
@@ -4414,7 +4298,6 @@ function vHero(G,usoLim,novoOn){
     ${lim}
     ${conta}
   </section>
-  ${RZ.contas||S.ctNova||S.ctEdit||S.ctDel||S.ctAj?vResumoListas().contas:""}
   <nav class="hx-atl" aria-label="Atalhos">
     ${at("g-novo","Gasto",'<path d="M12 5v14M5 12h14"/>',`aria-pressed="${!!novoOn}"`)}
     ${at("e-nova","Entrada",'<path d="M12 19V5M5 12l7-7 7 7"/>')}
@@ -5163,19 +5046,19 @@ const GN={aberto:false,ativo:"sec-conta",lock:0};
 const svgI=(d,w=16)=>`<svg width="${w}" height="${w}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg>`;
 
 /* ---------- Páginas da aba Gastos (deslizar para o lado) ---------- */
-const GPG=[["Extrato",'<path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/>'],["Análise",'<path d="M21 12a9 9 0 1 1-9-9v9z"/><path d="M15 3.5A9 9 0 0 1 20.5 9H15z"/>'],["Agenda",'<rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/>']];
-const GP={pg:(()=>{ try{ const v=+localStorage.getItem("diario-gpg3"); return v>=0&&v<3?v:0; }catch{ return 0; } })(),dir:0,prev:null};
-const GP_SEC={"sec-conta":0,"sec-bal":1,"sec-mov":0,"g-lista":0,"sec-dist":1,"sec-tempo":1,pg:2,em:2};
+const GPG=[["Extrato",'<path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/>'],["Resumo",'<path d="M12 3v18M5 7h14M7 7l-3 7a3 3 0 0 0 6 0zM17 7l-3 7a3 3 0 0 0 6 0z"/>'],["Análise",'<path d="M21 12a9 9 0 1 1-9-9v9z"/><path d="M15 3.5A9 9 0 0 1 20.5 9H15z"/>'],["Contas",'<path d="M9 11l3 3 8-8"/><path d="M20 12v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h9"/>']];
+const GP={pg:(()=>{ try{ const v=+localStorage.getItem("diario-gpg2"); return v>=0&&v<4?v:0; }catch{ return 0; } })(),dir:0,prev:null};
+const GP_SEC={"sec-conta":1,"sec-bal":1,"sec-mov":0,"g-lista":0,"sec-dist":2,"sec-tempo":2,pg:3,em:3};
 function vGPgTabs(){
   const k0=GP.prev??GP.pg; GP.prev=null;
   let nPg=0; try{ const D=pgMesDados(todayISO().slice(0,7)); nPg=[...D.atrasoAnt,...D.doMes].filter(i=>i.st==="atrasada"||i.st==="hoje").length; }catch{}
   return `<nav class="gnav gp-tabs" id="gnav" aria-label="Páginas da aba Gastos">
-    <div class="gp-tl" role="tablist" style="--k:${k0};--n:${GPG.length}" data-k="${GP.pg}">${GPG.map(([n,ic],k)=>`<button role="tab" class="gp-t" data-act="gp-ir" data-v="${k}" aria-selected="${k===GP.pg}">${svgI(ic,15)}<span>${n}</span>${k===2&&nPg?`<i class="gp-b">${nPg}</i>`:""}</button>`).join("")}<span class="gp-ind" aria-hidden="true"></span></div>
+    <div class="gp-tl" role="tablist" style="--k:${k0}" data-k="${GP.pg}">${GPG.map(([n,ic],k)=>`<button role="tab" class="gp-t" data-act="gp-ir" data-v="${k}" aria-selected="${k===GP.pg}">${svgI(ic,15)}<span>${n}</span>${k===3&&nPg?`<i class="gp-b">${nPg}</i>`:""}</button>`).join("")}<span class="gp-ind" aria-hidden="true"></span></div>
   </nav>`;
 }
 function gpIr(k,dir){
   if(k<0||k>=GPG.length||k===GP.pg){ if(k<0||k>=GPG.length){ const g=document.getElementById("gp"); if(g){ g.classList.remove("bump-l","bump-r"); void g.offsetWidth; g.classList.add(k<0?"bump-l":"bump-r"); } } return; }
-  GP.prev=GP.pg; GP.dir=dir??(k>GP.pg?1:-1); GP.pg=k; try{ localStorage.setItem("diario-gpg3",String(k)); }catch{}
+  GP.prev=GP.pg; GP.dir=dir??(k>GP.pg?1:-1); GP.pg=k; try{ localStorage.setItem("diario-gpg2",String(k)); }catch{}
   try{ navigator.vibrate&&navigator.vibrate(6); }catch{}
   render();
   requestAnimationFrame(()=>requestAnimationFrame(()=>{ const tl=document.querySelector(".gp-tl"); if(tl) tl.style.setProperty("--k",k); }));
@@ -5184,7 +5067,7 @@ function gpIr(k,dir){
 function gpTopo(){ const nav=document.getElementById("gnav"), gp=document.getElementById("gp"); if(!nav||!gp) return;
   const top=document.querySelector(".top"), off=nav.offsetHeight+(top&&!document.body.classList.contains("nav-off")?top.offsetHeight:0)+16;
   const alvo=gp.getBoundingClientRect().top+window.scrollY-off; if(window.scrollY>alvo) window.scrollTo({top:Math.max(0,alvo)}); }
-function gpMostrar(id){ const k=GP_SEC[id]; if(k==null||k===GP.pg) return false; GP.prev=GP.pg; GP.dir=k>GP.pg?1:-1; GP.pg=k; try{ localStorage.setItem("diario-gpg3",String(k)); }catch{} return true; }
+function gpMostrar(id){ const k=GP_SEC[id]; if(k==null||k===GP.pg) return false; GP.prev=GP.pg; GP.dir=k>GP.pg?1:-1; GP.pg=k; try{ localStorage.setItem("diario-gpg2",String(k)); }catch{} return true; }
 function vGUltimos(G){
   const ult=[...G.doPer].sort((a,b)=>b.data.localeCompare(a.data)||(b.criado||0)-(a.criado||0)).slice(0,5);
   if(!ult.length) return "";
@@ -5581,13 +5464,6 @@ function vRzMes(G,P){
       <button class="rz-ext" data-act="gp-ir" data-v="0">Ver extrato completo${svgI('<path d="M9 6l6 6-6 6"/>',16)}</button></div>
   </section>`;
 }
-function vAnaliseTopo(G,avs){
-  const P=rzPrev(G), lim=S.gPer==="mes"?vLimGerais(limGeraisStatus(G.ym)):"";
-  return `<h2 class="gx-sec" id="sec-prev"><span>${P.atual?"Como o mês está indo":"Como foi o mês"}</span><small>${esc(G.P.label)}</small></h2>
-    ${vAvisosFaixa(avs)}
-    ${vRzMes(G,P)}
-    ${lim?`<section class="card rz-card rz-lim">${lim}</section>`:""}`;
-}
 function vResumoPg(G,avs){
   const P=rzPrev(G), L=vResumoListas();
   const lim=S.gPer==="mes"?vLimGerais(limGeraisStatus(G.ym)):"";
@@ -5942,7 +5818,7 @@ function vFluxo(G,varMes,usoLim,estado,compacto){
   </section>`;
 }
 function vGastos(){
-  const G=gCompute(); const ym=G.ym; const pg=GP.pg, anim=GP.dir; GP.dir=0; const aba=S.gAba||"tudo"; if(pg===2){ PG.aberto=true; EM.aberto=true; }
+  const G=gCompute(); const ym=G.ym; const pg=GP.pg, anim=GP.dir; GP.dir=0; const aba=S.gAba||"tudo"; if(pg===3){ PG.aberto=true; EM.aberto=true; }
   const ed=S.gEdit?S.gastos.get(S.gEdit):null;
   const aberto=!!ed||(S.gForm&&S.gTipo!=="entrada");
   const defData = ed?ed.data : (S.gPer!=="mes"||ym===G.mesAtual?todayISO():`${ym}-01`);
@@ -5997,10 +5873,10 @@ function vGastos(){
       </div>
     </div>
     ${aba==="entradas"?vEntradasCorpo(G):vMovGastosCorpo(G,lista,filtrando,origs.sort((a,b)=>origemNome(a).localeCompare(origemNome(b))),varias,aba)}
-  </section>
+  </section>`:""}
+  ${pg===1?`${vResumoPg(G,avs)}
   ${GI.open?"":(()=>{ const h=giHist(true); return h?`<section class="card gi-hist-card">${h}${RZ.imp||GI.undo?`<div class="btns"><button class="btn sm" data-act="gi-rapido">Importar outro extrato</button></div>`:""}</section>`:""; })()}`:""}
-  ${pg===1?`  ${vAnaliseTopo(G,avs)}
-  <h2 class="gx-sec" id="sec-dist"><span>Para onde foi o dinheiro</span><small>${esc(G.P.label)}</small></h2>
+  ${pg===2?`  <h2 class="gx-sec" id="sec-dist"><span>Para onde foi o dinheiro</span><small>${esc(G.P.label)}</small></h2>
   <section class="grid">
     <div class="card span-7 g-dist2"><div class="card-h"><div><h2>Distribuição</h2><p><span class="dist-per">${esc(G.P.label)}</span> · <span id="dist-sub">${DIST[S.gDist][1]}</span></p></div>
         ${G.total?`<div class="car-nav"><button class="icon-btn nav" data-act="dist" data-v="-1" aria-label="Gráfico anterior"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M15 6l-6 6 6 6"/></svg></button><span class="dots">${DIST.map((d,k)=>`<button class="dot-b" data-act="dist-go" data-v="${k}" aria-label="${d[0]}" aria-current="${k===S.gDist}"></button>`).join("")}</span><button class="icon-btn nav" data-act="dist" data-v="1" aria-label="Próximo gráfico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></button></div>`:""}</div>
@@ -6039,8 +5915,7 @@ function vGastos(){
       <div class="chart-box sm"><canvas id="c-gmes" role="img" aria-label="Gráfico da evolução mensal dos gastos"></canvas></div>
     </div>
   </section>`:""}
-  ${pg===2?`${vRzReceb()}
-  ${vPagar()}
+  ${pg===3?`${vPagar()}
   ${vEmprestimos()}`:""}
   </div>
   ${S.gOrcOpen?vOrc(G):""}
@@ -6266,7 +6141,6 @@ app.addEventListener("click",async e=>{
   else if(act==="gi-undo-ok"){ await giDesfazer(b.dataset.id); }
   else if(act==="g-per"){ const v=b.dataset.v; if(v==="custom"&&S.gPer!=="custom"){ const P=gPeriodo(); S.gDe=P.de; S.gAte=P.ate; } S.gPer=v; S.gLim=100; render(); }
   else if(act==="mq-abrir"){ mqAbrir(); }
-  else if(act==="cx-abrir"){ cxAbrir(); }
   else if(act==="rz-olho"){ RZ.ocultar=!RZ.ocultar; try{ localStorage.setItem("diario-ocultar",RZ.ocultar?"1":"0"); }catch{} render(); }
   else if(act==="rz-contas"){ RZ.contas=!RZ.contas; if(!RZ.contas){ S.ctEdit=null; S.ctDel=null; S.ctAj=null; S.ctNova=false; } render(); }
   else if(act==="rz-imp"){ RZ.imp=!RZ.imp; GI.undo=null; render(); }
