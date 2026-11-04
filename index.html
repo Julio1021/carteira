@@ -1181,10 +1181,6 @@ body.bs-on{overflow:hidden}
 @media (max-width:760px){
   .top{transition:transform .28s ease}
   .bnav{transition:transform .28s ease,opacity .28s ease}
-  .top{position:fixed;left:0;right:0;top:0;transition:transform .3s cubic-bezier(.2,.8,.2,1),box-shadow .3s ease;box-shadow:0 10px 28px -14px rgba(0,0,0,.35)}
-  body.top-off .top{transform:translateY(calc(-100% - env(safe-area-inset-top,0px) - 6px));box-shadow:none}
-  main#app{padding-top:calc(14px + env(safe-area-inset-top,0px))}
-  body.top-off .gnav{top:8px}
   body.nav-off .bnav{transform:translateY(calc(100% + 24px + env(safe-area-inset-bottom,0px)));opacity:0;pointer-events:none}
   body.nav-off .toast{bottom:calc(20px + env(safe-area-inset-bottom,0px))}
 }
@@ -2306,6 +2302,27 @@ body[data-tab="painel"] .fab,body[data-tab="ativos"] .fab,body[data-tab="relator
 :root[data-tema="linsaf"] .hx-arr{background:rgba(255,255,255,.16)}
 :root[data-tema="linsaf"] .bnav{background:rgba(255,255,255,.94);border-color:#E6E0D5;box-shadow:0 10px 30px -12px rgba(22,28,45,.28);backdrop-filter:blur(12px)}
 :root[data-tema="linsaf"] .tx-l{box-shadow:0 1px 2px rgba(22,28,45,.04),0 6px 18px -12px rgba(22,28,45,.12);border-color:#E9E3D8}
+
+/* ===== Celular: sem cabeçalho; Ajustes vira uma bolinha que respira ===== */
+@media (max-width:760px){
+  body .top{position:fixed !important;top:calc(env(safe-area-inset-top,0px) + 6px) !important;right:10px;left:auto;width:auto;z-index:30;background:none !important;border:0 !important;box-shadow:none !important;-webkit-backdrop-filter:none !important;backdrop-filter:none !important;transform:none !important;border-radius:0 !important}
+  body .top .top-in{padding:0 !important;min-height:0 !important;display:block !important;background:none !important}
+  body .top .brand,body .top .tabs,body .top .sync{display:none !important}
+  body .theme-wrap{position:static}
+  body .theme-btn{width:30px;height:30px;padding:0 !important;border-radius:50% !important;display:grid !important;place-items:center;gap:0;background:var(--surface) !important;border:1px solid var(--line) !important;box-shadow:0 4px 14px -6px rgba(0,0,0,.35);color:transparent !important}
+  body .theme-btn>span{display:none !important}
+  body .theme-btn::before{content:"";width:11px;height:11px;border-radius:50%;background:radial-gradient(circle at 35% 35%,color-mix(in srgb,var(--accent) 55%,#fff),var(--accent) 70%);animation:ajRespira 3.2s ease-in-out infinite}
+  body .theme-btn::after{content:"";position:absolute;width:30px;height:30px;border-radius:50%;border:1.5px solid var(--accent);opacity:0;animation:ajOnda 3.2s ease-out infinite;pointer-events:none}
+  body .theme-btn{position:relative}
+  body .theme-btn[aria-expanded="true"]::before{animation:none;transform:scale(1.2)}
+  body .theme-btn[aria-expanded="true"]::after{animation:none}
+  body .theme-pop{position:fixed !important;top:calc(env(safe-area-inset-top,0px) + 44px) !important;left:12px !important;right:12px !important;width:auto !important}
+  main#app{padding-top:calc(40px + env(safe-area-inset-top,0px))}
+  body .gnav{top:8px}
+}
+@keyframes ajRespira{0%,100%{transform:scale(.78)}50%{transform:scale(1.18)}}
+@keyframes ajOnda{0%{transform:scale(.55);opacity:.45}70%,100%{transform:scale(1.35);opacity:0}}
+@media (prefers-reduced-motion:reduce){ body .theme-btn::before,body .theme-btn::after{animation:none !important} }
 </style>
 
 <header class="top">
@@ -2322,7 +2339,7 @@ body[data-tab="painel"] .fab,body[data-tab="ativos"] .fab,body[data-tab="relator
       <button role="tab" data-tab="painel" aria-selected="false">Patrimônio</button>
     </nav>
     <div class="sync" id="sync"><i></i><span>Conectando…</span></div>
-    <div class="theme-wrap"><button class="theme-btn" id="theme-btn" aria-haspopup="true" aria-expanded="false"><span class="sw" id="theme-sw"></span><span>Ajustes</span></button><div class="theme-pop" id="theme-pop" hidden></div></div>
+    <div class="theme-wrap"><button class="theme-btn" id="theme-btn" aria-label="Ajustes" title="Ajustes" aria-haspopup="true" aria-expanded="false"><span class="sw" id="theme-sw"></span><span>Ajustes</span></button><div class="theme-pop" id="theme-pop" hidden></div></div>
   </div>
 </header>
 <nav class="bnav" aria-label="Seções"><button data-tab="inicio" aria-selected="false"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9v11h14V9"/><path d="M10 20v-6h4v6"/></svg><span>Início</span><i class="bn-b" hidden></i></button><button data-tab="gastos" aria-selected="false"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg><span>Extrato</span><i class="bn-b" hidden></i></button><button data-tab="plano" aria-selected="false"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4M8 14h3"/></svg><span>Planejamento</span><i class="bn-b" hidden></i></button><button data-tab="painel" aria-selected="false"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 17l5-5 4 3 8-8"/><path d="M15 7h5v5"/><path d="M3 21h18"/></svg><span>Patrimônio</span><i class="bn-b" hidden></i></button></nav>
@@ -5309,35 +5326,6 @@ document.addEventListener("keydown",e=>{ if(e.key==="/"&&S.tab==="gastos"&&!/INP
   document.addEventListener("focusin",e=>{ if(e.target.matches&&e.target.matches("input,select,textarea")) document.body.classList.remove("nav-off"); });
 })();
 
-
-/* ---------- Celular: cabeçalho escondido; aparece ao mexer na tela e some sozinho ---------- */
-(function(){
-  const mq=window.matchMedia("(max-width:760px)"), B=document.body;
-  let ultY=window.scrollY, ultT=0, acc=0, idle=null, ty=null;
-  const preso=()=>{ const b=document.getElementById("theme-btn"); return (b&&b.getAttribute("aria-expanded")==="true")||(document.activeElement&&document.activeElement.closest&&document.activeElement.closest(".top")); };
-  const esconder=()=>{ clearTimeout(idle); if(mq.matches&&!preso()) B.classList.add("top-off"); };
-  const agendar=(ms=2600)=>{ clearTimeout(idle); idle=setTimeout(esconder,ms); };
-  const mostrar=()=>{ B.classList.remove("top-off"); agendar(); };
-  function sync(){ if(!mq.matches){ clearTimeout(idle); B.classList.remove("top-off"); } else esconder(); }
-  window.addEventListener("scroll",()=>{
-    if(!mq.matches) return;
-    const now=performance.now(), y=Math.max(0,window.scrollY), d=y-ultY; ultY=y;
-    if(now-ultT>450){ acc=0; mostrar(); }            /* começou a mexer: aparece */
-    ultT=now;
-    if((d>0&&acc<0)||(d<0&&acc>0)) acc=0; acc+=d;
-    if(acc>140) esconder();                          /* rolando direto para baixo: some */
-    else if(acc<-12) mostrar();                      /* voltou para cima: aparece */
-    else if(!B.classList.contains("top-off")) agendar();
-  },{passive:true});
-  /* no topo da página (sem rolagem possível): puxar para baixo também mostra */
-  window.addEventListener("touchstart",e=>{ ty=e.touches[0].clientY; },{passive:true});
-  window.addEventListener("touchmove",e=>{ if(ty!=null&&window.scrollY<=0&&e.touches[0].clientY-ty>30){ ty=null; mostrar(); } },{passive:true});
-  const tb=document.getElementById("theme-btn");
-  if(tb) new MutationObserver(()=>{ if(tb.getAttribute("aria-expanded")==="true"){ clearTimeout(idle); B.classList.remove("top-off"); } else agendar(1800); }).observe(tb,{attributes:true,attributeFilter:["aria-expanded"]});
-  document.querySelector(".top")&&document.querySelector(".top").addEventListener("pointerdown",()=>agendar(3500));
-  mq.addEventListener?mq.addEventListener("change",sync):mq.addListener(sync);
-  if(mq.matches){ B.classList.remove("top-off"); agendar(1800); }   /* ao abrir: mostra rapidinho e recolhe */
-})();
 
 /* ---------- Empréstimos (dinheiro a receber) ---------- */
 const EM={aberto:(()=>{ try{ return localStorage.getItem("diario-em-aberto")!=="0"; }catch{ return true; } })(),form:null,rec:null,del:null,ver:{}};
