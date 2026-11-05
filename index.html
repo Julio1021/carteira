@@ -2333,6 +2333,17 @@ body[data-tab="painel"] .fab,body[data-tab="ativos"] .fab,body[data-tab="relator
 .pz-i .pz-p{grid-column:auto;font-size:12px;font-weight:600;color:var(--muted);margin-top:2px}
 .pz-v{font-size:17px;font-weight:800;letter-spacing:-.01em;font-variant-numeric:tabular-nums;white-space:nowrap;color:var(--ink)}
 .pz-i{row-gap:8px}
+
+/* ===== Tema Petróleo & Laranja Claro ===== */
+:root[data-tema="petclaro"] .card{border-color:#DCE6E3;box-shadow:0 1px 2px rgba(16,48,44,.05),0 8px 20px -12px rgba(16,48,44,.16)}
+:root[data-tema="petclaro"] .hx{box-shadow:0 18px 36px -18px rgba(224,122,69,.65),inset 0 1px 0 rgba(255,255,255,.2)}
+:root[data-tema="petclaro"] .hx-k{background:rgba(255,255,255,.16);border-color:rgba(255,255,255,.26)}
+:root[data-tema="petclaro"] .hx-k .hx-ki{background:#fff}
+:root[data-tema="petclaro"] .hx-k:first-child .hx-ki{color:#0E8A6E}
+:root[data-tema="petclaro"] .hx-k:last-child .hx-ki{color:#C8511F}
+:root[data-tema="petclaro"] .bnav{background:rgba(255,255,255,.95);border-color:#DCE6E3;box-shadow:0 10px 30px -12px rgba(16,48,44,.28)}
+:root[data-tema="petclaro"] .tx-l{border-color:#DCE6E3;box-shadow:0 1px 2px rgba(16,48,44,.04),0 6px 18px -12px rgba(16,48,44,.14)}
+:root[data-tema="petclaro"] .hero{box-shadow:0 1px 2px rgba(16,48,44,.05),0 8px 20px -12px rgba(16,48,44,.16)}
 </style>
 
 <header class="top">
@@ -3328,6 +3339,8 @@ const T={
  portal:{"nome": "Portal Azul", "tipo": "Claro", "scheme": "light", "v": ["#E8E8E5", "#FBFBF9", "#F2F2EF", "#272C33", "#4A4F57", "#62676F", "#DCDBD6", "#1F6DB8", "#FFFFFF", "#DDEAF7", "#15803D", "#E3F3E8", "#C2362B", "#FBE4E1", "#1F6DB8", "linear-gradient(180deg,#FFFFFF 0%,#F4F4F1 100%)", "linear-gradient(180deg,#FFFBEA 0%,#FFF1C2 100%)", "#6B5A1E", "linear-gradient(180deg,#3189D3 0%,#2271BE 45%,#1B5FA8 100%)", "#FFFFFF", "#E3EEF9", "linear-gradient(180deg,#2C80C9 0%,#2069B3 50%,#195596 100%)", "#FFFFFF", "rgba(0,0,0,.18)", "#FFD83D", "#174A82", "#2272C0", "#FFFFFF", "#B07A00", "#FFFFFF", "#FFF4C2"], "s": ["#1F6DB8", "#F2A65A", "#15803D", "#E8B400", "#C2362B", "#3FA6E8", "#7A4FB8", "#8A8F98"]},
  petroleo:{nome:"Petróleo & Laranja",tipo:"Escuro",scheme:"dark",v:["#242424","#183936","#214743","#ffffff","#d3e6e2","#93b3ad","#2d5550","#2fbfa6","#0b2421","#1d4d47","#3fd0b5","#12443e","#f08a55","#4a2c20","#f08a55","linear-gradient(160deg,#1c433f,#152f2c)","linear-gradient(160deg,#4a3128,#2f211c)","#e9cbbb","linear-gradient(135deg,#13897a,#0f5c55)","#ffffff","#e3f3f0","#0f5c55","#ffffff","rgba(0,0,0,.22)","#e07a45","#ffffff","#e07a45","#ffffff","#e07a45","#122b28","#3a2a23"],
    s:["#2fbfa6","#e07a45","#f2d7a6","#7fd6c6","#f4a582","#5b9bea","#c9a7d6","#e8c547"]},
+ petclaro:{nome:"Petróleo & Laranja Claro",tipo:"Claro",scheme:"light",v:["#EDF2F0","#FFFFFF","#F3F7F6","#10302C","#3D5A55","#6A847F","#DCE6E3","#0F7A6C","#FFFFFF","#E0F1EE","#0E8A6E","#E1F4EE","#C8511F","#FCEADF","#E07A45","#FFFFFF","linear-gradient(160deg,#FFF4EC 0%,#FDE7D9 100%)","#8A4320","linear-gradient(135deg,#13897A 0%,#0F6E64 55%,#0F5C55 100%)","#FFFFFF","#DDF2EE","#0F5C55","#FFFFFF","#E3ECEA","#E07A45","#FFFFFF","#E07A45","#FFFFFF","#C9652F","#FFFFFF","#FFF1E7"],
+   s:["#0F7A6C","#E07A45","#D9A441","#3FA693","#E8916A","#3D7FD1","#9A72C9","#7E8B88"]},
  grafite:{nome:"Grafite & Ouro",tipo:"Escuro",scheme:"dark",v:["#121212","#1c1c1c","#262626","#f3efe6","#c9c2b3","#8f887a","#2f2f2f","#d4a63a","#1a1406","#3a2f16","#6fcf8a","#1d3324","#ef7a6a","#3d1f1b","#d4a63a","#1c1c1c","linear-gradient(160deg,#2c2516,#1f1b12)","#d9c79c","linear-gradient(135deg,#2e2a20,#18160f)","#f5e6c4","#c7b998","#0b0b0b","#f3ead7","#1f1f1f","#d4a63a","#1a1406","#d4a63a","#1a1406","#9aa7bd","#171717","#2c2516"],
    s:["#d4a63a","#6fa8dc","#e07a45","#8fd1b0","#c9a7d6","#f4a582","#b0b0b0","#5fb3a6"]},
  noite:{nome:"Noite & Coral",tipo:"Escuro",scheme:"dark",v:["#0d1324","#141c33","#1b2542","#eef2ff","#bac4e0","#7f8bad","#26304f","#7aa2ff","#0d1324","#1f2c55","#4fd6a0","#143a30","#ff8a7a","#40202a","#ff6b6b","linear-gradient(160deg,#18223e,#121a30)","linear-gradient(160deg,#3a1f2e,#24162a)","#f0c7d2","linear-gradient(135deg,#ff6b6b,#c2417a)","#ffffff","#ffe3e8","#0a0f1d","#e6ecff","rgba(255,255,255,.06)","#ff6b6b","#ffffff","#ff6b6b","#ffffff","#ffb86b","#0f1729","#2a1d36"],
