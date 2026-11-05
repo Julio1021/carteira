@@ -2393,7 +2393,7 @@ function iniNav(){ return; const g=false;
   document.querySelectorAll("nav.tabs, nav.bnav").forEach(nav=>{ const bp=nav.querySelector('[data-tab="painel"]'), bg=nav.querySelector('[data-tab="gastos"]'); if(!bp||!bg) return;
     if(g&&bp.compareDocumentPosition(bg)&Node.DOCUMENT_POSITION_FOLLOWING) nav.insertBefore(bg,bp);
     if(!g&&bg.compareDocumentPosition(bp)&Node.DOCUMENT_POSITION_FOLLOWING) nav.insertBefore(bp,bg); }); }
-function iniDefinir(v){ try{ localStorage.setItem(INI_KEY,v); }catch{} iniNav(); renderPicker();
+function iniDefinir(v){ try{ localStorage.setItem(INI_KEY,v); }catch{} try{ gdPrefMarcar("ini"); }catch{} iniNav(); renderPicker();
   toast(v==="inicio"?"Pronto: o app vai abrir no Início":v==="ultima"?"Pronto: o app vai abrir na última aba que você usou":"Pronto: o app vai abrir no Patrimônio"); }
 const S = { arqs:new Map(), assets:new Map(), entries:new Map(), ready:false, tab:iniAba(), range:"6M", assetMode:"valor",
   entryDate: todayISO(), drafts:{}, confirmDel:null, histFilter:"", repYear:null,
@@ -2408,7 +2408,7 @@ const bucket = k => ({arq:S.arqs,ativo:S.assets,lanc:S.entries,gasto:S.gastos,or
 let renderT=null; const scheduleRender=()=>{ clearTimeout(renderT); renderT=setTimeout(render,40); };
 function ingest(docs){
   S.arqs.clear(); S.assets.clear(); S.entries.clear(); S.gastos.clear(); S.orc.clear(); S.regras.clear(); S.entradas.clear(); S.contas.clear(); S.pagar.clear(); S.pagtos.clear(); S.rendas.clear(); S.emps.clear(); S.recebs.clear(); S.cartoes.clear(); S.cpags.clear();
-  for(const d of docs){ if(d.kind==="arq"){ S.arqs.set(d.id,d); continue; } if(d.kind==="cartao"){ S.cartoes.set(d.id,d); continue; } if(d.kind==="cpag"){ S.cpags.set(d.id,d); continue; } if(d.kind==="emprestimo") S.emps.set(d.id,d); else if(d.kind==="receb") S.recebs.set(d.id,d); else if(d.kind==="renda") S.rendas.set(d.id,d); else if(d.kind==="pagar") S.pagar.set(d.id,d); else if(d.kind==="pagto") S.pagtos.set(d.id,d); else if(d.kind==="conta") S.contas.set(d.id,d); else if(d.kind==="entrada") S.entradas.set(d.id,d); else if(d.kind==="regra") S.regras.set(d.id,d); else if(d.kind==="ativo") S.assets.set(d.id,d); else if(d.kind==="lanc") S.entries.set(d.id,d); else if(d.kind==="gasto") S.gastos.set(d.id,d); else if(d.kind==="orc") S.orc.set(d.id,d); else if(d.kind==="pref" && d.tema && d.tema!==temaAtual && T[d.tema]) applyTheme(d.tema,{save:false}); }
+  for(const d of docs){ if(d.kind==="arq"){ S.arqs.set(d.id,d); continue; } if(d.kind==="cartao"){ S.cartoes.set(d.id,d); continue; } if(d.kind==="cpag"){ S.cpags.set(d.id,d); continue; } if(d.kind==="emprestimo") S.emps.set(d.id,d); else if(d.kind==="receb") S.recebs.set(d.id,d); else if(d.kind==="renda") S.rendas.set(d.id,d); else if(d.kind==="pagar") S.pagar.set(d.id,d); else if(d.kind==="pagto") S.pagtos.set(d.id,d); else if(d.kind==="conta") S.contas.set(d.id,d); else if(d.kind==="entrada") S.entradas.set(d.id,d); else if(d.kind==="regra") S.regras.set(d.id,d); else if(d.kind==="ativo") S.assets.set(d.id,d); else if(d.kind==="lanc") S.entries.set(d.id,d); else if(d.kind==="gasto") S.gastos.set(d.id,d); else if(d.kind==="orc") S.orc.set(d.id,d); else if(d.kind==="pref" && store.mode==="cloud" && d.tema && d.tema!==temaAtual && T[d.tema]) applyTheme(d.tema,{save:false}); }
   const primeira=!S.ready; S.ready=true; if(primeira) render(); else scheduleRender(); try{ const ov=document.getElementById("cx-ov"); if(ov&&!ov.hidden) cxRender(); }catch{}
 }
 function setSync(mode){
@@ -2482,6 +2482,19 @@ function gdJuntar(L,TL,R,TR,pref){
   const lim=Date.now()-120*864e5; Object.keys(T).forEach(k=>{ if(T[k]<lim) delete T[k]; });
   return {docs:[...out.values()],tomb:T};
 }
+/* preferências que viajam junto: tema, aba inicial e meta de sobra */
+const GD_PU="diario-gd-pu", GD_PK={tema:"diario-carteira-tema",ini:"diario-aba-inicial",meta:"diario-meta-sobra"};
+function gdPrefMarcar(k){ const u=gdLer(GD_PU,{}); u[k]=Date.now(); gdGravar(GD_PU,u); try{ gdMudou(); }catch{} }
+function gdPrefsLocais(){ const u=gdLer(GD_PU,{}), o={}; Object.entries(GD_PK).forEach(([k,key])=>{ let v=null; try{ v=localStorage.getItem(key); }catch{} o[k]={v,u:u[k]||0}; }); return o; }
+function gdPrefsAplicar(M,L){ let mexeu=false; const u=gdLer(GD_PU,{});
+  Object.keys(GD_PK).forEach(k=>{ const m=M[k]; if(!m) return; u[k]=m.u; if((L[k]||{}).v===m.v) return; mexeu=true;
+    try{ m.v==null?localStorage.removeItem(GD_PK[k]):localStorage.setItem(GD_PK[k],m.v); }catch{}
+    if(k==="tema"&&m.v&&typeof T!=="undefined"&&T[m.v]) applyTheme(m.v,{save:false});
+    if(k==="ini"){ try{ iniNav(); renderPicker(); }catch{} } });
+  gdGravar(GD_PU,u); return mexeu; }
+function gdPrefsJuntar(L,R,modo){ const o={}; Object.keys(GD_PK).forEach(k=>{ const a=L[k], b=R&&R[k];
+  if(!b){ o[k]=a; return; } if(modo==="drive"){ o[k]=b; return; } if(modo==="aparelho"){ o[k]={v:a.v,u:Math.max(a.u,b.u)+1}; return; }
+  o[k]=a.u>b.u?a:b; }); return o; }
 async function gdSync(op={}){
   if(!gdDisponivel()||GD.rodando) return;
   const cfg=gdCfg(); if(!cfg.on&&!op.primeira) return;
@@ -2502,13 +2515,16 @@ async function gdSync(op={}){
     if(del.length) await GD.raw.delMany(del);
     if(put.length) await GD.raw.putMany(put);
     gdGravar(GD_K.tomb,M.tomb);
-    const novo={app:"diario-da-carteira",versao:1,atualizado:new Date().toISOString(),docs:M.docs,tomb:M.tomb};
-    const mudouDrive=!pk||JSON.stringify(pk.docs)!==JSON.stringify(M.docs)||JSON.stringify(TR)!==JSON.stringify(M.tomb);
+    const PL=gdPrefsLocais(), PR=pk&&pk.prefs||null, PM=gdPrefsJuntar(PL,PR,op.modo);
+    const prefMexeu=gdPrefsAplicar(PM,PL);
+    const novo={app:"diario-da-carteira",versao:1,atualizado:new Date().toISOString(),docs:M.docs,tomb:M.tomb,prefs:PM};
+    const mudouDrive=!pk||JSON.stringify(pk.docs)!==JSON.stringify(M.docs)||JSON.stringify(TR)!==JSON.stringify(M.tomb)||JSON.stringify(PR)!==JSON.stringify(PM);
     if(mudouDrive) await gdSubir(id,novo);
     gdGravar(GD_K.cfg,{...gdCfg(),on:true,last:Date.now()});
     GD.estado="ok"; GD.escolha=null;
     if(op.primeira) toast("Pronto: este aparelho está sincronizado com o seu Drive.");
     else if(put.length+del.length) toast(`Sincronizado: ${put.length+del.length} alteração(ões) vieram do Drive.`);
+    else if(prefMexeu) toast("Preferências atualizadas a partir do Drive.");
   }catch(e){ GD.estado=e.code==="sem_token"?"entrar":"erro"; GD.erro=e.code==="sem_token"?"":e.status===403?"O Google recusou o acesso. Confira se o seu e-mail está nos usuários de teste.":"Sem conexão com o Drive. Tento de novo depois."; }
   GD.rodando=false; gdPinta(); render();
 }
@@ -3438,7 +3454,7 @@ function applyTheme(id,{save=true}={}){
   try{ let m=document.querySelector('meta[name="theme-color"]'); if(!m){ m=document.createElement("meta"); m.name="theme-color"; document.head.appendChild(m); } { const cs=getComputedStyle(document.documentElement); let c=cs.getPropertyValue("--top").trim(); if(!/^(#[0-9a-f]{3,8}|rgb\()/i.test(c)||document.documentElement.dataset.glass) c=cs.getPropertyValue("--bg").trim(); m.content=c||t.v[0]; }
     if(!document.querySelector('meta[name="apple-mobile-web-app-capable"]')){ [["apple-mobile-web-app-capable","yes"],["mobile-web-app-capable","yes"],["apple-mobile-web-app-title","Carteira"],["apple-mobile-web-app-status-bar-style","black-translucent"]].forEach(([n,c])=>{ const x=document.createElement("meta"); x.name=n; x.content=c; document.head.appendChild(x); }); } }catch{}
   document.getElementById("theme-sw").innerHTML=[t.v[21],t.v[7],t.v[26]].map(c=>`<i style="background:${c}"></i>`).join("");
-  if(save){ try{localStorage.setItem(TKEY,temaAtual);}catch{} if(store.mode==="cloud") store.put({kind:"pref",id:"pref_tema",tema:temaAtual}).catch(()=>{}); }
+  if(save){ try{localStorage.setItem(TKEY,temaAtual);}catch{} try{ gdPrefMarcar("tema"); }catch{} if(store.mode==="cloud") store.put({kind:"pref",id:"pref_tema",tema:temaAtual}).catch(()=>{}); }
   renderPicker(); onTheme();
 }
 function renderPicker(){
@@ -6998,7 +7014,7 @@ app.addEventListener("click",async e=>{
   else if(act==="ir-extrato"){ S.tab="gastos"; GP.pg=0; S.gAba="tudo"; render(); window.scrollTo({top:0}); }
   else if(act==="pt-ir"){ S.tab=b.dataset.v; render(); window.scrollTo({top:0}); }
   else if(act==="pl-meta"){ RZ.meta=!RZ.meta; render(); if(RZ.meta) setTimeout(()=>{ const i=document.getElementById("meta-v"); if(i){ i.focus(); i.scrollIntoView({block:"center"}); } },40); }
-  else if(act==="meta-del"){ try{ localStorage.removeItem(META_K); }catch{} RZ.meta=false; render(); toast("Meta de sobra removida"); }
+  else if(act==="meta-del"){ try{ localStorage.removeItem(META_K); }catch{} gdPrefMarcar("meta"); RZ.meta=false; render(); toast("Meta de sobra removida"); }
   else if(act==="pl-cartoes"){ S.tab="cartoes"; render(); window.scrollTo({top:0}); }
   else if(act==="g-novo"){ if(S.tab!=="gastos"){ S.tab="gastos"; GP.pg=0; } S.gTipo="gasto"; S.gForm=true; S.eEdit=null; S.gEdit=null; render(); const f=document.getElementById("gd"); if(f) f.focus(); }
   else if(act==="g-fechar"){ S.gForm=false; S.gTipo="gasto"; S.gEdit=null; render(); }
@@ -7082,7 +7098,7 @@ app.addEventListener("toggle",e=>{ if(e.target.matches&&e.target.matches("[data-
 document.addEventListener("input",e=>{ if(e.target.closest&&e.target.closest("#f-em")) emPrevAtualiza(); });
 document.addEventListener("change",e=>{ if(e.target.closest&&e.target.closest("#f-em")) emPrevAtualiza(); });
 app.addEventListener("submit",async e=>{
-  if(e.target.id==="f-meta"){ e.preventDefault(); const v=parseNum(document.getElementById("meta-v").value); if(!(v>0)){ toast("Digite um valor maior que zero"); return; } try{ localStorage.setItem(META_K,String(v)); }catch{} RZ.meta=false; render(); toast(`Meta de sobra: ${fmt(v)} por mês`); return; }
+  if(e.target.id==="f-meta"){ e.preventDefault(); const v=parseNum(document.getElementById("meta-v").value); if(!(v>0)){ toast("Digite um valor maior que zero"); return; } try{ localStorage.setItem(META_K,String(v)); }catch{} gdPrefMarcar("meta"); RZ.meta=false; render(); toast(`Meta de sobra: ${fmt(v)} por mês`); return; }
   if(e.target.id==="f-em"){ e.preventDefault(); await emSalvar(e.target); return; }
   if(e.target.classList&&e.target.classList.contains("em-pay")){ e.preventDefault(); await emReceber(e.target); return; }
   if(e.target.id==="f-pg"){ e.preventDefault(); await pgSalvar(e.target); return; }
