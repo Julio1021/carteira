@@ -2315,8 +2315,14 @@ body[data-tab="painel"] .fab,body[data-tab="ativos"] .fab,body[data-tab="relator
   body .theme-btn[aria-expanded="true"]::before{animation:none;transform:scale(1.2)}
   body .theme-btn[aria-expanded="true"]::after{animation:none}
   body .theme-pop{position:fixed !important;z-index:45 !important;top:auto !important;bottom:calc(env(safe-area-inset-bottom,0px) + 92px) !important;left:12px !important;right:12px !important;width:auto !important;max-height:min(70vh,620px) !important}
+  body .theme-btn i.gd-dot{position:absolute;top:-1px;right:-1px;width:9px;height:9px;border-radius:50%;border:2px solid var(--surface);display:none;margin:0}
+  body .theme-btn[data-gd] i.gd-dot{display:block}
+  body .theme-btn[data-gd="ok"] i.gd-dot{background:#1FA463}
+  body .theme-btn[data-gd="pend"] i.gd-dot{background:#E8A317}
+  body .theme-btn[data-gd="err"] i.gd-dot{background:#D93025}
   body .gnav{top:8px}
 }
+.theme-btn i.gd-dot{display:none}
 @keyframes ajRespira{0%,100%{transform:scale(.78)}50%{transform:scale(1.18)}}
 @keyframes ajOnda{0%{transform:scale(.55);opacity:.45}70%,100%{transform:scale(1.35);opacity:0}}
 @media (prefers-reduced-motion:reduce){ body .theme-btn::before,body .theme-btn::after{animation:none !important} }
@@ -2336,7 +2342,7 @@ body[data-tab="painel"] .fab,body[data-tab="ativos"] .fab,body[data-tab="relator
       <button role="tab" data-tab="painel" aria-selected="false">Patrimônio</button>
     </nav>
     <div class="sync" id="sync"><i></i><span>Conectando…</span></div>
-    <div class="theme-wrap"><button class="theme-btn" id="theme-btn" aria-label="Ajustes" title="Ajustes" aria-haspopup="true" aria-expanded="false"><span class="sw" id="theme-sw"></span><span>Ajustes</span></button><div class="theme-pop" id="theme-pop" hidden></div></div>
+    <div class="theme-wrap"><button class="theme-btn" id="theme-btn" aria-label="Ajustes" title="Ajustes" aria-haspopup="true" aria-expanded="false"><i class="gd-dot" aria-hidden="true"></i><span class="sw" id="theme-sw"></span><span>Ajustes</span></button><div class="theme-pop" id="theme-pop" hidden></div></div>
   </div>
 </header>
 <nav class="bnav" aria-label="Seções"><button data-tab="inicio" aria-selected="false"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9v11h14V9"/><path d="M10 20v-6h4v6"/></svg><span>Início</span><i class="bn-b" hidden></i></button><button data-tab="gastos" aria-selected="false"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg><span>Extrato</span><i class="bn-b" hidden></i></button><button data-tab="plano" aria-selected="false"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4M8 14h3"/></svg><span>Planejamento</span><i class="bn-b" hidden></i></button><button data-tab="painel" aria-selected="false"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 17l5-5 4 3 8-8"/><path d="M15 7h5v5"/><path d="M3 21h18"/></svg><span>Patrimônio</span><i class="bn-b" hidden></i></button></nav>
@@ -2421,7 +2427,7 @@ function useLocal(){
   try{ gdIniciar(); }catch(e){ console.error(e); }
 }
 /* ================= SINCRONIZAÇÃO COM O GOOGLE DRIVE (app instalado e site do GitHub) ================= */
-const GD_CLIENT = "";   // ID do cliente OAuth (Google Cloud) — preenchido na configuração
+const GD_CLIENT = "1041319567421-qrl6cj7mibldnddric4ej5a3gnuk303o.apps.googleusercontent.com";   // ID do cliente OAuth (Google Cloud) — preenchido na configuração
 const GD_SCOPE = "https://www.googleapis.com/auth/drive.appdata";
 const GD_FILE = "carteira-sync.json";
 const GD_K = {cfg:"diario-gd", tok:"diario-gd-tok", tomb:"diario-tomb"};
@@ -2518,12 +2524,14 @@ function gdEnvolver(){ // marca data de alteração e guarda o que foi apagado
 function gdQuando(ms){ if(!ms) return "nunca"; const m=Math.floor((Date.now()-ms)/6e4); return m<1?"agora":m<60?`há ${m} min`:m<1440?`há ${Math.floor(m/60)} h`:`há ${Math.floor(m/1440)} dia(s)`; }
 function gdPinta(){ // indicador do topo
   const el=document.getElementById("sync"); if(!el||store.mode!=="local") return;
-  const cfg=gdCfg(); if(!gdDisponivel()||!cfg.on){ setSync("local"); el.classList.remove("gd"); el.removeAttribute("role"); return; }
+  const tb=document.getElementById("theme-btn");
+  const cfg=gdCfg(); if(!gdDisponivel()||!cfg.on){ setSync("local"); el.classList.remove("gd"); el.removeAttribute("role"); if(tb) delete tb.dataset.gd; try{ const ov=document.getElementById("gd-ov"); if(ov&&!ov.hidden) gdRender(); }catch{} return; }
   el.classList.add("gd"); el.setAttribute("role","button"); el.tabIndex=0;
   const st=GD.estado||(gdTok()?"ok":"entrar");
   el.className="sync gd "+(st==="ok"?"ok":st==="erro"?"err":"local");
   el.querySelector("span").textContent=st==="rodando"?"Sincronizando…":st==="pendente"?"Salvando no Drive…":st==="entrar"?"Toque para sincronizar":st==="erro"?"Drive: sem conexão":`Drive · ${gdQuando(cfg.last)}`;
   el.title="Sincronização com o Google Drive";
+  if(tb) tb.dataset.gd=st==="ok"?"ok":st==="erro"?"err":"pend";
   try{ const ov=document.getElementById("gd-ov"); if(ov&&!ov.hidden) gdRender(); }catch{}
 }
 function gdAbrir(){
