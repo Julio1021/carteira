@@ -2326,6 +2326,13 @@ body[data-tab="painel"] .fab,body[data-tab="ativos"] .fab,body[data-tab="relator
 @keyframes ajRespira{0%,100%{transform:scale(.78)}50%{transform:scale(1.18)}}
 @keyframes ajOnda{0%{transform:scale(.55);opacity:.45}70%,100%{transform:scale(1.35);opacity:0}}
 @media (prefers-reduced-motion:reduce){ body .theme-btn::before,body .theme-btn::after{animation:none !important} }
+
+/* rosca: saldo de cada ativo em destaque */
+.pz-nt{display:flex;flex-direction:column;min-width:0;line-height:1.2}
+.pz-nt b{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pz-i .pz-p{grid-column:auto;font-size:12px;font-weight:600;color:var(--muted);margin-top:2px}
+.pz-v{font-size:17px;font-weight:800;letter-spacing:-.01em;font-variant-numeric:tabular-nums;white-space:nowrap;color:var(--ink)}
+.pz-i{row-gap:8px}
 </style>
 
 <header class="top">
@@ -3242,8 +3249,8 @@ function vPizzaAtivos(C,L){
         <div class="pz-mid"><b id="pz-n">${it.length}</b><small>ativo${it.length>1?"s":""}</small></div></div>
       <div class="pz-l">${it.map((p,k)=>{ const a=p.a, i=C.tops.indexOf(a), part=p.valor/L.total;
         return `<button class="pz-i" data-act="pz-sel" data-k="${k}" style="--c:${corCSS(a,i)};--w:${(part*100).toFixed(2)}%;--i:${k}">
-          <span class="pz-n">${marca(a,i)}<b>${esc(a.nome)}</b></span><span class="pz-p">${(part*100).toLocaleString("pt-BR",{maximumFractionDigits:1})}%</span>
-          <span class="pz-b"><i></i></span><small>${rzV(p.valor)}</small></button>`; }).join("")}</div>
+          <span class="pz-n">${marca(a,i)}<span class="pz-nt"><b>${esc(a.nome)}</b><small class="pz-p">${(part*100).toLocaleString("pt-BR",{maximumFractionDigits:1})}% da carteira</small></span></span><strong class="pz-v">${rzV(p.valor)}</strong>
+          <span class="pz-b"><i></i></span></button>`; }).join("")}</div>
     </div>
   </section>`;
 }
@@ -3616,10 +3623,10 @@ function vPainel(C){
   <nav class="hx-atl" aria-label="Atalhos do patrimônio">
     ${[["goto","lancar","Lançar",'<path d="M12 5v14M5 12h14"/>'],["goto","ativos","Ativos",'<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>'],["pj-ir","","Projetar",'<path d="M3 17l6-6 4 4 8-8"/><path d="M14 7h7v7"/>'],["goto","relatorios","Relatórios",'<path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 6-6"/>'],["bk-exp","","Backup",'<path d="M12 3v12M7 10l5 5 5-5M4 15v4a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-4"/>']].map(([a,t,n,ic],k)=>`<button class="hx-at" data-act="${a}" ${t?`data-tab="${t}"`:""}><span class="hx-ati ${k===0?"pri":""}">${svgI(ic,21)}</span><span>${n}</span></button>`).join("")}
   </nav>
+  ${vPizzaAtivos(C,L)}
   <section class="hero so1">
     ${vDesempenho(C,L,lucro,rentTot,mes,rentAno,ano)}
   </section>
-  ${vPizzaAtivos(C,L)}
   <section class="card">
     <div class="card-h"><div><h2>Seus ativos</h2><p>Saldo atual de cada investimento e quanto ele representa da carteira</p></div><button class="btn sm" data-act="goto" data-tab="ativos">Gerenciar ativos</button></div>
     <div class="assets">${C.top.slice().sort((x,y)=>y.valor-x.valor).map(p=>{const a=p.a, i=C.tops.indexOf(a), part=L.total?p.valor/L.total:0;
