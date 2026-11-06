@@ -2344,6 +2344,10 @@ body[data-tab="painel"] .fab,body[data-tab="ativos"] .fab,body[data-tab="relator
 :root[data-tema="petclaro"] .bnav{background:rgba(255,255,255,.95);border-color:#DCE6E3;box-shadow:0 10px 30px -12px rgba(16,48,44,.28)}
 :root[data-tema="petclaro"] .tx-l{border-color:#DCE6E3;box-shadow:0 1px 2px rgba(16,48,44,.04),0 6px 18px -12px rgba(16,48,44,.14)}
 :root[data-tema="petclaro"] .hero{box-shadow:0 1px 2px rgba(16,48,44,.05),0 8px 20px -12px rgba(16,48,44,.16)}
+
+.pg-fora{display:flex;gap:6px;align-items:baseline;margin:10px 2px 0;font-size:12.5px;color:var(--muted)}
+.pg-fora-i{border:0;background:none;padding:0;font:inherit;color:var(--ink-2);font-weight:600;cursor:pointer;text-decoration:underline;text-decoration-color:var(--line);text-underline-offset:3px}
+.pg-fora-i:hover{color:var(--accent);text-decoration-color:currentColor}
 </style>
 
 <header class="top">
@@ -2424,10 +2428,23 @@ function lsLoad(){ try{ const raw=localStorage.getItem(LS_KEY); return raw?JSON.
 function lsSave(){ try{ localStorage.setItem(LS_KEY, JSON.stringify([...S.assets.values(),...S.entries.values(),...S.gastos.values(),...S.orc.values(),...S.regras.values(),...S.entradas.values(),...S.contas.values(),...S.pagar.values(),...S.pagtos.values(),...S.rendas.values(),...S.emps.values(),...S.recebs.values(),...S.cartoes.values(),...S.cpags.values()])); }catch{} }
 const bucket = k => ({arq:S.arqs,ativo:S.assets,lanc:S.entries,gasto:S.gastos,orc:S.orc,regra:S.regras,entrada:S.entradas,conta:S.contas,pagar:S.pagar,pagto:S.pagtos,renda:S.rendas,emprestimo:S.emps,receb:S.recebs,cartao:S.cartoes,cpag:S.cpags})[k];
 let renderT=null; const scheduleRender=()=>{ clearTimeout(renderT); renderT=setTimeout(render,40); };
+let migAcadAg=false;
 function ingest(docs){
   S.arqs.clear(); S.assets.clear(); S.entries.clear(); S.gastos.clear(); S.orc.clear(); S.regras.clear(); S.entradas.clear(); S.contas.clear(); S.pagar.clear(); S.pagtos.clear(); S.rendas.clear(); S.emps.clear(); S.recebs.clear(); S.cartoes.clear(); S.cpags.clear();
   for(const d of docs){ if(d.kind==="arq"){ S.arqs.set(d.id,d); continue; } if(d.kind==="cartao"){ S.cartoes.set(d.id,d); continue; } if(d.kind==="cpag"){ S.cpags.set(d.id,d); continue; } if(d.kind==="emprestimo") S.emps.set(d.id,d); else if(d.kind==="receb") S.recebs.set(d.id,d); else if(d.kind==="renda") S.rendas.set(d.id,d); else if(d.kind==="pagar") S.pagar.set(d.id,d); else if(d.kind==="pagto") S.pagtos.set(d.id,d); else if(d.kind==="conta") S.contas.set(d.id,d); else if(d.kind==="entrada") S.entradas.set(d.id,d); else if(d.kind==="regra") S.regras.set(d.id,d); else if(d.kind==="ativo") S.assets.set(d.id,d); else if(d.kind==="lanc") S.entries.set(d.id,d); else if(d.kind==="gasto") S.gastos.set(d.id,d); else if(d.kind==="orc") S.orc.set(d.id,d); else if(d.kind==="pref" && store.mode==="cloud" && d.tema && d.tema!==temaAtual && T[d.tema]) applyTheme(d.tema,{save:false}); }
-  const primeira=!S.ready; S.ready=true; if(primeira) render(); else scheduleRender(); try{ const ov=document.getElementById("cx-ov"); if(ov&&!ov.hidden) cxRender(); }catch{}
+  const primeira=!S.ready; S.ready=true; if(!migAcadAg){ migAcadAg=true; setTimeout(()=>{ try{ migrarAcademia(); }catch{} },2000); } if(primeira) render(); else scheduleRender(); try{ const ov=document.getElementById("cx-ov"); if(ov&&!ov.hidden) cxRender(); }catch{}
+}
+/* ajuste único: academia passou a ser paga por Pix à Jessika, R$ 255 a cada 3 meses (mai/ago/nov…) */
+let migAcad=false;
+function migrarAcademia(){
+  if(migAcad) return; migAcad=true;
+  try{ if(localStorage.getItem("mig-acad-1")) return; }catch{}
+  const b=S.pagar.get("pg_dyla6syc5xo");
+  if(b&&!b.cada&&Math.abs(b.valor-85)<0.01&&b.rep==="mensal"){
+    const doc={...b,nome:"Academia - Jessika",valor:255,cada:3,ini:"2026-05",dia:1,chave:"Jessika",pag:"Pix"};
+    store.put(doc).catch(()=>{});
+  }
+  try{ localStorage.setItem("mig-acad-1","1"); }catch{}
 }
 function setSync(mode){
   const el=document.getElementById("sync");
@@ -4578,8 +4595,12 @@ function pgAtiva(b,ym){
   if(b.rep==="unica") return (b.data||"").slice(0,7)===ym;
   if(ym<b.ini) return false;
   if(b.rep==="parcelas") return ymDiff(b.ini,ym)<(b.parc||1);
+  if(b.cada>1&&ymDiff(b.ini,ym)%b.cada!==0) return false;
   return !b.fim||ym<=b.fim;
 }
+/* contas "a cada X meses": próximo mês de vencimento a partir de ym */
+function pgProxYm(b,ym){ if(!(b.cada>1)) return ym; if(ym<=b.ini) return b.ini; const d=ymDiff(b.ini,ym), r=d%b.cada; return r?ymAdd(ym,b.cada-r):ym; }
+const pgRepTxt=b=>b.cada>1?({2:"A cada 2 meses",3:"A cada 3 meses",6:"A cada 6 meses",12:"Uma vez por ano"}[b.cada]||`A cada ${b.cada} meses`):"Todo mês";
 /* Calcula as contas de um intervalo de meses, ligando cada uma a no máximo um gasto. */
 function pgCalc(de,ate){
   const hoje=todayISO(); const bills=[...S.pagar.values()];
@@ -4648,7 +4669,7 @@ function pgStatusTxt(i){
   return `Vence em ${i.dias} dias`;
 }
 function pgMeta(i){ const b=i.b; const p=[catNome(b.cat)];
-  if(b.rep==="parcelas") p.push(`Parcela ${i.n}/${b.parc}`); else if(b.rep==="mensal") p.push("Todo mês"); else p.push("Uma vez");
+  if(b.rep==="parcelas") p.push(`Parcela ${i.n}/${b.parc}`); else if(b.rep==="mensal") p.push(b.cada>1?`${pgRepTxt(b)} (≈ ${fmt(b.valor/b.cada)}/mês)`:"Todo mês"); else p.push("Uma vez");
   if(b.variavel&&i.st!=="pago") p.push("valor estimado");
   if(b.pag) p.push(b.pag);
   return p.join(" · "); }
@@ -4689,18 +4710,20 @@ function pgPayForm(i){
 }
 function pgForm(b){
   const ed=!!b; b=b||{rep:"mensal",dia:+todayISO().slice(8,10),cat:"contas",pag:"Boleto",ini:PG.mes};
-  const mesOpts=[]; for(let k=-24;k<=12;k++){ const m=ymAdd(todayISO().slice(0,7),k); mesOpts.push(`<option value="${m}" ${m===(b.ini||PG.mes)?"selected":""}>${mLong(m)}</option>`); }
+  const iniSel=b.cada>1?pgProxYm(b,todayISO().slice(0,7)):(b.ini||PG.mes);
+  const mesOpts=[]; for(let k=-24;k<=12;k++){ const m=ymAdd(todayISO().slice(0,7),k); mesOpts.push(`<option value="${m}" ${m===iniSel?"selected":""}>${mLong(m)}</option>`); }
   const rep=(v,n)=>`<label class="seg-r"><input type="radio" name="pgrep" value="${v}" ${b.rep===v?"checked":""}><span>${n}</span></label>`;
   return `<form class="pg-form" id="f-pg" data-id="${ed?b.id:""}" data-rep="${b.rep}" autocomplete="off">
     <div class="pg-form-h"><h3>${ed?"Editar conta":"Nova conta a pagar"}</h3><button class="icon-btn" type="button" data-act="pg-form-no" aria-label="Fechar"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
     <div class="pg-grid">
       <div class="field pg-span2"><label for="pgn">Nome da conta</label><input class="inp" id="pgn" required maxlength="50" placeholder="Ex.: Conta de luz, Aluguel, Internet" value="${esc(b.nome||"")}"></div>
       <div class="field"><label for="pgv">Valor (R$)</label><input class="inp money" id="pgv" required inputmode="decimal" placeholder="0,00" value="${b.valor?numF.format(b.valor):""}"></div>
-      <div class="field pg-span3"><span class="lbl-f">Repetição</span><div class="seg pg-seg" role="radiogroup" aria-label="Repetição">${rep("mensal","Todo mês")}${rep("parcelas","Parcelada")}${rep("unica","Uma vez só")}</div></div>
-      <div class="field so-rec"><label for="pgd">Vence todo dia</label><select class="inp" id="pgd">${Array.from({length:31},(_,k)=>`<option ${k+1===(b.dia||1)?"selected":""}>${k+1}</option>`).join("")}</select></div>
+      <div class="field pg-span3"><span class="lbl-f">Repetição</span><div class="seg pg-seg" role="radiogroup" aria-label="Repetição">${rep("mensal","Repete")}${rep("parcelas","Parcelada")}${rep("unica","Uma vez só")}</div></div>
+      <div class="field so-mens"><label for="pgcada">Com que frequência</label><select class="inp" id="pgcada">${[[1,"Mensal"],[2,"Bimestral"],[3,"Trimestral"],[4,"Quadrimestral"],[6,"Semestral"],[12,"Anual"]].map(([n,t])=>`<option value="${n}" ${(b.cada||1)===n?"selected":""}>${t}</option>`).join("")}</select></div>
+      <div class="field so-rec"><label for="pgd">Vence no dia</label><select class="inp" id="pgd">${Array.from({length:31},(_,k)=>`<option ${k+1===(b.dia||1)?"selected":""}>${k+1}</option>`).join("")}</select></div>
       <div class="field so-parc"><label for="pgi">1ª parcela em</label><select class="inp" id="pgi">${mesOpts.join("")}</select></div>
       <div class="field so-parc"><label for="pgq">Nº de parcelas</label><input class="inp" id="pgq" type="number" min="2" max="120" inputmode="numeric" value="${b.parc||10}"></div>
-      <div class="field so-mens"><label for="pgi2">Começa em</label><select class="inp" id="pgi2">${mesOpts.join("")}</select></div>
+      <div class="field so-mens"><label for="pgi2" id="pgi2-l">${(b.cada||1)>1?"Vence em":"Começa em"}</label><select class="inp" id="pgi2">${mesOpts.join("")}</select></div>
       <div class="field so-unica"><label for="pgdt">Data de vencimento</label><input class="inp" type="date" id="pgdt" value="${b.data||todayISO()}"></div>
       <div class="field"><label for="pgc">Categoria</label><select class="inp" id="pgc">${GCATS.map(([id,n])=>`<option value="${id}" ${b.cat===id?"selected":""}>${n}</option>`).join("")}</select></div>
       <div class="field"><label for="pgp">Forma de pagamento</label><select class="inp" id="pgp">${PAGS.map(p=>`<option ${b.pag===p?"selected":""}>${p}</option>`).join("")}</select></div>
@@ -4755,6 +4778,8 @@ function vPagar(){
     ${abertas.length||pagas.length?"":`<p class="hint pg-vazio">Nenhuma conta em ${mLong(ym).toLowerCase()}.</p>`}
     ${grupos.map(([st,n])=>{ const l=abertas.filter(i=>i.st===st); return l.length?`<div class="pg-grp g-${st}"><h3>${n} <span>${l.length} · ${fmt(l.reduce((s,i)=>s+i.valor,0))}</span></h3>${l.map(i=>pgLinha(i,false)).join("")}</div>`:""; }).join("")}
     ${pagas.length?`<details class="pg-grp g-pago" ${PG.pagasAbertas||!abertas.length?"open":""} data-pg-pagas><summary><h3>Pagas <span>${pagas.length} · ${fmt(D.pago)}</span></h3></summary>${pagas.map(i=>pgLinha(i,false)).join("")}</details>`:""}
+    ${(()=>{ const fora=[...S.pagar.values()].filter(b=>b.rep==="mensal"&&b.cada>1&&(!b.fim||b.fim>=ym)&&!pgAtiva(b,ym)).map(b=>({b,m:pgProxYm(b,ym)})).filter(x=>!x.b.fim||x.m<=x.b.fim).sort((x,y)=>x.m.localeCompare(y.m));
+      return fora.length?`<p class="pg-fora">${PG_ICO.cal||""}<span>Fora deste mês: ${fora.map(x=>`<button type="button" class="pg-fora-i" data-act="pg-edit" data-id="${x.b.id}">${esc(x.b.nome)} · ${fmt(x.b.valor)} em ${MES_ABR[+x.m.slice(5,7)-1]}${x.m.slice(0,4)!==ym.slice(0,4)?"/"+x.m.slice(2,4):""}</button>`).join(", ")}</span></p>`:""; })()}
     ${!PG.verSug?`<button class="copy pg-ver-sug" data-act="pg-sug">Sugerir contas a partir dos meus gastos</button>`:""}
     `:`<div class="pg-empty"><div class="pg-empty-ico" aria-hidden="true"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="3"/><path d="M16 2v4M8 2v4M3 10h18M8 15l2.5 2.5L16 13"/></svg></div>
       <div><b>Nunca mais esqueça um vencimento</b><p>Cadastre aluguel, luz, internet, parcelas e boletos. O site mostra o que vence primeiro, avisa o que está atrasado e calcula quanto sobra na conta depois de pagar tudo.</p></div></div>`}
@@ -4817,10 +4842,10 @@ async function pgSalvar(form){
   const doc={...(base||{}),kind:"pagar",id:base?base.id:"pg_"+uid(),nome,valor:Math.round(v*100)/100,rep,cat:document.getElementById("pgc").value,pag:document.getElementById("pgp").value,
     chave:document.getElementById("pgk").value.trim(),variavel:document.getElementById("pgvar").checked,criado:base?base.criado:Date.now()};
   delete doc.data; delete doc.parc;
-  if(rep==="mensal"){ doc.dia=+document.getElementById("pgd").value; doc.ini=document.getElementById("pgi2").value; }
-  else if(rep==="parcelas"){ doc.dia=+document.getElementById("pgd").value; doc.ini=document.getElementById("pgi").value; const q=parseInt(document.getElementById("pgq").value,10); if(!(q>=2&&q<=120)){ toast("Informe o número de parcelas (de 2 a 120)."); return; } doc.parc=q; delete doc.fim;
+  if(rep==="mensal"){ doc.dia=+document.getElementById("pgd").value; doc.ini=document.getElementById("pgi2").value; const c=parseInt(document.getElementById("pgcada").value,10)||1; if(c>1){ doc.cada=c; if(base&&base.ini&&base.ini<doc.ini&&ymDiff(base.ini,doc.ini)%c===0) doc.ini=base.ini; } else delete doc.cada; }
+  else if(rep==="parcelas"){ delete doc.cada; doc.dia=+document.getElementById("pgd").value; doc.ini=document.getElementById("pgi").value; const q=parseInt(document.getElementById("pgq").value,10); if(!(q>=2&&q<=120)){ toast("Informe o número de parcelas (de 2 a 120)."); return; } doc.parc=q; delete doc.fim;
     }
-  else { const dt=document.getElementById("pgdt").value; if(!dt){ toast("Informe a data de vencimento."); return; } doc.data=dt; doc.dia=+dt.slice(8,10); doc.ini=dt.slice(0,7); delete doc.fim; }
+  else { delete doc.cada; const dt=document.getElementById("pgdt").value; if(!dt){ toast("Informe a data de vencimento."); return; } doc.data=dt; doc.dia=+dt.slice(8,10); doc.ini=dt.slice(0,7); delete doc.fim; }
   PG.form=null; PG.del=null;
   if(!base){ const v0=doc.rep==="unica"?doc.ini:doc.ini>PG.mes?doc.ini:PG.mes; PG.mes=v0<todayISO().slice(0,7)?todayISO().slice(0,7):v0; if(doc.rep==="unica") PG.mes=doc.ini; }
   await safe(store.put(doc),base?"Conta atualizada":`${nome} adicionada às contas a pagar`); render();
@@ -7089,6 +7114,7 @@ app.addEventListener("change",e=>{
   if(e.target.id==="g-orig"){ S.gOrig=e.target.value; S.gLim=100; render(); return; }
   if(e.target.id==="g-ord"){ S.gOrd=e.target.value; S.gLim=100; render(); return; }
   if(e.target.id==="g-min"){ S.gMin=e.target.value; S.gLim=100; render(); return; }
+  if(e.target.id==="pgcada"){ const l=document.getElementById("pgi2-l"); if(l) l.textContent=+e.target.value>1?"Vence em":"Começa em"; return; }
   if(e.target.name==="pgrep"){ const f=e.target.closest(".pg-form"); if(f) f.dataset.rep=e.target.value; return; }
   if(e.target.dataset.logo){ logoArquivo(e.target.dataset.logo,e.target.files[0]); return; }
   if(e.target.id==="gi-file"){ giArquivo(e.target.files[0]); return; }
