@@ -2378,6 +2378,28 @@ html body .rz-l>.rz-row:not(:last-child)::after{content:"";position:absolute;lef
 html body .entry:not(:last-child)::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:color-mix(in srgb,var(--ink) 30%,var(--surface));border-radius:2px;z-index:2;pointer-events:none}
 html body .orc-row:not(:last-child)::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:color-mix(in srgb,var(--ink) 30%,var(--surface));border-radius:2px;z-index:2;pointer-events:none}
 html body .em-hr:not(:last-child)::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:color-mix(in srgb,var(--ink) 30%,var(--surface));border-radius:2px;z-index:2;pointer-events:none}
+
+/* ===== avisos flutuantes ===== */
+.av-fab{position:fixed;right:16px;bottom:calc(96px + env(safe-area-inset-bottom,0px));z-index:31;width:48px;height:48px;border-radius:50%;border:1px solid var(--line);background:var(--surface);color:var(--muted);display:grid;place-items:center;cursor:pointer;box-shadow:0 8px 22px -10px rgba(0,0,0,.4);transition:transform .15s ease,bottom .25s ease}
+.av-fab:active{transform:scale(.92)}
+.av-fab.novo{color:var(--accent);border-color:color-mix(in srgb,var(--accent) 40%,var(--line))}
+.av-fab.grave{color:#fff;background:var(--neg);border-color:var(--neg);animation:avPulse 1.4s ease 1}
+.av-fab b{position:absolute;top:-3px;right:-3px;min-width:20px;height:20px;padding:0 5px;border-radius:99px;background:var(--accent);color:var(--accent-ink);font-size:11.5px;font-weight:800;display:grid;place-items:center;border:2px solid var(--bg)}
+.av-fab.grave b{background:#fff;color:var(--neg)}
+body.nav-off .av-fab{bottom:calc(20px + env(safe-area-inset-bottom,0px))}
+@keyframes avPulse{0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--neg) 55%,transparent)}100%{box-shadow:0 0 0 16px transparent}}
+@media (min-width:761px){ .av-fab{bottom:24px;right:24px} }
+.av-ov{position:fixed;inset:0;z-index:60;background:rgba(10,14,22,.42);animation:avFade .2s ease}
+.av-sheet{position:fixed;left:0;right:0;bottom:0;z-index:61;max-height:78vh;overflow:auto;background:var(--surface);border-radius:22px 22px 0 0;padding:16px 16px calc(20px + env(safe-area-inset-bottom,0px));box-shadow:0 -12px 40px -12px rgba(0,0,0,.4);animation:avUp .28s cubic-bezier(.2,.8,.3,1)}
+@media (min-width:761px){ .av-sheet{left:auto;right:24px;bottom:84px;width:420px;border-radius:20px} }
+.av-sh-h{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:12px}
+.av-sh-h b{display:block;font-family:var(--f-display);font-size:18px}
+.av-sh-h small{color:var(--muted);font-size:12.5px}
+html body .av-sheet .av-faixa{display:flex;flex-direction:column;gap:8px;overflow:visible;grid-auto-flow:row}
+html body .av-sheet .av{width:auto}
+@keyframes avUp{from{transform:translateY(100%)}to{transform:none}}
+@keyframes avFade{from{opacity:0}to{opacity:1}}
+@media (prefers-reduced-motion:reduce){ .av-fab,.av-sheet,.av-ov{animation:none} }
 </style>
 
 <header class="top">
@@ -3460,6 +3482,7 @@ function render(){
   const fn={inicio:vInicio,plano:vPlano,painel:vPainel,lancar:vLancar,ativos:vAtivos,relatorios:vRelatorios,gastos:vGastos,cartoes:vCartoes}[S.tab]||vInicio;
   killCharts();
   app.innerHTML=(NAV_GRUPO[S.tab]==="painel"?vPtNav():NAV_GRUPO[S.tab]==="plano"&&S.tab==="cartoes"?vPlNav():"")+fn(C);
+  try{ app.insertAdjacentHTML("beforeend",vAvFab()); }catch(e){ console.error(e); }
   navBadge();
   appVisual();
   clearTimeout(window.__celT); window.__celT=setTimeout(()=>{ try{ fxMomentos(); }catch(e){ console.error(e); } },900);
@@ -6047,7 +6070,6 @@ function vRzMes(G,P){
 function vAnaliseTopo(G,avs){
   const P=rzPrev(G), lim=S.gPer==="mes"?vLimGerais(limGeraisStatus(G.ym)):"";
   return `<h2 class="gx-sec" id="sec-prev"><span>${P.atual?"Como o mês está indo":"Como foi o mês"}</span><small>${esc(G.P.label)}</small></h2>
-    ${vAvisosFaixa(avs)}
     ${vRzMes(G,P)}
     ${lim?`<section class="card rz-card rz-lim">${lim}</section>`:""}`;
 }
@@ -6058,8 +6080,7 @@ function vResumoPg(G,avs){
     ${RZ.contas||S.ctNova||S.ctEdit||S.ctDel||S.ctAj?L.contas:""}
     ${vRzReceb()}
     ${vRzMes(G,P)}
-    ${lim?`<section class="card rz-card rz-lim">${lim}</section>`:""}
-    ${vAvisosFaixa(avs)}`;
+    ${lim?`<section class="card rz-card rz-lim">${lim}</section>`:""}`;
 }
 function vContas(){
   const cs=[...S.contas.values()].sort((a,b)=>b.saldo-a.saldo);
@@ -6172,7 +6193,7 @@ function vExHd(G,usoLim,nAv){
     <button class="ex-k out ${aba==="gastos"?"on":""}" data-act="g-aba" data-v="gastos"><small>${svgI('<path d="M7 17 17 7M9 7h8v8"/>',13)}Saiu</small><b>${fmt(G.total)}</b></button>
     <button class="ex-k sob ${sobra<0?"neg":""}" data-act="gp-ir" data-v="1"><small>${sobra<0?"Faltou":"Sobrou"}</small><b>${fmt(Math.abs(sobra))}</b>${isFinite(taxa)&&sobra>0?`<i>${Math.round(taxa*100)}% do que entrou</i>`:""}</button>
     ${lim}
-    ${nAv?`<button class="ex-av" data-act="gp-ir" data-v="1">${svgI('<path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/>',14)}${nAv} aviso${nAv>1?"s":""} no Resumo${svgI('<path d="M9 6l6 6-6 6"/>',14)}</button>`:""}
+    
   </section>`;
 }
 
@@ -6279,6 +6300,21 @@ function giRapido(){ let i=document.getElementById("gi-quick"); if(!i){ i=docume
   i.click(); }
 function giUltimo(){ const cs=[...S.contas.values()].filter(c=>c.origem==="extrato").sort((a,b)=>b.data.localeCompare(a.data)); return cs[0]||null; }
 
+/* ---------- avisos: botão flutuante + painel ---------- */
+const AVS={open:false};
+function avsAtuais(){ try{ const G=gPeriodo(), ym=G.ym; const avs=gAvisos();
+  if(G.fixosPrev&&G.fixosPrev.length) avs.unshift({k:"fixos-"+ym,sev:1,txt:`${G.fixosPrev.length} gasto(s) fixo(s) de ${mLong(ymAdd(ym,-1)).toLowerCase()} ainda não lançado(s): ${G.fixosPrev.slice(0,3).map(f=>esc(f.desc)).join(", ")}${G.fixosPrev.length>3?"…":""}.`,acao:`<button class="btn sm primary" data-act="g-fixos">Lançar fixos</button>`});
+  return avs; }catch{ return []; } }
+function avVistos(){ try{ return new Set(JSON.parse(localStorage.getItem("diario-av-vistos")||"[]")); }catch{ return new Set(); } }
+function avMarcarVistos(l){ const v=avVistos(); l.forEach(a=>v.add(a.k)); try{ localStorage.setItem("diario-av-vistos",JSON.stringify([...v].slice(-300))); }catch{} }
+function vAvFab(){
+  if(!["inicio","gastos"].includes(S.tab)) return "";
+  const l=avsAtuais(); if(!l.length){ AVS.open=false; return ""; }
+  const v=avVistos(), novos=l.filter(a=>!v.has(a.k)), grave=novos.some(a=>a.sev>=3);
+  const fab=`<button class="av-fab ${grave?"grave":""} ${novos.length?"novo":""}" data-act="avs-open" aria-haspopup="dialog" aria-label="${l.length} aviso${l.length>1?"s":""} sobre o mês${novos.length?`, ${novos.length} novo${novos.length>1?"s":""}`:""}">${svgI('<path d="M9 18h6M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.3 1 2.1V17h6v-.2c0-.8.4-1.6 1-2.1A7 7 0 0 0 12 2z"/>',22)}${novos.length?`<b>${novos.length}</b>`:""}</button>`;
+  const sheet=AVS.open?`<div class="av-ov" data-act="avs-close"></div><section class="av-sheet" role="dialog" aria-modal="true" aria-label="Avisos do mês"><div class="av-sh-h"><div><b>Avisos do mês</b><small>${l.length} ${l.length>1?"coisas merecem":"coisa merece"} sua atenção</small></div><button class="icon-btn" data-act="avs-close" aria-label="Fechar">${svgI('<path d="M6 6l12 12M18 6L6 18"/>',16)}</button></div>${vAvisosFaixa(l)}</section>`:"";
+  return fab+sheet;
+}
 function vAvisosFaixa(lista){
   if(!lista.length) return "";
   return `<section class="av-faixa" aria-label="Avisos">${lista.map(a=>`<div class="av s${a.sev}"><span class="ico" aria-hidden="true">${AV_ICO[a.sev]}</span><p>${a.txt}</p>
@@ -6545,7 +6581,6 @@ function vInicio(){
   return `<div class="gx inicio">
     ${vLembreteImport()}
     ${vHero(G,usoLim,false,"inicio")}
-    ${vAvisosFaixa(avs)}
     ${vRzMes(G,P)}
     ${vRzReceb()}
     <section class="card gp-ult"><div class="card-h"><div><h2>Últimos lançamentos</h2><p>${esc(G.P.label)}</p></div><button class="btn sm" data-act="ir-extrato">Ver extrato ${svgI('<path d="M9 6l6 6-6 6"/>',14)}</button></div>
@@ -6622,7 +6657,7 @@ function vGastos(){
   </section>`}
 
   <div class="gp ${anim>0?"in-r":anim<0?"in-l":""}" id="gp" data-pg="${pg}" role="tabpanel" aria-label="${GPG[pg][0]}">
-  ${pg===0?`  ${avs.length?`<button class="ex-av" data-act="gp-ir" data-v="1">${svgI('<path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/>',14)}${avs.length} aviso${avs.length>1?"s":""} sobre o seu mês${svgI('<path d="M9 6l6 6-6 6"/>',14)}</button>`:""}
+  ${pg===0?`  
   <section class="mov mov-app" id="g-lista">
     <div class="mov-h">
       <div class="tabs2 tabs3" role="tablist" aria-label="Tipo de movimentação">
@@ -6817,6 +6852,7 @@ app.addEventListener("click",async e=>{
   const b=e.target.closest("[data-act]"); if(!b) return;
   const act=b.dataset.act;
   if(b.dataset.gn&&act!=="bs-open"){ GN.aberto=false; }
+  if(b.closest(".av-sheet")&&!["av-ok","avs-close"].includes(act)) AVS.open=false;
   if(act==="goto"){ S.tab=b.dataset.tab; render(); window.scrollTo({top:0}); }
   else if(act==="range"){ S.range=b.dataset.v; render(); }
   else if(act==="amode"){ S.assetMode=b.dataset.v; render(); }
@@ -7001,6 +7037,8 @@ app.addEventListener("click",async e=>{
   else if(act==="e-del-ok"){ const id=b.dataset.id; S.eDel=null; if(S.eEdit===id) S.eEdit=null; await safe(store.del(id),"Entrada excluída"); render(); }
   else if(act==="e-mais"){ S.eLim+=50; render(); }
   else if(act==="av-ok"){ S.avOcultos.add(b.dataset.k); render(); }
+  else if(act==="avs-open"){ AVS.open=true; avMarcarVistos(avsAtuais()); render(); }
+  else if(act==="avs-close"){ AVS.open=false; render(); }
   else if(act==="av-ver"){ if(b.dataset.cat){ S.gCat=b.dataset.cat; S.gBusca=""; } if(b.dataset.busca){ S.gBusca=b.dataset.busca; S.gCat=""; } S.gLim=100; gpMostrar("g-lista"); render(); const l=document.getElementById("g-lista"); if(l) l.scrollIntoView({behavior:"smooth",block:"start"}); }
   else if(act==="g-form"){ if(S.gForm&&S.gTipo==="entrada"){ S.gForm=false; S.gTipo="gasto"; render(); return; } S.gForm=!S.gForm; render(); if(S.gForm){ const f=document.getElementById("gd"); if(f) f.focus(); } }
   else if(act==="g-mes"){ FX.dir=+b.dataset.v; S.gPer="mes"; S.gLim=100; S.gMes=ymAdd(S.gMes,+b.dataset.v); S.gEdit=null; S.gDel=null; PG.pay=null; render(); mxCentrar(true); }
