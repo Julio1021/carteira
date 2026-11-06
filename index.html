@@ -4888,13 +4888,15 @@ function vHero(G,usoLim,novoOn,modo){
     </div>
     ${!atual?`<button class="hx-hoje" data-act="g-hoje">${svgI('<path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/>',13)}Voltar para o mês atual</button>`:""}
     ${S.gPer==="custom"?`<div class="per-dates hx-datas"><input type="date" class="inp" id="g-de" value="${P.de}" aria-label="De"><span>até</span><input type="date" class="inp" id="g-ate" value="${P.ate}" aria-label="Até"></div>`:""}
-    ${mini?"":`<div class="hx-main ${sl}">
-      <small>${temE?(sobra<0?`Faltou ${quando}`:`Sobrou ${quando}`):`Você gastou ${quando}`}<button class="hx-eye" data-act="rz-olho" aria-pressed="${RZ.ocultar}" aria-label="${RZ.ocultar?"Mostrar":"Esconder"} valores">${svgI(RZ.ocultar?'<path d="M3 3l18 18"/><path d="M10.6 5.1A10 10 0 0 1 12 5c6 0 10 7 10 7a17 17 0 0 1-3.2 3.9M6.6 6.6C3.9 8.4 2 12 2 12s4 7 10 7c1.7 0 3.2-.5 4.5-1.2"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/>':'<path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>',15)}</button></small>
-      <b ${fxCnt(temE?Math.abs(sobra):O,T0)}>${rzV(temE?Math.abs(sobra):O)}</b>
-      ${temE?`<span>${sobra<0?"gastou mais do que entrou":`${Math.round(sobra/E*100)}% do que entrou`}</span>`:`<span><button class="copy" data-act="e-nova">Lance suas entradas</button> para ver quanto sobra</span>`}
+    ${mini?"":(()=>{ let PPh=null; try{ PPh=atual&&S.gPer==="mes"?rzPrev(G):null; }catch{}
+      const pend=!!(temE&&sobra<0&&PPh&&PPh.aRec>0), mg=!temE||pend;
+      return `<div class="hx-main ${sl}">
+      <small>${!mg?(sobra<0?`Faltou ${quando}`:`Sobrou ${quando}`):`Você gastou ${quando}`}<button class="hx-eye" data-act="rz-olho" aria-pressed="${RZ.ocultar}" aria-label="${RZ.ocultar?"Mostrar":"Esconder"} valores">${svgI(RZ.ocultar?'<path d="M3 3l18 18"/><path d="M10.6 5.1A10 10 0 0 1 12 5c6 0 10 7 10 7a17 17 0 0 1-3.2 3.9M6.6 6.6C3.9 8.4 2 12 2 12s4 7 10 7c1.7 0 3.2-.5 4.5-1.2"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/>':'<path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>',15)}</button></small>
+      <b ${fxCnt(!mg?Math.abs(sobra):O,T0)}>${rzV(!mg?Math.abs(sobra):O)}</b>
+      ${pend?`<span>e ainda vão entrar ${rzV(PPh.aRec)} este mês</span>`:temE?`<span>${sobra<0?"gastou mais do que entrou":`${Math.round(sobra/E*100)}% do que entrou`}</span>`:`<span><button class="copy" data-act="e-nova">Lance suas entradas</button> para ver quanto sobra</span>`}
       ${(()=>{ const m=metaSobra(); if(!m||S.gPer!=="mes"||!temE) return ""; const ok=sobra>=m; return ok?`<span class="hx-meta ok">🏅 Meta de ${rzV(m)} batida</span>`:`<span class="hx-meta">Meta de sobra: ${rzV(m)} · faltam ${rzV(m-Math.max(0,sobra))}</span>`; })()}
-      ${G.propE>0?`<span class="hx-prop">+ ${rzV(G.propE)} vieram das suas outras contas${temE&&sobra<0?" e cobriram a diferença":""}</span>`:""}
-    </div>`}
+      ${G.propE>0?`<span class="hx-prop">+ ${rzV(G.propE)} vieram das suas outras contas${temE&&sobra<0&&!pend?" e cobriram a diferença":""}</span>`:""}
+    </div>`; })()}
     <div class="hx-io ${sl}">
       <button class="hx-k in ${aba==="entradas"?"on":""}" data-act="g-aba" data-v="entradas" aria-pressed="${aba==="entradas"}"><span class="hx-ki">${svgI('<path d="M17 7 7 17M7 9v8h8"/>',15)}</span><span><small>Entrou</small><b ${fxCnt(E,T0)}>${rzV(E)}</b></span></button>
       <button class="hx-k out ${aba==="gastos"?"on":""}" data-act="g-aba" data-v="gastos" aria-pressed="${aba==="gastos"}"><span class="hx-ki">${svgI('<path d="M7 17 17 7M9 7h8v8"/>',15)}</span><span><small>Saiu</small><b ${fxCnt(O,T0)}>${rzV(O)}</b></span></button>
@@ -5898,7 +5900,8 @@ function gAvisos(){
     else if(x.st==="warn") av.push({k:"lgw+"+x.t+(x.t==="dia"?todayISO():x.t==="semana"?inicioSemana(todayISO()):ref),sev:2,txt:`Você já usou ${pct(x.uso).replace("+","")} do limite geral ${x.t==="dia"?"de hoje":x.t==="semana"?"da semana":"do mês"}. Restam ${fmt(x.lim-x.gasto)}.`});
   });
   const E=[...S.entradas.values()].filter(e=>e.cat!=="proprias"&&dataMes(e).startsWith(ref)).reduce((s,e)=>s+e.valor,0), G=doMes.reduce((s,g)=>s+g.valor,0);
-  if(E>0){ if(G>E) av.push({k:"saldo-"+ref,sev:3,txt:`${atual?"Até agora, este mês":"Em "+mLong(ref)}, você gastou ${fmt(G-E)} a mais do que entrou (${fmt(G)} de gastos para ${fmt(E)} de entradas).`});
+  let aRecAv=0; try{ aRecAv=atual?rdAReceber(ref).reduce((t,x)=>t+x.r.valor,0):0; }catch{}
+  if(E>0){ if(G>E&&!(atual&&aRecAv>0)) av.push({k:"saldo-"+ref,sev:3,txt:`${atual?"Até agora, este mês":"Em "+mLong(ref)}, você gastou ${fmt(G-E)} a mais do que entrou (${fmt(G)} de gastos para ${fmt(E)} de entradas).`});
     else if(!atual||frac>=0.6) av.push({k:"saldo+"+ref,sev:0,txt:`${atual?"Até agora sobraram":"Em "+mLong(ref)+" sobraram"} ${fmt(E-G)}, ou ${pct((E-G)/E).replace("+","")} do que entrou.`}); }
   if(doMes.length>=5){ const vs=doMes.map(g=>g.valor).sort((a,b)=>a-b), med=vs[Math.floor(vs.length/2)]; const mx=doMes.reduce((a,b)=>b.valor>a.valor?b:a);
     if(mx.valor>=200 && mx.valor>=med*5) av.push({k:"maior-"+mx.id,sev:1,txt:`Maior gasto ${nomeMes}: <b>${esc(mx.desc)}</b>, ${fmt(mx.valor)} em ${dShort(mx.data)}.`,busca:mx.desc}); }
