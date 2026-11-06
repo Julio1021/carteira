@@ -2350,6 +2350,20 @@ html body .tabs3 .tab2[aria-selected="true"]{background:var(--accent-soft);color
 
 html body .pz .card-h{display:flex;flex-wrap:nowrap;align-items:flex-start;justify-content:space-between;gap:10px}
 html body .pz .card-h .btn{flex:none}
+
+/* ===== abertura animada ===== */
+#abre{position:fixed;inset:0;z-index:9999;background:var(--bg,#0f1a19);display:grid;place-items:center;transition:opacity .38s ease,visibility .38s ease}
+#abre .abre-c{display:flex;flex-direction:column;align-items:center;gap:18px;transform:translateY(-4%)}
+#abre img{width:96px;height:96px;border-radius:26px;box-shadow:0 18px 40px -16px rgba(0,0,0,.45);animation:abResp 1.6s ease-in-out infinite}
+#abre .abre-t{text-align:center;display:flex;flex-direction:column;gap:3px;opacity:0;animation:abTxt .5s ease .12s forwards}
+#abre .abre-t b{font-family:var(--f-display);font-size:22px;font-weight:700;color:var(--ink);letter-spacing:-.01em}
+#abre .abre-t small{font-size:13px;color:var(--muted);font-weight:600}
+#abre.sai{opacity:0;visibility:hidden;pointer-events:none}
+#abre.sai img{transform:scale(1.12);transition:transform .38s ease;animation:none}
+@keyframes abResp{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
+@keyframes abTxt{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){ #abre img,#abre .abre-t{animation:none;opacity:1} }
+html body .ini-box.abre-sw{border:1px solid var(--line);background:var(--surface-2);padding:12px;border-radius:14px;margin-bottom:14px}
 </style>
 
 <header class="top">
@@ -2369,6 +2383,12 @@ html body .pz .card-h .btn{flex:none}
     <div class="theme-wrap"><button class="theme-btn" id="theme-btn" aria-label="Ajustes" title="Ajustes" aria-haspopup="true" aria-expanded="false"><i class="gd-dot" aria-hidden="true"></i><span class="sw" id="theme-sw"></span><span>Ajustes</span></button><div class="theme-pop" id="theme-pop" hidden></div></div>
   </div>
 </header>
+<div id="abre" aria-hidden="true"><div class="abre-c"><img id="abre-img" alt="" width="96" height="96"><div class="abre-t"><b id="abre-ola"></b><small>Diário da Carteira</small></div></div></div>
+<script>(function(){ var o=document.getElementById("abre"); try{ if(localStorage.getItem("diario-abre")==="0"||sessionStorage.getItem("diario-abriu")){ o.remove(); return; } sessionStorage.setItem("diario-abriu","1"); }catch(e){}
+  var m=document.querySelector(".mark-img img"); if(m) document.getElementById("abre-img").src=m.src;
+  var h=new Date().getHours(), nm="Júlio"; try{ nm=localStorage.getItem("diario-nome")||nm; }catch(e){}
+  document.getElementById("abre-ola").textContent=(h>=5&&h<12?"Bom dia":h>=12&&h<18?"Boa tarde":"Boa noite")+", "+nm;
+  window.__abreT0=Date.now(); setTimeout(function(){ window.abreFim&&window.abreFim(); },2600); })();</script>
 <nav class="bnav" aria-label="Seções"><button data-tab="inicio" aria-selected="false"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9v11h14V9"/><path d="M10 20v-6h4v6"/></svg><span>Início</span><i class="bn-b" hidden></i></button><button data-tab="gastos" aria-selected="false"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg><span>Extrato</span><i class="bn-b" hidden></i></button><button data-tab="plano" aria-selected="false"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4M8 14h3"/></svg><span>Planejar</span><i class="bn-b" hidden></i></button><button data-tab="painel" aria-selected="false"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 17l5-5 4 3 8-8"/><path d="M15 7h5v5"/><path d="M3 21h18"/></svg><span>Patrimônio</span><i class="bn-b" hidden></i></button></nav>
 <button class="fab" id="fab" aria-label="Lançar" aria-haspopup="dialog"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button>
 
@@ -2431,10 +2451,13 @@ function lsSave(){ try{ localStorage.setItem(LS_KEY, JSON.stringify([...S.assets
 const bucket = k => ({arq:S.arqs,ativo:S.assets,lanc:S.entries,gasto:S.gastos,orc:S.orc,regra:S.regras,entrada:S.entradas,conta:S.contas,pagar:S.pagar,pagto:S.pagtos,renda:S.rendas,emprestimo:S.emps,receb:S.recebs,cartao:S.cartoes,cpag:S.cpags})[k];
 let renderT=null; const scheduleRender=()=>{ clearTimeout(renderT); renderT=setTimeout(render,40); };
 let migAcadAg=false;
+window.abreFim=function(){ const o=document.getElementById("abre"); if(!o||o.classList.contains("sai")) return; const falta=Math.max(0,900-(Date.now()-(window.__abreT0||0)));
+  setTimeout(()=>{ o.classList.add("sai"); setTimeout(()=>o.remove(),450); },falta); };
+const abreOn=()=>{ try{ return localStorage.getItem("diario-abre")!=="0"; }catch{ return true; } };
 function ingest(docs){
   S.arqs.clear(); S.assets.clear(); S.entries.clear(); S.gastos.clear(); S.orc.clear(); S.regras.clear(); S.entradas.clear(); S.contas.clear(); S.pagar.clear(); S.pagtos.clear(); S.rendas.clear(); S.emps.clear(); S.recebs.clear(); S.cartoes.clear(); S.cpags.clear();
   for(const d of docs){ if(d.kind==="arq"){ S.arqs.set(d.id,d); continue; } if(d.kind==="cartao"){ S.cartoes.set(d.id,d); continue; } if(d.kind==="cpag"){ S.cpags.set(d.id,d); continue; } if(d.kind==="emprestimo") S.emps.set(d.id,d); else if(d.kind==="receb") S.recebs.set(d.id,d); else if(d.kind==="renda") S.rendas.set(d.id,d); else if(d.kind==="pagar") S.pagar.set(d.id,d); else if(d.kind==="pagto") S.pagtos.set(d.id,d); else if(d.kind==="conta") S.contas.set(d.id,d); else if(d.kind==="entrada") S.entradas.set(d.id,d); else if(d.kind==="regra") S.regras.set(d.id,d); else if(d.kind==="ativo") S.assets.set(d.id,d); else if(d.kind==="lanc") S.entries.set(d.id,d); else if(d.kind==="gasto") S.gastos.set(d.id,d); else if(d.kind==="orc") S.orc.set(d.id,d); else if(d.kind==="pref" && store.mode==="cloud" && d.tema && d.tema!==temaAtual && T[d.tema]) applyTheme(d.tema,{save:false}); }
-  const primeira=!S.ready; S.ready=true; if(!migAcadAg){ migAcadAg=true; setTimeout(()=>{ try{ migrarAcademia(); }catch{} },2000); } if(primeira) render(); else scheduleRender(); try{ const ov=document.getElementById("cx-ov"); if(ov&&!ov.hidden) cxRender(); }catch{}
+  const primeira=!S.ready; S.ready=true; if(primeira) setTimeout(()=>{ try{ window.abreFim&&window.abreFim(); }catch{} },60); if(!migAcadAg){ migAcadAg=true; setTimeout(()=>{ try{ migrarAcademia(); }catch{} },2000); } if(primeira) render(); else scheduleRender(); try{ const ov=document.getElementById("cx-ov"); if(ov&&!ov.hidden) cxRender(); }catch{}
 }
 /* ajuste único: academia passou a ser paga por Pix à Jessika, R$ 255 a cada 3 meses (mai/ago/nov…) */
 let migAcad=false;
@@ -3384,6 +3407,7 @@ function renderPicker(){
         <i aria-hidden="true"></i></button>
       <div class="ini-ops" role="radiogroup" aria-label="Aba que abre primeiro">${INI_OPS.map(([v,n,d])=>`<button role="radio" class="ini-op" data-ini="${v}" aria-checked="${ip===v}"><b>${n}</b><small>${d}</small></button>`).join("")}</div>
     </div>
+    <button class="ini-box ini-sw abre-sw" role="switch" aria-checked="${abreOn()}" data-abre-sw="1" aria-label="Abertura animada"><span class="ini-t"><b>Abertura animada</b><small>${abreOn()?"Logo e saudação por um instante ao abrir o app":"Desligada: o app abre direto"}</small></span><i aria-hidden="true"></i></button>
     <button class="ini-box cx-pop" data-gd-pop="1">${svgI('<path d="M7 18a5 5 0 0 1-.5-10 6 6 0 0 1 11.6 1.5A4.5 4.5 0 0 1 17.5 18z"/>',20)}<span><b>Sincronizar com o Google Drive</b><small>${store.mode!=="local"?"Para o app instalado e o site do GitHub":gdCfg().on?`Ligado · ${gdQuando(gdCfg().last)}`:"Mesmos dados no celular e no PC"}</small></span>${svgI('<path d="M9 6l6 6-6 6"/>',16)}</button>
     <button class="ini-box cx-pop" data-cx-pop="1">${svgI('<path d="M21 8v13H3V8M1 3h22v5H1zM10 12h4"/>',20)}<span><b>Caixinha de arquivos${S.arqs.size?` · ${S.arqs.size}`:""}</b><small>Passe arquivos rápidos entre o celular e o PC</small></span>${svgI('<path d="M9 6l6 6-6 6"/>',16)}</button>
     <h3>Escolha um tema</h3><p>${Object.keys(T).length} temas. A mudança vale na hora e fica salva para as próximas visitas.</p>${["Vidro","Escuro","Claro"].map(tp=>{ const nm={Vidro:"Vidro líquido",Escuro:"Temas escuros",Claro:"Temas claros"}[tp]; return `<div class="theme-sec">${nm}</div><div class="theme-grid" role="radiogroup" aria-label="${nm}">${
@@ -3393,7 +3417,7 @@ function renderPicker(){
 }
 const tBtn=document.getElementById("theme-btn"), tPop=document.getElementById("theme-pop");
 tBtn.addEventListener("click",e=>{ e.stopPropagation(); tPop.hidden=!tPop.hidden; tBtn.setAttribute("aria-expanded",!tPop.hidden); });
-tPop.addEventListener("click",e=>{ e.stopPropagation(); const gp=e.target.closest("[data-gd-pop]"); if(gp){ tPop.hidden=true; tBtn.setAttribute("aria-expanded","false"); gdAbrir(); return; } const cp=e.target.closest("[data-cx-pop]"); if(cp){ tPop.hidden=true; tBtn.setAttribute("aria-expanded","false"); cxAbrir(); return; } const sw=e.target.closest("[data-ini-sw]"); if(sw){ iniDefinir(iniPref()==="painel"?"inicio":"painel"); return; } const io=e.target.closest("[data-ini]"); if(io){ iniDefinir(io.dataset.ini); return; } const o=e.target.closest("[data-tema]"); if(o){ applyTheme(o.dataset.tema); toast("Tema aplicado: "+T[o.dataset.tema].nome); } });
+tPop.addEventListener("click",e=>{ e.stopPropagation(); const gp=e.target.closest("[data-gd-pop]"); if(gp){ tPop.hidden=true; tBtn.setAttribute("aria-expanded","false"); gdAbrir(); return; } const cp=e.target.closest("[data-cx-pop]"); if(cp){ tPop.hidden=true; tBtn.setAttribute("aria-expanded","false"); cxAbrir(); return; } const asw=e.target.closest("[data-abre-sw]"); if(asw){ try{ localStorage.setItem("diario-abre",abreOn()?"0":"1"); }catch{} renderPicker(); toast(abreOn()?"Abertura animada ligada.":"Abertura animada desligada."); return; } const sw=e.target.closest("[data-ini-sw]"); if(sw){ iniDefinir(iniPref()==="painel"?"inicio":"painel"); return; } const io=e.target.closest("[data-ini]"); if(io){ iniDefinir(io.dataset.ini); return; } const o=e.target.closest("[data-tema]"); if(o){ applyTheme(o.dataset.tema); toast("Tema aplicado: "+T[o.dataset.tema].nome); } });
 document.addEventListener("click",()=>{ if(!tPop.hidden){ tPop.hidden=true; tBtn.setAttribute("aria-expanded","false"); } });
 document.addEventListener("keydown",e=>{ if(e.key==="Escape"&&S.gOrcOpen){ S.gOrcOpen=false; render(); return; } if(e.key==="Escape"&&!tPop.hidden){ tPop.hidden=true; tBtn.setAttribute("aria-expanded","false"); tBtn.focus(); } });
 
