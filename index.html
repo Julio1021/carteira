@@ -2348,6 +2348,13 @@ body[data-tab="painel"] .fab,body[data-tab="ativos"] .fab,body[data-tab="relator
 .pg-fora{display:flex;gap:6px;align-items:baseline;margin:10px 2px 0;font-size:12.5px;color:var(--muted)}
 .pg-fora-i{border:0;background:none;padding:0;font:inherit;color:var(--ink-2);font-weight:600;cursor:pointer;text-decoration:underline;text-decoration-color:var(--line);text-underline-offset:3px}
 .pg-fora-i:hover{color:var(--accent);text-decoration-color:currentColor}
+
+/* topo: saldo em conta como número principal (mês atual) */
+.hx-saldo .hx-atu{display:inline-flex;align-items:center;gap:4px;border:0;background:rgba(255,255,255,.14);color:inherit;font:inherit;font-size:12px;font-weight:600;padding:3px 10px;border-radius:99px;cursor:pointer;opacity:.92}
+.hx-saldo .hx-atu:hover{background:rgba(255,255,255,.22)}
+.hx-saldo .hx-atu.velho{background:rgba(255,196,120,.28)}
+.hx-saldo .hx-fim{display:block;margin-top:8px;font-size:13px;opacity:.9}
+.hx-saldo .hx-fim b{display:inline;font-family:inherit;font-size:15px;font-weight:800;margin:0 0 0 4px;letter-spacing:0}
 </style>
 
 <header class="top">
@@ -4874,8 +4881,9 @@ function vHero(G,usoLim,novoOn,modo){
   const E=G.totalE, O=G.total, sobra=E-O, temE=E>0;
   const quando=mes?(atual?"este mês":"em "+mLong(S.gMes).split(" ")[0].toLowerCase()):"no período";
   const seta=(v,l,d)=>`<button class="hx-arr" data-act="g-mes" data-v="${v}" aria-label="${l}">${svgI(`<path d="${d}"/>`,18)}</button>`;
-  let conta=""; try{ const PP=rzPrev(G), tot=S.contas.size?saldoTotalContas():null, proj=tot!=null&&PP.atual?tot+PP.aRec-Math.max(0,PP.gastoFim-PP.O):null;
+  let conta="", SD=null; try{ const PP=rzPrev(G), tot=S.contas.size?saldoTotalContas():null, proj=tot!=null&&PP.atual?tot+PP.aRec-Math.max(0,PP.gastoFim-PP.O):null;
     const cs=[...S.contas.values()], rec=cs.length?cs.reduce((m,c)=>c.data>m?c.data:m,cs[0].data):null, dd=rec?diasDesde(rec):null, ab=RZ.contas||S.ctNova||S.ctEdit||S.ctDel||S.ctAj;
+    if(tot!=null&&atual&&mes) SD={tot,proj,dd,ab};
     conta=tot==null?`<button class="hx-conta" data-act="ct-nova"><span class="hx-c1"><small>Em conta</small><b>Adicionar conta</b></span>${svgI('<path d="M12 5v14M5 12h14"/>',15)}</button>`
       :`<button class="hx-conta" data-act="rz-contas" aria-expanded="${!!ab}"><span class="hx-c1"><small>Em conta${dd!=null?` · ${dd===0?"hoje":dd===1?"ontem":`há ${dd} dias`}`:""}</small><b>${rzV(tot)}</b></span>${proj!=null?`<span class="hx-c2"><small>No fim do mês</small><b ${fxCnt(proj,T0,`data-cnt-de="${tot}" data-cnt-d="1500" data-cnt-pre="≈ "`)}>≈ ${rzV(proj)}</b></span>`:""}${svgI(ab?'<path d="M6 15l6-6 6 6"/>':'<path d="M6 9l6 6 6-6"/>',15)}</button>`; }catch{}
   const lim=G.limTotal?`<div class="hx-lim ${usoLim>1?"neg":usoLim>.85?"warn":""}"><div><span>Limite de gastos</span><b>${fmt(G.gastoComLim)} <small>de ${fmt(G.limTotal)}</small></b></div><span class="hx-lb"><i style="width:${Math.min(100,usoLim*100).toFixed(1)}%"></i></span></div>`:"";
@@ -4888,7 +4896,12 @@ function vHero(G,usoLim,novoOn,modo){
     </div>
     ${!atual?`<button class="hx-hoje" data-act="g-hoje">${svgI('<path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/>',13)}Voltar para o mês atual</button>`:""}
     ${S.gPer==="custom"?`<div class="per-dates hx-datas"><input type="date" class="inp" id="g-de" value="${P.de}" aria-label="De"><span>até</span><input type="date" class="inp" id="g-ate" value="${P.ate}" aria-label="Até"></div>`:""}
-    ${mini?"":(()=>{ let PPh=null; try{ PPh=atual&&S.gPer==="mes"?rzPrev(G):null; }catch{}
+    ${mini?"":SD?`<div class="hx-main hx-saldo ${sl}">
+      <small>Em conta<button class="hx-eye" data-act="rz-olho" aria-pressed="${RZ.ocultar}" aria-label="${RZ.ocultar?"Mostrar":"Esconder"} valores">${svgI(RZ.ocultar?'<path d="M3 3l18 18"/><path d="M10.6 5.1A10 10 0 0 1 12 5c6 0 10 7 10 7a17 17 0 0 1-3.2 3.9M6.6 6.6C3.9 8.4 2 12 2 12s4 7 10 7c1.7 0 3.2-.5 4.5-1.2"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/>':'<path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>',15)}</button></small>
+      <b ${fxCnt(SD.tot,T0)}>${rzV(SD.tot)}</b>
+      <button class="hx-atu ${SD.dd>=3?"velho":""}" data-act="rz-contas" aria-expanded="${!!SD.ab}">${SD.dd==null?"Toque para atualizar":`atualizado ${SD.dd===0?"hoje":SD.dd===1?"ontem":`há ${SD.dd} dias`}`} · ajustar ${svgI(SD.ab?'<path d="M6 15l6-6 6 6"/>':'<path d="M6 9l6 6 6-6"/>',12)}</button>
+      ${SD.proj!=null?`<span class="hx-fim">No fim do mês <b ${fxCnt(SD.proj,T0,`data-cnt-de="${SD.tot}" data-cnt-d="1500" data-cnt-pre="≈ "`)}>≈ ${rzV(SD.proj)}</b></span>`:""}
+    </div>`:(()=>{ let PPh=null; try{ PPh=atual&&S.gPer==="mes"?rzPrev(G):null; }catch{}
       const pend=!!(temE&&sobra<0&&PPh&&PPh.aRec>0), mg=!temE||pend;
       return `<div class="hx-main ${sl}">
       <small>${!mg?(sobra<0?`Faltou ${quando}`:`Sobrou ${quando}`):`Você gastou ${quando}`}<button class="hx-eye" data-act="rz-olho" aria-pressed="${RZ.ocultar}" aria-label="${RZ.ocultar?"Mostrar":"Esconder"} valores">${svgI(RZ.ocultar?'<path d="M3 3l18 18"/><path d="M10.6 5.1A10 10 0 0 1 12 5c6 0 10 7 10 7a17 17 0 0 1-3.2 3.9M6.6 6.6C3.9 8.4 2 12 2 12s4 7 10 7c1.7 0 3.2-.5 4.5-1.2"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/>':'<path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>',15)}</button></small>
@@ -4902,7 +4915,7 @@ function vHero(G,usoLim,novoOn,modo){
       <button class="hx-k out ${aba==="gastos"?"on":""}" data-act="g-aba" data-v="gastos" aria-pressed="${aba==="gastos"}"><span class="hx-ki">${svgI('<path d="M7 17 17 7M9 7h8v8"/>',15)}</span><span><small>Saiu</small><b ${fxCnt(O,T0)}>${rzV(O)}</b></span></button>
     </div>
     ${mini?"":lim}
-    ${mini?"":conta}
+    ${mini||SD?"":conta}
   </section>
   ${!mini&&(RZ.contas||S.ctNova||S.ctEdit||S.ctDel||S.ctAj)?vResumoListas().contas:""}
   <nav class="hx-atl" aria-label="Atalhos">
