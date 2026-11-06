@@ -2364,6 +2364,20 @@ html body .pz .card-h .btn{flex:none}
 @keyframes abTxt{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 @media (prefers-reduced-motion:reduce){ #abre img,#abre .abre-t{animation:none;opacity:1} }
 html body .ini-box.abre-sw{border:1px solid var(--line);background:var(--surface-2);padding:12px;border-radius:14px;margin-bottom:14px}
+
+/* ===== divisórias de lista: linha recuada, 2px, bem visível ===== */
+html body .tx-w,html body .pg-row,html body .bs-it,html body .ah-r,html body .cc-it,html body .rs-top5 li,html body .rz-it,html body .rz-l>.rz-row,html body .entry,html body .orc-row,html body .em-hr{border-bottom:0!important;position:relative}
+html body .tx-w:not(:last-child)::after{content:"";position:absolute;left:64px;right:12px;bottom:0;height:2px;background:color-mix(in srgb,var(--ink) 30%,var(--surface));border-radius:2px;z-index:2;pointer-events:none}
+html body .pg-row:not(:last-child)::after{content:"";position:absolute;left:58px;right:0;bottom:0;height:2px;background:color-mix(in srgb,var(--ink) 30%,var(--surface));border-radius:2px;z-index:2;pointer-events:none}
+html body .bs-it:not(:last-child)::after{content:"";position:absolute;left:60px;right:4px;bottom:0;height:2px;background:color-mix(in srgb,var(--ink) 30%,var(--surface));border-radius:2px;z-index:2;pointer-events:none}
+html body .ah-r:not(:last-child)::after{content:"";position:absolute;left:54px;right:2px;bottom:0;height:2px;background:color-mix(in srgb,var(--ink) 30%,var(--surface));border-radius:2px;z-index:2;pointer-events:none}
+html body .cc-it:not(:last-child)::after{content:"";position:absolute;left:22px;right:2px;bottom:0;height:2px;background:color-mix(in srgb,var(--ink) 30%,var(--surface));border-radius:2px;z-index:2;pointer-events:none}
+html body .rs-top5 li:not(:last-child)::after{content:"";position:absolute;left:34px;right:0;bottom:0;height:2px;background:color-mix(in srgb,var(--ink) 30%,var(--surface));border-radius:2px;z-index:2;pointer-events:none}
+html body .rz-it:not(:last-child)::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:color-mix(in srgb,var(--ink) 30%,var(--surface));border-radius:2px;z-index:2;pointer-events:none}
+html body .rz-l>.rz-row:not(:last-child)::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:color-mix(in srgb,var(--ink) 30%,var(--surface));border-radius:2px;z-index:2;pointer-events:none}
+html body .entry:not(:last-child)::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:color-mix(in srgb,var(--ink) 30%,var(--surface));border-radius:2px;z-index:2;pointer-events:none}
+html body .orc-row:not(:last-child)::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:color-mix(in srgb,var(--ink) 30%,var(--surface));border-radius:2px;z-index:2;pointer-events:none}
+html body .em-hr:not(:last-child)::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:color-mix(in srgb,var(--ink) 30%,var(--surface));border-radius:2px;z-index:2;pointer-events:none}
 </style>
 
 <header class="top">
